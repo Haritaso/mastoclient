@@ -32,17 +32,15 @@ export default {
       method: 'GET',
       url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/notifications',
       headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
-      data: {
+      params: {
         limit: 15
       }
     })
     .then (res => {
-      console.log(res.data)
       for (var i=0,d;d=res.data[i];i++) {
         this.notifications.push(d)
         if (d.type == 'mention') {
           this.reply.push(d)
-          console.log(d)
         }
       }
       setTimeout(this.connectWs, 3000)

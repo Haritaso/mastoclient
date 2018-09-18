@@ -97,7 +97,6 @@ const store = () => new Vuex.Store({
       })
     },
     tootaction (context, payload) {
-      console.log(payload.data.TootContent)
       axios({
         method: 'POST',
         url: 'https://' + context.getters.getactive[0].url + '/api/v1/statuses',

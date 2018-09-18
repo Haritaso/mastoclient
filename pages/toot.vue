@@ -15,7 +15,7 @@
       <el-input
         type="textarea"
         placeholder="今なにしてる？"
-        :autosize="{ minRows: 4, maxRows: 10}"
+        :autosize="{ minRows: 5, maxRows: 10}"
         v-model="form.TootContent"
         class="tootinput"
       >
@@ -24,10 +24,10 @@
         <div class="tootoption">
           <div>
             <el-upload
-              limit="8"
+              :limit="4"
               :auto-upload="false"
               :file-list="fileList"
-              :show-file-list=false
+              :show-file-list="false"
             >
               <el-button
                 size="medium"
@@ -125,6 +125,7 @@ export default {
   transition-duration: 0.5s;
 }
 .buttons {
+  display: block;
   background-color: #ebebeb;
   position: relative;
   border-radius: 0px 0px 5px 5px;

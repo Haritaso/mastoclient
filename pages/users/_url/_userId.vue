@@ -82,7 +82,7 @@ export default {
 <style scoped>
 .userdata {
   max-width: 960px;
-  min-width: 530px;
+  min-width: 550px;
   margin: 0 auto;
 }
 .header {

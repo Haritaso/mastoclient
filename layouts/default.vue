@@ -7,6 +7,7 @@
           :router="true"
           background-color="#545c64"
           text-color="#fff"
+          class="useraside"
         >
           <el-menu-item index="1" route='/home' class="usertab">
             <img class="icon" :src=src>
@@ -19,10 +20,10 @@
             </template>
             <el-menu-item-group title="既存のアカウントに切り替え">
               <el-menu-item
-                default-active="2-0"
+                :default-active="2-1"
                 v-for="item in $store.state.users"
                 :key="item.index"
-                :index="2- + item.index"
+                :index="item.index"
                 @click="change(item.index)"
               >
               {{ item.id }}
@@ -34,27 +35,27 @@
               </el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item index="3" route='/home' @click=closetab>
+          <el-menu-item index="3" route='/home' @click="closetab">
             <i class="el-icon-document" />
             <span>ホーム</span>
           </el-menu-item>
-          <el-menu-item index="4" route='/toot' @click=closetab>
+          <el-menu-item index="4" route='/toot' @click="closetab">
             <i class="el-icon-edit" />
             <span>トゥート！</span>
           </el-menu-item>
-          <el-menu-item index="5" route='/notification' @click=closetab>
+          <el-menu-item index="5" route='/notification' @click="closetab">
             <i class="el-icon-bell" />
             <span>通知</span>
           </el-menu-item>
-          <el-menu-item index="6" route='/favorite' @click=closetab>
+          <el-menu-item index="6" route='/favorite' @click="closetab">
             <i class="el-icon-star-off" />
             <span>お気に入り一覧</span>
           </el-menu-item>
-          <el-menu-item index="7" route='/direct_message' @click=closetab>
+          <el-menu-item index="7" route='/direct_message' @click="closetab">
             <i class="el-icon-message" />
             <span>DM</span>
           </el-menu-item>
-          <el-menu-item index="8" route='/setting' @click=closetab>
+          <el-menu-item index="8" route='/setting' @click="closetab">
             <i class="el-icon-more-outline" />
             <span>設定</span>
           </el-menu-item>
@@ -109,6 +110,7 @@ export default {
         index: index
       })
       this.drawer = false
+      this.$router.push("home")
     },
     closetab () {
       this.drawer = false
@@ -142,6 +144,9 @@ export default {
 <style>
 .aside {
   z-index: 1;
+}
+.useraside {
+  height: auto;
 }
 .main {
   z-index: 2;
