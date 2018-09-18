@@ -99,7 +99,7 @@ export default {
   position: absolute;
   bottom: 0px;
   width: 100%;
-  height: 61px;
+  height: 67px;
   z-index: 0;
   background-color: #545c64;
 }
