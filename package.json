@@ -1,0 +1,27 @@
+{
+  "name": "mastoclient",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "dev": "nuxt",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "element-ui": "^2.4.6",
+    "nuxt": "^1.0.0",
+    "vuex-persistedstate": "^2.5.4"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.15.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^4.0.0",
+    "vue-cli-plugin-element-ui": "^1.1.2"
+  }
+}
