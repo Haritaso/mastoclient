@@ -18,7 +18,7 @@
           <div class="header-sub">
             <div class="header-sub-name">
               <span class="display_name">{{ userdata.display_name }}</span>
-              <span class="user_id">{{ "@" + userdata.acct + "@" + $route.params.url }}</span>
+              <span class="user_id">{{ "@" + userdata.acct }}</span>
             </div>
             <div class="header-sub-tab">
               <el-menu

@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .aside {
   z-index: 1;
 }
@@ -150,9 +150,6 @@ export default {
 }
 .main {
   z-index: 2;
-}
-.usertab {
-  height: 100px;
 }
 .usertab .name {
   position: absolute;
@@ -172,7 +169,9 @@ export default {
 }
 .icon {
   width: 70px;
+  min-width: 70px;
   height: 70px;
+  min-height: 70px;
   margin: 12px auto;
   border: 3px solid #909399;
 }

@@ -27,6 +27,10 @@
             <el-switch v-model="form.media">
             </el-switch>
           </el-form-item>
+          <el-form-item label="Tootの詳細表示" :label-width="formLabelWidth">
+            <el-switch v-model="form.detail">
+            </el-switch>
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">キャンセル</el-button>
@@ -40,7 +44,7 @@
         :label="item.title"
         :name="item.index"
       >
-        <gettoot :scope="item.scope" :media="item.media" :stream="item.stream"/>
+        <gettoot :scope="item.scope" :media="item.media" :stream="item.stream" :detail="item.detail" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -63,7 +67,8 @@ export default {
         index: '',
         scope: '',
         media: false,
-        stream: false
+        stream: false,
+        detail: false,
       },
       formLabelWidth: '120px'
     }
@@ -78,6 +83,7 @@ export default {
         scope: form.scope,
         media: form.media,
         stream: form.stream,
+        detail: form.detail,
       });
       this.editableTabsValue = newIndex
     },

@@ -3,6 +3,7 @@
     <toot v-for="toot in toots"
       :key="toot.id"
       :toot="toot"
+      :detail="detail"
     ></toot>
   </div>
 </template>
@@ -15,7 +16,7 @@ export default {
   data () {
     return {
       toots: [],
-      newscope: ''
+      newscope: '',
     }
   },
   watch: {
@@ -25,7 +26,7 @@ export default {
       }
     }
   },
-  props: ['scope', 'media', 'stream'],
+  props: ['scope', 'media', 'stream', 'detail'],
   created: function () {
     this.newscope = this.scope
     if (this.scope == 'public?local') {

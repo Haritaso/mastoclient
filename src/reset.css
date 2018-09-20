@@ -7,3 +7,15 @@ body {
 .el-main {
   padding: 20px 5px 20px 5px;
 }
+.el-card__body {
+  padding: 10px 5px 10px 5px;
+}
+.el-dialog {
+  width: 90%
+}
+li.el-menu-item.usertab {
+  height: 100px;
+}
+p {
+  margin: 10px 0 0 0;
+}
