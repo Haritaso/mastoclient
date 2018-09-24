@@ -7,6 +7,10 @@
           <router-link :to=userlink>{{ toot.account.display_name }}</router-link>
         </div>
         <div v-html="toot.content"></div>
+        <div class="mediapreview" v-if="mediaoption == true">
+          <img :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.preview_url" :key="i" @click="mediaClick(i)">
+          <vue-gallery-slideshow :images="mediaurl" :index="mediaindex" @close="mediaindex = null"></vue-gallery-slideshow>
+        </div>
         <div>
           <div class="action">
             <el-button class="fas fa-reply size" type="text"></el-button>
@@ -14,8 +18,8 @@
           </div>
           <div class="action">
             <el-button type="text" @click="reblogaction()">
-              <i v-if="reblogtap == false" class="fas fa-retweet size "></i>
-              <i v-else class="fas fa-retweet size reblog"></i>
+              <i v-if="reblogtap == false" class="fas fa-sync-alt size"></i>
+              <i v-else class="fas fa-sync-alt size reblog"></i>
             </el-button>
             <span v-if="detail == true">{{ reblog }}</span>
           </div>
@@ -36,6 +40,7 @@
 </template>
 
 <script>
+import VueGallerySlideshow from 'vue-gallery-slideshow'
 export default {
   name: 'toot',
   props: ['toot', 'detail'],
@@ -45,13 +50,32 @@ export default {
       reblog: this.toot.reblogs_count,
       fav: this.toot.favourites_count,
       reblogtap: false,
-      favtap: false
+      favtap: false,
+      mediaoption: false,
+      mediaindex: null,
+      mediaurl: [],
+      mediainit: false,
+      mediaclass: {}
     }
   },
   computed: {
     userlink () {
       const url = this.$store.getters.getactive[0].url
       return '/users/' + url + "/" + this.toot.account.id + "/toot"
+    },
+  },
+  created () {
+    if ( !!this.toot.media_attachments[0] ) {
+      this.mediaoption = true
+    } else {
+      this.mediaoption = false
+    }
+    if (this.toot.media_attachments.length == 1) {
+      this.mediaclass = "style1"
+    } else if (this.toot.media_attachments.length == 2) {
+      this.mediaclass = "style2"
+    } else {
+      this.mediaclass = "style4"
     }
   },
   methods: {
@@ -72,7 +96,20 @@ export default {
         this.favtap = !this.favtap
         this.fav--
       }
+    },
+    mediaClick(i) {
+      console.log()
+      if (this.mediainit === false) {
+        for (var media in this.toot.media_attachments) {
+          this.mediaurl.push(this.toot.media_attachments[media].url)
+        }
+      }
+      this.mediaindex = i
+      this.mediainit = true
     }
+  },
+  components: {
+    VueGallerySlideshow
   }
 }
 </script>
@@ -122,5 +159,42 @@ export default {
   transform: rotate(360deg);
   transition: 0.8s;
   color: #2b90d9;
+}
+.mediapreview {
+  display: inline-block;
+  height: 200px;
+  object-fit: cover;
+  overflow: hidden;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+.style1 {
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  object-position: 50% 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+.style2 {
+  display: inline-block;
+  position: relative;
+  border-radius: 4px;
+  height: 100%;
+  width: 50%;
+  object-position: 50% 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+.style4 {
+  display: inline-block;
+  position: relative;
+  border-radius: 4px;
+  right: 2px;
+  height: 50%;
+  width: 50%;
+  object-fit: cover;
+  overflow: hidden;
 }
 </style>

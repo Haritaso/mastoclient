@@ -7,7 +7,7 @@
       >
         add tab
       </el-button>
-      <el-dialog title="新しいTLを追加" :visible.sync="dialogFormVisible">
+      <el-dialog title="新しいTLを追加" :visible.sync="dialogFormVisible" :modal="false">
         <el-form :model="form">
           <el-form-item label="TL名" :label-width="formLabelWidth">
             <el-input v-model="form.title" auto-complete="off"></el-input>
@@ -32,6 +32,23 @@
             </el-switch>
           </el-form-item>
         </el-form>
+        <el-collapse v-model="activeName" accordion>
+          <el-collapse-item title="上級者向け" name="1">
+            <el-form :model="form">
+              <el-form-item label="login中の他のアカウントTLを混ぜる" :label-width="formLabelWidth">
+                <el-switch v-model="form.mix">
+                </el-switch>
+              </el-form-item>
+              <el-form-item label="TL種類" v-if="form.mix == true" :label-width="formLabelWidth">
+                <el-select v-model="form.scope" placeholder="選択">
+                  <el-option label="ホーム" value="home"></el-option>
+                  <el-option label="ローカル" value="public?local"></el-option>
+                  <el-option label="連合" value="public"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </el-collapse-item>
+        </el-collapse>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">キャンセル</el-button>
           <el-button type="primary" @click="addTab(form)">作成</el-button>
@@ -69,8 +86,11 @@ export default {
         media: false,
         stream: false,
         detail: false,
+        mix: false,
+
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '160px',
+      activeName: '0'
     }
   },
   methods: {
