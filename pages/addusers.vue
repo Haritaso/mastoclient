@@ -48,6 +48,10 @@ export default {
           index: this.$store.getters.getactive[0].index,
           id: "@" + response.data.acct + "@" + this.$store.getters.getactive[0].url
         })
+        this.$store.commit('registerTL', {
+          index: this.$store.getters.getactive[0].index
+        })
+        this.$router.push('home')
       })
     }
   }

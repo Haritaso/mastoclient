@@ -5,6 +5,7 @@ const store = () => new Vuex.Store({
   state: {
     users: [],
     count: 0,
+    TLcount: 0,
     first: false,
     activedata: false,
   },
@@ -31,6 +32,16 @@ const store = () => new Vuex.Store({
     change (state, payload) {
       state.users[payload.index].active = true
       state.activedata = true
+    },
+    registerTL (state, payload) {
+      state.users[payload.index].TL = []
+    },
+    setUserTL (state, payload) {
+      state.users[payload.index].TL.push(payload.TL)
+      state.TLcount++
+    },
+    delUserTL (state, payload) {
+      state.users[payload.index].TL = payload.TL
     }
   },
   getters: {
@@ -110,20 +121,7 @@ const store = () => new Vuex.Store({
           in_reply_to_id: payload.data.reply
         }
       })
-      .then (response => {
-        if (response.status == 200) {
-          this.$message({
-            type: 'success',
-            message: 'tootしました。'
-          })
-        } else {
-          this.$message({
-            type: 'warning',
-            message: 'tootに失敗しました。'
-          })
-        }
-      })
-    }
+    },
   }
 })
 

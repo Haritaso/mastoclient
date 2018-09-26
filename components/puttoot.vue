@@ -17,11 +17,19 @@
             <span v-if="detail == true">{{ reply }}</span>
           </div>
           <div class="action">
-            <el-button type="text" @click="reblogaction()">
-              <i v-if="reblogtap == false" class="fas fa-sync-alt size"></i>
-              <i v-else class="fas fa-sync-alt size reblog"></i>
-            </el-button>
-            <span v-if="detail == true">{{ reblog }}</span>
+            <div v-if="toot.visibility == 'private'">
+              <el-button type="text" disabled>
+                <i class="fas fa-lock size"></i>
+              </el-button>
+              <span v-if="detail == true">✖</span>
+            </div>
+            <div v-else>
+              <el-button type="text" @click="reblogaction()">
+                <i v-if="reblogtap == false" class="fas fa-sync-alt size"></i>
+                <i v-else class="fas fa-sync-alt size reblog"></i>
+              </el-button>
+              <span v-if="detail == true">{{ reblog }}</span>
+            </div>
           </div>
           <div class="action">
             <el-button type="text" @click="favaction()">
@@ -40,6 +48,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import VueGallerySlideshow from 'vue-gallery-slideshow'
 export default {
   name: 'toot',
@@ -77,24 +86,60 @@ export default {
     } else {
       this.mediaclass = "style4"
     }
+    if (this.toot.reblogged == true) {
+      this.reblogtap = true
+      this.reblog++
+    }
+    if (this.toot.favourited == true) {
+      this.favtap = true
+      this.fav++
+    }
   },
   methods: {
     reblogaction () {
       if (this.reblogtap == false) {
-        this.reblogtap = !this.reblogtap
-        this.reblog++
+        axios({
+          method: 'POST',
+          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/reblog',
+          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        })
+        .then (res => {
+          this.reblogtap = !this.reblogtap
+          this.reblog++
+        })
       } else {
-        this.reblogtap = !this.reblogtap
-        this.reblog--
+        axios({
+          method: 'POST',
+          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/unreblog',
+          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        })
+        .then (res => {
+          this.reblogtap = !this.reblogtap
+          this.reblog--
+        })
       }
     },
     favaction () {
       if (this.favtap == false) {
-        this.favtap = !this.favtap
-        this.fav++
+        axios({
+          method: 'POST',
+          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/favourite',
+          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        })
+        .then (res => {
+          this.favtap = !this.favtap
+          this.fav++
+        })
       } else {
-        this.favtap = !this.favtap
-        this.fav--
+        axios({
+          method: 'POST',
+          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/unfavourite',
+          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        })
+        .then (res => {
+          this.favtap = !this.favtap
+          this.fav--
+        })
       }
     },
     mediaClick(i) {

@@ -17,6 +17,7 @@ export default {
     return {
       toots: [],
       newscope: '',
+      wsscope: ''
     }
   },
   watch: {
@@ -32,7 +33,6 @@ export default {
     if (this.scope == 'public?local') {
       this.newscope = this.scope + '=true'
     }
-    console.log(this.newscope)
     axios({
       method: 'GET',
       url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/timelines/' + this.newscope,
@@ -53,15 +53,18 @@ export default {
   },
   methods: {
     connectWs () {
-      const newscope = this.scope.replace('?',':')
-      console.log(newscope)
+      this.wsscope = this.scope.replace('?',':')
+      if (this.scope == 'home') {
+        this.wsscope = 'user'
+      }
+      console.log(this.wsscope)
       const wssurl =
         'wss://' +
         this.$store.getters.getactive[0].url +
         '/api/v1/streaming?access_token=' +
         this.$store.getters.getactive[0].accessToken +
         '&stream=' +
-        newscope
+        this.wsscope
       const ws = new WebSocket(wssurl)
       ws.onmessage = function (message) {
         const wssresponse = JSON.parse(message.data)

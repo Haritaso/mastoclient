@@ -55,15 +55,17 @@
         </span>
       </el-dialog>
     </div>
-    <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
-      <el-tab-pane v-for="item in editableTabs"
-        :key="item.index"
-        :label="item.title"
-        :name="item.index"
-      >
-        <gettoot :scope="item.scope" :media="item.media" :stream="item.stream" :detail="item.detail" />
-      </el-tab-pane>
-    </el-tabs>
+    <div v-if="$store.state.TLcount >= 1">
+      <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
+        <el-tab-pane v-for="item in $store.getters.getactive[0].TL"
+          :key="item.name"
+          :label="item.title"
+          :name="item.name"
+        >
+          <gettoot :scope="item.scope" :media="item.media" :stream="item.stream" :detail="item.detail" />
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
@@ -77,17 +79,16 @@ export default {
       editableTabsValue: '0',
       dialogFormVisible: false,
       mediaboolan: false,
-      editableTabs: [],
       tabIndex: 0,
+      tabcontent: [],
       form: {
         title: '',
-        index: '',
+        name: '',
         scope: '',
         media: false,
         stream: false,
         detail: false,
         mix: false,
-
       },
       formLabelWidth: '160px',
       activeName: '0'
@@ -96,23 +97,27 @@ export default {
   methods: {
     addTab(form) {
       this.dialogFormVisible = false
-      let newIndex = ++this.tabIndex + ''
-      this.editableTabs.push({
-        title: form.title,
-        index: newIndex,
-        scope: form.scope,
-        media: form.media,
-        stream: form.stream,
-        detail: form.detail,
-      });
+      let newIndex = this.tabIndex + ''
+      this.$store.commit('setUserTL', {
+        index: this.$store.getters.getactive[0].index,
+        TL: {
+          title: form.title,
+          name: newIndex,
+          scope: form.scope,
+          media: form.media,
+          stream: form.stream,
+          detail: form.detail,
+        }
+      })
+      this.tabIndex++
       this.editableTabsValue = newIndex
     },
     removeTab(targetName) {
-      let tabs = this.editableTabs
+      let tabs = this.tabcontent
       let activeName = this.editableTabsValue
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {
-          if (tab.index === targetName) {
+          if (tab.name === targetName) {
             let nextTab = tabs[index + 1] || tabs[index - 1]
             if (nextTab) {
               activeName = nextTab.name
@@ -121,7 +126,14 @@ export default {
         })
       }
       this.editableTabsValue = activeName
-      this.editableTabs = tabs.filter(tab => tab.index !== targetName)
+      this.tabcontent = tabs.filter(tab => tab.name !== targetName)
+      this.$nextTick(function () {
+        this.$store.commit('delUserTL', {
+          index: this.$store.getters.getactive[0].index,
+          TL: this.tabcontent
+        })
+      })
+      this.tabIndex = this.tabcontent.length
     },
   },
   components: {
