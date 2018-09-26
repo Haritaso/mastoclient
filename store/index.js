@@ -5,7 +5,6 @@ const store = () => new Vuex.Store({
   state: {
     users: [],
     count: 0,
-    TLcount: 0,
     first: false,
     activedata: false,
   },
@@ -35,14 +34,16 @@ const store = () => new Vuex.Store({
     },
     registerTL (state, payload) {
       state.users[payload.index].TL = []
+      state.users[payload.index].TLcount = 0
     },
     setUserTL (state, payload) {
       state.users[payload.index].TL.push(payload.TL)
-      state.TLcount++
+      state.users[payload.index].TLcount++
     },
     delUserTL (state, payload) {
       state.users[payload.index].TL = payload.TL
-    }
+      state.users[payload.index].TLcount--
+    },
   },
   getters: {
     getactive: state => {

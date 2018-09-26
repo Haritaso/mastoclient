@@ -8,6 +8,7 @@
           background-color="#545c64"
           text-color="#fff"
           class="useraside"
+          @select="handleSelect"
         >
           <el-menu-item index="1" route='/home' class="usertab">
             <img class="icon" :src=src>
@@ -71,6 +72,7 @@
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#67C23A"
+          @select="handleSelect"
         >
           <el-menu-item index="1" @click="drawer = !drawer">
             <i class="el-icon-menu"></i>
@@ -110,7 +112,7 @@ export default {
         index: index
       })
       this.drawer = false
-      this.$router.push("home")
+      this.$router.push("loading")
     },
     closetab () {
       this.drawer = false
@@ -136,6 +138,9 @@ export default {
           message: '入力をキャンセルしました。'
         })
       })
+    },
+    handleSelect (key, keyPath) {
+      console.log(key, keyPath)
     }
   }
 }

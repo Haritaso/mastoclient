@@ -55,9 +55,9 @@
         </span>
       </el-dialog>
     </div>
-    <div v-if="$store.state.TLcount >= 1">
+    <div v-if="$store.getters.getactive[0].TLcount >= 1">
       <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
-        <el-tab-pane v-for="item in $store.getters.getactive[0].TL"
+        <el-tab-pane v-for="item in this.tabcontent"
           :key="item.name"
           :label="item.title"
           :name="item.name"
@@ -94,6 +94,11 @@ export default {
       activeName: '0'
     }
   },
+  created: function () {
+    if (this.$store.getters.getactive[0].TLcount == 1) {
+      this.tabcontent = this.$store.getters.getactive[0].TL
+    }
+  },
   methods: {
     addTab(form) {
       this.dialogFormVisible = false
@@ -109,11 +114,12 @@ export default {
           detail: form.detail,
         }
       })
+      this.tabcontent = this.$store.getters.getactive[0].TL
       this.tabIndex++
       this.editableTabsValue = newIndex
     },
     removeTab(targetName) {
-      let tabs = this.tabcontent
+      let tabs = this.$store.getters.getactive[0].TL
       let activeName = this.editableTabsValue
       if (activeName === targetName) {
         tabs.forEach((tab, index) => {

@@ -18,6 +18,11 @@
 
 <script>
 export default {
-  props: ['index']
+  props: ['index'],
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+    }
+  }
 }
 </script>

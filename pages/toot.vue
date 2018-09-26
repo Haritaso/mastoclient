@@ -92,8 +92,7 @@ export default {
         sensitive: false,
         media: [],
       },
-      cw: false,
-      filelist: ''
+      cw: false
     }
   },
   computed: {
@@ -115,6 +114,9 @@ export default {
       this.$store.dispatch('tootaction', {
         data: this.form
       })
+      this.form.TootContent = ''
+      this.form.cwContent = ''
+      this.form.media = []
     }
   }
 }

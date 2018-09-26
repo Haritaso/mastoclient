@@ -14,8 +14,9 @@
     "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
-    "nuxt": "^1.0.0",
+    "nuxt": "^2.0.0",
     "vue-gallery-slideshow": "^1.2.4",
+    "vue-server-renderer": "2.5.16",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
