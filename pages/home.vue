@@ -95,9 +95,7 @@ export default {
     }
   },
   created: function () {
-    if (this.$store.getters.getactive[0].TLcount == 1) {
-      this.tabcontent = this.$store.getters.getactive[0].TL
-    }
+    setTimeout(this.setTL, 2000)
   },
   methods: {
     addTab(form) {
@@ -141,6 +139,11 @@ export default {
       })
       this.tabIndex = this.tabcontent.length
     },
+    setTL () {
+      if (this.$store.getters.getactive[0].TLcount == 1) {
+        this.tabcontent = this.$store.getters.getactive[0].TL
+      }
+    }
   },
   components: {
     gettoot

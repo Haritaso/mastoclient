@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="style">
     <div class="half-circle-spinner">
       <div class="circle circle-1"></div>
       <div class="circle circle-2"></div>
@@ -11,14 +11,24 @@
 <script>
 export default {
   name: 'loading',
+  layout: 'index',
+  computed: {
+    style () {
+      return {
+        '--border-top-color': this.$store.getters.getactive[0].acolor,
+        '--border-bottom-color': this.$store.getters.getactive[0].acolor
+      }
+    }
+  },
   mounted: function () {
     setTimeout(this.next, 2000)
   },
   methods: {
     next () {
-      this.$router.push("home")
+      var query = this.$route.query.url
+      this.$router.push(query)
     }
-  }
+  },
 }
 </script>
 
@@ -68,12 +78,12 @@ export default {
 }
 
 .half-circle-spinner .circle.circle-1 {
-  border-top-color: #1dfbff;
+  border-top-color: var(--border-top-color);
   animation: half-circle-spinner-animation 1s infinite;
 }
 
 .half-circle-spinner .circle.circle-2 {
-  border-bottom-color: #1dfbff;
+  border-bottom-color: var(--border-bottom-color);
   animation: half-circle-spinner-animation 1s infinite alternate;
 }
 

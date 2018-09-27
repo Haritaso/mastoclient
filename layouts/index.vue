@@ -9,7 +9,7 @@
         text-color="#fff"
         active-text-color="#409EFF"
         >
-        <el-menu-item index="1">MastoClient</el-menu-item>
+        <el-menu-item index="1"></el-menu-item>
       </el-menu>
     </el-header>
     <el-main><nuxt/></el-main>

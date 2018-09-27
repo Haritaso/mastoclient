@@ -13,17 +13,18 @@
 import axios from "axios";
 
 export default {
+  layout: 'index',
   computed: {
     userdata: function() {
       return this.$store.getters.getactive[0];
     }
   },
   mounted: function() {
-    setTimeout(this.register, 1000);
+    setTimeout(this.register, 1000)
   },
   methods: {
-    async register() {
-      await console.log(this.$store.getters.getactive[0]);
+    register() {
+      console.log(this.$store.getters.getactive[0])
       axios
         .post(
           "https://" + this.$store.getters.getactive[0].url + "/oauth/token",
@@ -71,10 +72,10 @@ export default {
               "@" +
               this.$store.getters.getactive[0].url
           });
-          this.$store.commit("registerTL", {
+          this.$store.commit("registerUI", {
             index: this.$store.getters.getactive[0].index
           });
-          this.$router.replace("home");
+          this.$router.push("home");
         });
     }
   }

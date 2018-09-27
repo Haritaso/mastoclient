@@ -5,8 +5,8 @@
       <el-aside>
         <el-menu
           :router="true"
-          background-color="#545c64"
-          text-color="#fff"
+          :background-color="Bcolor"
+          :text-color="Tcolor"
           class="useraside"
           @select="handleSelect"
         >
@@ -69,9 +69,9 @@
         <el-menu
           :default-active="nowindex"
           mode="horizontal"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#67C23A"
+          :background-color="Bcolor"
+          :text-color="Tcolor"
+          :active-text-color="Acolor"
           @select="handleSelect"
         >
           <el-menu-item index="1" @click="drawer = !drawer">
@@ -96,14 +96,23 @@ export default {
     }
   },
   computed: {
-    src: function () {
+    src () {
       return this.$store.getters.geticon
     },
-    name: function () {
+    name () {
       return this.$store.getters.getdisplayname
     },
-    id: function () {
+    id () {
       return this.$store.getters.getid
+    },
+    Tcolor () {
+      return this.$store.getters.getactive[0].tcolor
+    },
+    Acolor () {
+      return this.$store.getters.getactive[0].acolor
+    },
+    Bcolor () {
+      return this.$store.getters.getactive[0].bcolor
     }
   },
   methods: {
@@ -112,7 +121,7 @@ export default {
         index: index
       })
       this.drawer = false
-      this.$router.push("loading")
+      this.$router.push("loading?url=home")
     },
     closetab () {
       this.drawer = false
