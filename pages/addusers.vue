@@ -16,19 +16,13 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "axios"
 
 export default {
   layout: 'index',
   computed: {
     userdata () {
-      return this.$store.getters.getactive[0];
-    },
-    style () {
-      return {
-        "--border-top-color": this.$store.getters.getactive[0].acolor,
-        "--border-bottom-color": this.$store.getters.getactive[0].acolor
-      }
+      return this.$store.getters.getactive[0]
     }
   },
   mounted: function() {
@@ -49,16 +43,16 @@ export default {
           }
         )
         .then(response => {
-          console.log(response.data.access_token);
+          console.log(response.data.access_token)
           this.$store.commit("addtoken", {
             index: this.$store.getters.getactive[0].index,
             accessToken: response.data.access_token
           });
-          setTimeout(this.getUserdata, 1000);
+          setTimeout(this.getUserdata, 1000)
         })
         .catch(error => {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
     getUserdata() {
       axios
@@ -74,7 +68,7 @@ export default {
           }
         )
         .then(response => {
-          console.log(response);
+          console.log(response)
           this.$store.commit("update", {
             data: response.data,
             index: this.$store.getters.getactive[0].index,
@@ -83,14 +77,14 @@ export default {
               response.data.acct +
               "@" +
               this.$store.getters.getactive[0].url
-          });
+          })
           this.$store.commit("registerUI", {
             index: this.$store.getters.getactive[0].index
-          });
-          this.$router.push("home");
+          })
+          this.$router.push("home")
         });
     }
-  }
+  },
 };
 </script>
 
@@ -134,7 +128,7 @@ export default {
 .atom-spinner .spinner-circle {
   display: block;
   position: absolute;
-  color: var(--border-top-color);
+  color: #409EFF;
   font-size: calc(60px * 0.24);
   top: 50%;
   left: 50%;
@@ -149,7 +143,7 @@ export default {
   animation-duration: 1s;
   border-left-width: calc(60px / 25);
   border-top-width: calc(60px / 25);
-  border-left-color: var(--border-bottom-color);
+  border-left-color: #409EFF;
   border-left-style: solid;
   border-top-style: solid;
   border-top-color: transparent;

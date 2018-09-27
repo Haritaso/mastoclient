@@ -69,7 +69,7 @@ export default {
   created: function () {
     this.general.textColor = this.$store.getters.getactive[0].tcolor
     this.general.activetextColor = this.$store.getters.getactive[0].acolor
-    this.general.backgroundColor = this.$store.getters.getactive[0].bcolor
+    this.general.backgroundColor = this.$store.getters.getactive[0].backcolor
     this.getacountdata()
   },
   computed: {

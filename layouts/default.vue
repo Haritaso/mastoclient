@@ -104,16 +104,12 @@ export default {
     },
     id () {
       return this.$store.getters.getid
-    },
-    Tcolor () {
-      return this.$store.getters.getactive[0].tcolor
-    },
-    Acolor () {
-      return this.$store.getters.getactive[0].acolor
-    },
-    Bcolor () {
-      return this.$store.getters.getactive[0].bcolor
     }
+  },
+  created: function () {
+    this.Tcolor = this.$store.getters.getactive[0].tcolor
+    this.Acolor = this.$store.getters.getactive[0].acolor
+    this.Bcolor = this.$store.getters.getactive[0].backcolor
   },
   methods: {
     change (index) {

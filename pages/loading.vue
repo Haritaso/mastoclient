@@ -24,16 +24,16 @@ export default {
       return {
         "--border-top-color": this.$store.getters.getactive[0].acolor,
         "--border-bottom-color": this.$store.getters.getactive[0].acolor
-      };
+      }
     }
   },
   mounted: function() {
-    setTimeout(this.next, 2000);
+    setTimeout(this.next, 2000)
   },
   methods: {
     next() {
-      var query = this.$route.query.url;
-      this.$router.push(query);
+      var query = this.$route.query.url
+      this.$router.push(query)
     }
   }
 };
