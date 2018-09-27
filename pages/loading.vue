@@ -1,8 +1,15 @@
 <template>
   <div :style="style">
-    <div class="half-circle-spinner">
-      <div class="circle circle-1"></div>
-      <div class="circle circle-2"></div>
+    <div class="atom-spinner">
+      <div class="spinner-inner">
+        <div class="spinner-line"></div>
+        <div class="spinner-line"></div>
+        <div class="spinner-line"></div>
+        <!--Chrome renders little circles malformed :(-->
+        <div class="spinner-circle">
+          &#9679;
+        </div>
+      </div>
     </div>
     <div class="back"></div>
   </div>
@@ -10,31 +17,31 @@
 
 <script>
 export default {
-  name: 'loading',
-  layout: 'index',
+  name: "loading",
+  layout: "index",
   computed: {
-    style () {
+    style() {
       return {
-        '--border-top-color': this.$store.getters.getactive[0].acolor,
-        '--border-bottom-color': this.$store.getters.getactive[0].acolor
-      }
+        "--border-top-color": this.$store.getters.getactive[0].acolor,
+        "--border-bottom-color": this.$store.getters.getactive[0].acolor
+      };
     }
   },
-  mounted: function () {
-    setTimeout(this.next, 2000)
+  mounted: function() {
+    setTimeout(this.next, 2000);
   },
   methods: {
-    next () {
-      var query = this.$route.query.url
-      this.$router.push(query)
+    next() {
+      var query = this.$route.query.url;
+      this.$router.push(query);
     }
-  },
-}
+  }
+};
 </script>
 
 <style scoped>
-.half-circle-spinner,
-.half-circle-spinner * {
+.atom-spinner,
+.atom-spinner * {
   box-sizing: border-box;
 }
 
@@ -45,54 +52,84 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  opacity: .5;
-  background: #000;
+  opacity: 0.9;
+  background: rgb(0, 0, 0);
 }
-.half-circle-spinner {
+
+.atom-spinner {
   z-index: 2000;
-  position:relative;
-  top:auto;
-  bottom:auto;
-  right:auto;
-  left:auto;
-  margin:auto;
-  width: 80px;
-  height: 80px;
+  position: relative;
+  top: auto;
+  bottom: auto;
+  right: auto;
+  left: auto;
+  margin: auto;
+  width: 120px;
+  height: 120px;
   border-radius: 100%;
 }
 
-.half-circle-spinner::after {
-  content: "";
-  display: inline-block;
+.atom-spinner .spinner-inner {
+  position: relative;
+  display: block;
   height: 100%;
-  width: 0;
-  vertical-align: middle;
+  width: 100%;
 }
-.half-circle-spinner .circle {
-  content: "";
+
+.atom-spinner .spinner-circle {
+  display: block;
+  position: absolute;
+  color: var(--border-top-color);
+  font-size: calc(60px * 0.24);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.atom-spinner .spinner-line {
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 100%;
-  border: calc(60px / 10) solid transparent;
+  border-radius: 50%;
+  animation-duration: 1s;
+  border-left-width: calc(60px / 25);
+  border-top-width: calc(60px / 25);
+  border-left-color: var(--border-bottom-color);
+  border-left-style: solid;
+  border-top-style: solid;
+  border-top-color: transparent;
 }
 
-.half-circle-spinner .circle.circle-1 {
-  border-top-color: var(--border-top-color);
-  animation: half-circle-spinner-animation 1s infinite;
+.atom-spinner .spinner-line:nth-child(1) {
+  animation: atom-spinner-animation-1 1s linear infinite;
+  transform: rotateZ(120deg) rotateX(66deg) rotateZ(0deg);
 }
 
-.half-circle-spinner .circle.circle-2 {
-  border-bottom-color: var(--border-bottom-color);
-  animation: half-circle-spinner-animation 1s infinite alternate;
+.atom-spinner .spinner-line:nth-child(2) {
+  animation: atom-spinner-animation-2 1s linear infinite;
+  transform: rotateZ(240deg) rotateX(66deg) rotateZ(0deg);
 }
 
-@keyframes half-circle-spinner-animation {
-  0% {
-    transform: rotate(0deg);
-  }
+.atom-spinner .spinner-line:nth-child(3) {
+  animation: atom-spinner-animation-3 1s linear infinite;
+  transform: rotateZ(360deg) rotateX(66deg) rotateZ(0deg);
+}
+
+@keyframes atom-spinner-animation-1 {
   100% {
-    transform: rotate(360deg);
+    transform: rotateZ(120deg) rotateX(66deg) rotateZ(360deg);
+  }
+}
+
+@keyframes atom-spinner-animation-2 {
+  100% {
+    transform: rotateZ(240deg) rotateX(66deg) rotateZ(360deg);
+  }
+}
+
+@keyframes atom-spinner-animation-3 {
+  100% {
+    transform: rotateZ(360deg) rotateX(66deg) rotateZ(360deg);
   }
 }
 </style>
