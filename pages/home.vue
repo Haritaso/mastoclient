@@ -55,7 +55,7 @@
         </span>
       </el-dialog>
     </div>
-    <div v-if="$store.getters.getactive[0].TLcount >= 1">
+    <div v-if="this.tabcontent.length >= 1">
       <el-tabs v-model="editableTabsValue" type="card" closable @tab-remove="removeTab">
         <el-tab-pane v-for="item in this.tabcontent"
           :key="item.name"
@@ -94,8 +94,10 @@ export default {
       activeName: '0'
     }
   },
-  created: function () {
-    setTimeout(this.setTL, 2000)
+  mounted: function () {
+    setTimeout(() => {
+      this.setTL()
+    },0)
   },
   methods: {
     addTab(form) {
@@ -140,9 +142,7 @@ export default {
       this.tabIndex = this.tabcontent.length
     },
     setTL () {
-      if (this.$store.getters.getactive[0].TLcount == 1) {
-        this.tabcontent = this.$store.getters.getactive[0].TL
-      }
+      this.tabcontent = this.$store.getters.getactive[0].TL
     }
   },
   components: {

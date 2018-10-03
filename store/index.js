@@ -37,7 +37,7 @@ const store = () => new Vuex.Store({
       state.users[payload.index].TLcount = 0
       state.users[payload.index].tcolor = "#fff"
       state.users[payload.index].acolor = "#409EFF"
-      state.users[payload.index].backcolor = "#545c64"
+      state.users[payload.index].bcolor = "#545c64"
     },
     setUserTL (state, payload) {
       state.users[payload.index].TL.push(payload.TL)
@@ -50,12 +50,15 @@ const store = () => new Vuex.Store({
     setGeneral (state, payload) {
       state.users[payload.index].tcolor = payload.tcolor
       state.users[payload.index].acolor = payload.acolor
-      state.users[payload.index].bcolor = payload.backcolor
+      state.users[payload.index].bcolor = payload.bcolor
     }
   },
   getters: {
     getactive: state => {
       return state.users.filter(data => data.active)
+    },
+    geturl: (state, getters) => {
+      return state.activedata ? getters.getactive[0].url : null
     },
     geticon: (state, getters) => {
       return state.activedata ? getters.getactive[0].data.avatar : null
@@ -68,7 +71,16 @@ const store = () => new Vuex.Store({
     },
     getid: (state, getters) => {
       return state.activedata ? getters.getname + "@" + getters.getactive[0].url : null
-    }
+    },
+    getTcolor: (state, getters) => {
+      return getters.getactive[0].tcolor
+    },
+    getAcolor: (state, getters) => {
+      return getters.getactive[0].acolor
+    },
+    getBcolor: (state, getters) => {
+      return getters.getactive[0].bcolor
+    },
   },
   actions: {
     getAppName (context, payload) {

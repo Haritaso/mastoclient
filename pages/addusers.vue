@@ -26,7 +26,9 @@ export default {
     }
   },
   mounted: function() {
-    setTimeout(this.register, 1000)
+    setTimeout(() => {
+      this.register()
+    },1000)
   },
   methods: {
     register() {
@@ -48,6 +50,9 @@ export default {
             index: this.$store.getters.getactive[0].index,
             accessToken: response.data.access_token
           });
+          this.$store.commit("registerUI", {
+            index: this.$store.getters.getactive[0].index
+          })
           setTimeout(this.getUserdata, 1000)
         })
         .catch(error => {
@@ -77,9 +82,6 @@ export default {
               response.data.acct +
               "@" +
               this.$store.getters.getactive[0].url
-          })
-          this.$store.commit("registerUI", {
-            index: this.$store.getters.getactive[0].index
           })
           this.$router.push("home")
         });

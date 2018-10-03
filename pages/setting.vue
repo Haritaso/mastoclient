@@ -1,6 +1,6 @@
 <template>
   <el-collapse v-model="activeNames" accordion>
-    <el-collapse-item title="一般" name="1">
+    <el-collapse-item title="タブ" name="1">
       <el-form
         label-position="left"
       >
@@ -33,7 +33,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="text" class="usertitle">
-            <a :href="officialsetting">
+            <a :href="'https://' + url + '/settings/profile'">
               公式クライアントで詳細な設定を行う
             </a>
           </el-button>
@@ -64,20 +64,22 @@ export default {
         header: [],
         lock: Boolean,
       },
+      url: ''
     }
   },
-  created: function () {
-    this.general.textColor = this.$store.getters.getactive[0].tcolor
-    this.general.activetextColor = this.$store.getters.getactive[0].acolor
-    this.general.backgroundColor = this.$store.getters.getactive[0].backcolor
-    this.getacountdata()
-  },
-  computed: {
-    officialsetting () {
-      return 'https://' + this.$store.getters.getactive[0].url + '/settings/profile'
-    }
+  mounted: function () {
+    setTimeout(() => {
+      this.getcolor()
+      this.getacountdata()
+      this.url = this.$store.getters.getactive[0].url
+    },0)
   },
   methods: {
+    getcolor () {
+      this.general.textColor = this.$store.getters.getactive[0].tcolor
+      this.general.activetextColor = this.$store.getters.getactive[0].acolor
+      this.general.backgroundColor = this.$store.getters.getactive[0].bcolor
+    },
     generalsetting () {
       this.$store.commit('setGeneral', {
         index: this.$store.getters.getactive[0].index,

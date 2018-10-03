@@ -93,6 +93,9 @@ export default {
     return {
       nowindex: '1',
       drawer: false,
+      Tcolor: '#fff',
+      Acolor: '#409EFF',
+      Bcolor: '#545c64',
     }
   },
   computed: {
@@ -106,10 +109,10 @@ export default {
       return this.$store.getters.getid
     }
   },
-  created: function () {
-    this.Tcolor = this.$store.getters.getactive[0].tcolor
-    this.Acolor = this.$store.getters.getactive[0].acolor
-    this.Bcolor = this.$store.getters.getactive[0].backcolor
+  mounted: function () {
+    setTimeout(() => {
+      this.getcolor()
+    },0)
   },
   methods: {
     change (index) {
@@ -145,6 +148,11 @@ export default {
       })
     },
     handleSelect (key, keyPath) {
+    },
+    getcolor () {
+      this.Tcolor = this.$store.getters.getTcolor
+      this.Acolor = this.$store.getters.getAcolor
+      this.Bcolor = this.$store.getters.getBcolor
     }
   }
 }
