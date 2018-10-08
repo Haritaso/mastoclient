@@ -38,7 +38,7 @@
             </a>
           </el-button>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="space">
           <el-button type="primary" @click="updateuserdata" class="settingbutton height">設定を適用</el-button>
         </el-form-item>
       </el-form>
@@ -72,7 +72,7 @@ export default {
       this.getcolor()
       this.getacountdata()
       this.url = this.$store.getters.getactive[0].url
-    },0)
+    },1)
   },
   methods: {
     getcolor () {
@@ -137,5 +137,8 @@ export default {
 .height {
   position: relative;
   bottom: 70px;
+}
+.space {
+  margin-bottom: -44px;
 }
 </style>

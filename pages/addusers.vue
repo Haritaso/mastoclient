@@ -84,7 +84,7 @@ export default {
               this.$store.getters.getactive[0].url
           })
           this.$router.push("home")
-        });
+        })
     }
   },
 };

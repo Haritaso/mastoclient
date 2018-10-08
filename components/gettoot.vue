@@ -16,8 +16,9 @@ export default {
   data () {
     return {
       toots: [],
+      newdata: [],
       newscope: '',
-      wsscope: ''
+      wsscope: '',
     }
   },
   watch: {
@@ -44,7 +45,12 @@ export default {
     })
     .then (res => {
       for (var i=0,d;d=res.data[i];i++) {
-        this.toots.push(d)
+        if (d.reblog == null) {
+          this.toots.push(d)
+        } else {
+          this.toots.push(d.reblog)
+          this.toots[i].reblog = d.account
+        }
       }
       if (this.stream == true) {
         setTimeout(this.connectWs, 3000)
@@ -71,10 +77,26 @@ export default {
         const wssreshtml = JSON.parse(wssresponse.payload)
         if (wssresponse.event === "update") {
           setToot(wssreshtml)
+        } else if (wssresponse.event === "delete") {
+          deletetoot(wssreshtml)
         }
       }
       const setToot = (data) => {
-        return this.toots.unshift(data)
+        if (data.reblog == null) {
+          this.newdata = data
+        } else {
+          this.newdata = data.reblog
+          this.newdata.reblog = data.account
+        }
+        return this.toots.unshift(this.newdata)
+      }
+      const deletetoot = (deleteid) => {
+        for (var i=0,d;d=this.toots[i];i++) {
+          if (d.id == deleteid) {
+            console.log(this.toots[i])
+            this.toots.splice(i, 1)
+          }
+        }
       }
     }
   },

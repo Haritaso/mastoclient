@@ -112,7 +112,7 @@ export default {
   mounted: function () {
     setTimeout(() => {
       this.getcolor()
-    },0)
+    },1)
   },
   methods: {
     change (index) {

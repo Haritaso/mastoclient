@@ -84,14 +84,15 @@ export default {
       form: {
         title: '',
         name: '',
-        scope: '',
+        scope: null,
         media: false,
         stream: false,
         detail: false,
         mix: false,
       },
       formLabelWidth: '160px',
-      activeName: '0'
+      activeName: '0',
+      taberror: false
     }
   },
   mounted: function () {
@@ -101,22 +102,44 @@ export default {
   },
   methods: {
     addTab(form) {
-      this.dialogFormVisible = false
-      let newIndex = this.tabIndex + ''
-      this.$store.commit('setUserTL', {
-        index: this.$store.getters.getactive[0].index,
-        TL: {
-          title: form.title,
-          name: newIndex,
-          scope: form.scope,
-          media: form.media,
-          stream: form.stream,
-          detail: form.detail,
+      for (var i=0,d;d=this.tabcontent[i];i++) {
+        if (d.title == form.title) {
+          this.taberror = true
+          this.$message({
+            message: '他のタブと同じ名前は付けられません',
+            type: 'warning'
+          })
         }
-      })
-      this.tabcontent = this.$store.getters.getactive[0].TL
-      this.tabIndex++
-      this.editableTabsValue = newIndex
+      }
+      if (form.scope == null) {
+        this.taberror = true
+        this.$message({
+          message: 'タブの種類を指定して下さい。',
+          type: 'warning'
+        })
+      } else {
+        this.taberror = false
+      }
+      if (this.taberror == false) {
+        this.dialogFormVisible = false
+        let newIndex = this.tabIndex + ''
+        this.$store.commit('setUserTL', {
+          index: this.$store.getters.getactive[0].index,
+          TL: {
+            title: form.title,
+            name: newIndex,
+            scope: form.scope,
+            media: form.media,
+            stream: form.stream,
+            detail: form.detail,
+          }
+        })
+        this.tabcontent = this.$store.getters.getactive[0].TL
+        this.tabIndex++
+        this.editableTabsValue = newIndex
+        this.form.title = ''
+      }
+      
     },
     removeTab(targetName) {
       let tabs = this.$store.getters.getactive[0].TL

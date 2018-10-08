@@ -13,6 +13,9 @@ body {
 .el-dialog {
   width: 90%
 }
+.el-tag {
+  height: auto;
+}
 li.el-menu-item.usertab {
   height: 100px;
 }
@@ -21,4 +24,7 @@ p {
 }
 .el-collapse-item__content {
   padding: 10px 0 10px 0;
+}
+.fas {
+  line-height: 2!important;
 }

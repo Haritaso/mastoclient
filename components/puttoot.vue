@@ -1,14 +1,31 @@
 <template>
   <el-card key="toot.id" shadow="never">
+    <div class="tootstatus">
+      <div v-if="toot.reblog == null"></div>
+      <div v-else>
+        <el-tag type="success" class="fas fa-sync-alt">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
+      </div>
+    </div>
     <div class="tootcard">
-      <img class="icon" :src="toot.account.avatar">
+      <div>
+        <img class="icon" :src="toot.account.avatar">
+      </div>
       <div class="tootcontent">
-        <div>
-          <router-link :to=userlink>{{ toot.account.display_name }}</router-link>
+        <div class="username">
+          <router-link class="name" :to=userlink>
+            <span>
+              <bdi class="displayname">{{ toot.account.display_name }}</bdi>
+              <span>{{ userid }}</span>
+            </span>
+          </router-link>
+          <div class="time">
+            <time :datatime=time>-日</time>
+          </div>
         </div>
         <div v-html="toot.content"></div>
         <div class="mediapreview" v-if="mediaoption == true">
-          <img :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.preview_url" :key="i" @click="mediaClick(i)">
+          <img v-if="userreblog == false" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.preview_url" :key="i" @click="mediaClick(i)">
+          <img v-else-if="userreblog == true" :class="mediaclass" v-for="(media, i) in toot.reblog.media_attachments" :src="media.preview_url" :key="i" @click="mediaClick(i)">
           <vue-gallery-slideshow :images="mediaurl" :index="mediaindex" @close="mediaindex = null"></vue-gallery-slideshow>
         </div>
         <div>
@@ -64,27 +81,46 @@ export default {
       mediaindex: null,
       mediaurl: [],
       mediainit: false,
-      mediaclass: {}
+      mediaclass: {},
+      userreblog: false
     }
   },
   computed: {
     userlink () {
       const url = this.$store.getters.getactive[0].url
-      return '/users/' + url + "/" + this.toot.account.id + "/toot"
+      return '/users/' + url + "/" + this.toot.account.id + '/toot'
     },
+    rebloglink () {
+      const url = this.$store.getters.getactive[0].url
+      return '/users/' + url + "/" + this.toot.reblog.account.id + '/toot'
+    },
+    userid () {
+      if (this.toot.account.acct.indexOf('@') == true) {
+        return this.toot.account.acct
+      } else {
+        return '@' + this.toot.account.acct
+      }
+    },
+    time () {
+      return this.toot.created_at
+    }
   },
   created () {
-    if ( !!this.toot.media_attachments[0] ) {
+    if (!!this.toot.media_attachments[0]) {
       this.mediaoption = true
+      if (this.toot.media_attachments.length == 1) {
+        this.mediaclass = "style1"
+      } else if (this.toot.media_attachments.length == 2) {
+        this.mediaclass = "style2"
+      } else {
+        this.mediaclass = "style4"
+      }
     } else {
-      this.mediaoption = false
-    }
-    if (this.toot.media_attachments.length == 1) {
-      this.mediaclass = "style1"
-    } else if (this.toot.media_attachments.length == 2) {
-      this.mediaclass = "style2"
-    } else {
-      this.mediaclass = "style4"
+      if (this.toot.reblog == null) {
+        this.userreblog = false
+      } else {
+        this.userreblog = true
+      }
     }
     if (this.toot.reblogged == true) {
       this.reblogtap = true
@@ -94,6 +130,12 @@ export default {
       this.favtap = true
       this.fav++
     }
+    /* メモ
+    const start = new Date()
+    const date = new Date(this.toot.created_at)
+    const d = start - date
+    const a = (Math.floor(d)/ 1000).toString()
+    */
   },
   methods: {
     reblogaction () {
@@ -143,8 +185,7 @@ export default {
       }
     },
     mediaClick(i) {
-      console.log()
-      if (this.mediainit === false) {
+      if (this.mediainit == false) {
         for (var media in this.toot.media_attachments) {
           this.mediaurl.push(this.toot.media_attachments[media].url)
         }
@@ -161,7 +202,7 @@ export default {
 
 <style scoped>
 .tootcard {
-  display: inline-flex;
+  display: block;
 }
 .action {
   display: inline-block;
@@ -177,8 +218,23 @@ export default {
   margin: 4px 0 auto 0;
   border: 3px solid #909399;
 }
+.name {
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.displayname {
+  color: black;
+  text-decoration: none;
+}
+.time {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  float: right;
+}
 .fa {
-  display: inline-block;
+  display: block;
   font-weight: normal;
   font-size: inherit;
 }
@@ -192,7 +248,9 @@ export default {
 }
 .tootcontent {
   display: block;
-  margin: 0 12px 0 12px;
+  position: relative;
+  bottom: 60px;
+  margin: 0 12px -60px 65px;
   word-break: break-all;
 }
 .fav {
@@ -206,26 +264,27 @@ export default {
   color: #2b90d9;
 }
 .mediapreview {
-  display: inline-block;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   height: 200px;
+  width: auto;
   object-fit: cover;
   overflow: hidden;
   border-radius: 5px;
   margin-top: 10px;
+  grid-gap: 5px;
 }
 .style1 {
-  display: inline-block;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  object-position: 50% 50%;
+  display: grid;
+  grid-column: 1/3;
+  grid-row: 1/3;
   object-fit: cover;
   overflow: hidden;
 }
 .style2 {
-  display: inline-block;
-  position: relative;
-  border-radius: 4px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   height: 100%;
   width: 50%;
   object-position: 50% 50%;
@@ -233,13 +292,13 @@ export default {
   overflow: hidden;
 }
 .style4 {
-  display: inline-block;
-  position: relative;
-  border-radius: 4px;
-  right: 2px;
-  height: 50%;
-  width: 50%;
-  object-fit: cover;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  object-fit: cover;
+  border-radius: 5px;
+}
+.boost {
+  float: right;
 }
 </style>

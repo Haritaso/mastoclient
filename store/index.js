@@ -73,13 +73,13 @@ const store = () => new Vuex.Store({
       return state.activedata ? getters.getname + "@" + getters.getactive[0].url : null
     },
     getTcolor: (state, getters) => {
-      return getters.getactive[0].tcolor
+      return state.activedata ? getters.getactive[0].tcolor : null
     },
     getAcolor: (state, getters) => {
-      return getters.getactive[0].acolor
+      return state.activedata ? getters.getactive[0].acolor : null
     },
     getBcolor: (state, getters) => {
-      return getters.getactive[0].bcolor
+      return state.activedata ? getters.getactive[0].bcolor : null
     },
   },
   actions: {
