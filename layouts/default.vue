@@ -7,6 +7,7 @@
           :router="true"
           :background-color="Bcolor"
           :text-color="Tcolor"
+          :active-text-color="Acolor"
           class="useraside"
           @select="handleSelect"
         >
@@ -67,6 +68,7 @@
     <el-container>
       <el-header>
         <el-menu
+          class="header"
           :default-active="nowindex"
           mode="horizontal"
           :background-color="Bcolor"
@@ -92,10 +94,8 @@ export default {
   data() {
     return {
       nowindex: '1',
+      setcolor: false,
       drawer: false,
-      Tcolor: '#fff',
-      Acolor: '#409EFF',
-      Bcolor: '#545c64',
     }
   },
   computed: {
@@ -107,6 +107,15 @@ export default {
     },
     id () {
       return this.$store.getters.getid
+    },
+    Tcolor () {
+      return this.setcolor ? this.$store.getters.getactive[0].tcolor : '#fff'
+    },
+    Acolor () {
+      return this.setcolor ? this.$store.getters.getactive[0].acolor : '#409EFF'
+    },
+    Bcolor () {
+      return this.setcolor ? this.$store.getters.getactive[0].bcolor : '#545c64'
     }
   },
   mounted: function () {
@@ -150,15 +159,18 @@ export default {
     handleSelect (key, keyPath) {
     },
     getcolor () {
-      this.Tcolor = this.$store.getters.getTcolor
-      this.Acolor = this.$store.getters.getAcolor
-      this.Bcolor = this.$store.getters.getBcolor
+      if (this.$store.state.coloroption >=1 ) {
+        this.setcolor = true
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+.header {
+  display: flex;
+}
 .aside {
   z-index: 1;
 }

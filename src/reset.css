@@ -16,6 +16,9 @@ body {
 .el-tag {
   height: auto;
 }
+.el-textarea__inner {
+  border-radius: 5px 5px 0 0;
+}
 li.el-menu-item.usertab {
   height: 100px;
 }

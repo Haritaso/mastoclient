@@ -5,6 +5,24 @@
       <div v-else>
         <el-tag type="success" class="fas fa-sync-alt">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
       </div>
+      <div v-if="toot.visibility == 'public'">
+         <el-tag type="Info" class="fas fa-users">公開</el-tag>
+      </div>
+      <div v-else-if="toot.visibility == 'unlisted'">
+        <el-tag type="Info" class="fas fa-user-lock">未収載</el-tag>
+      </div>
+      <div v-else-if="toot.visibility == 'private'">
+        <el-tag type="Info" class="fas fa-user-check">フォロワー限定</el-tag>
+      </div>
+      <div v-else-if="toot.visibility == 'direct'">
+        <el-tag type="danger" class="fas fa-comment-alt">DM</el-tag>
+      </div>
+      <div v-if="toot.account.locked == true">
+        <el-tag type="warning" class="fas fa-lock">承認制アカウント</el-tag>
+      </div>
+      <div v-if="toot.account.bot == true">
+        <el-tag type="info" class="fas fa-robot">Bot</el-tag>
+      </div>
     </div>
     <div class="tootcard">
       <div>
@@ -19,14 +37,17 @@
             </span>
           </router-link>
           <div class="time">
-            <time :datatime=time>-日</time>
+            <time :datatime="this.toot.created_at">{{ time }}</time>
           </div>
         </div>
         <div v-html="toot.content"></div>
         <div class="mediapreview" v-if="mediaoption == true">
-          <img v-if="userreblog == false" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.preview_url" :key="i" @click="mediaClick(i)">
-          <img v-else-if="userreblog == true" :class="mediaclass" v-for="(media, i) in toot.reblog.media_attachments" :src="media.preview_url" :key="i" @click="mediaClick(i)">
-          <vue-gallery-slideshow :images="mediaurl" :index="mediaindex" @close="mediaindex = null"></vue-gallery-slideshow>
+          <img v-if="mediastate == 'image'" v-img:group="{ group: tootid }" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.url" :key="i">
+          <vue-plyr v-else-if="mediastate == 'video'" class="videoview">
+            <video :poster="videoposter" class="style1">
+              <source :src="videosrc" type="video/mp4">
+            </video>
+          </vue-plyr>
         </div>
         <div>
           <div class="action">
@@ -66,7 +87,9 @@
 
 <script>
 import axios from 'axios'
-import VueGallerySlideshow from 'vue-gallery-slideshow'
+import { PlyrVideo } from 'vue-plyr'
+import 'vue-plyr/dist/vue-plyr.css'
+
 export default {
   name: 'toot',
   props: ['toot', 'detail'],
@@ -78,11 +101,14 @@ export default {
       reblogtap: false,
       favtap: false,
       mediaoption: false,
-      mediaindex: null,
-      mediaurl: [],
-      mediainit: false,
       mediaclass: {},
-      userreblog: false
+      userreblog: false,
+      nowtime: new Date(),
+      watchStime: false,
+      watchMtime: false,
+      mediastate: '',
+      videosrc: '',
+      videoposter: ''
     }
   },
   computed: {
@@ -102,12 +128,40 @@ export default {
       }
     },
     time () {
-      return this.toot.created_at
+      const time = this.nowtime
+      const date = new Date(this.toot.created_at)
+      const d = time.getTime() - date.getTime()
+      const a = (d / 1000).toFixed()
+      if (a < 60) {
+        this.watchStime = true
+        return a + '秒前'
+      } else if ((a >= 60) && (a < 3600)) {
+        this.watchStime = false
+        this.watchMtime = true
+        return (a / 60).toFixed() + '分前'
+      } else if ((a >= 3600) && (a < (3600 * 24))) {
+        this.watchMtime = false
+        return (a / 3600).toFixed() + '時間前'
+      } else if ((a >= (3600 * 24)) && (a <( 3600 * 24 * 7))){
+        return Math.floor(a / (3600 * 24)) + '日前'
+      } else {
+        return date.getMonth()+1 + '月' + date.getDate() + '日'
+      }
+    },
+    tootid () {
+      return this.toot.id
     }
   },
   created () {
     if (!!this.toot.media_attachments[0]) {
       this.mediaoption = true
+      if ((this.toot.media_attachments[0].type == "video") || (this.toot.media_attachments[0].type == "gifv")) {
+        this.mediastate = 'video'
+        this.videosrc = this.toot.media_attachments[0].url
+        this.videoposter = this.toot.media_attachments[0].preview_url
+      } else if (this.toot.media_attachments[0].type == "image") {
+        this.mediastate = 'image'
+      }
       if (this.toot.media_attachments.length == 1) {
         this.mediaclass = "style1"
       } else if (this.toot.media_attachments.length == 2) {
@@ -130,19 +184,24 @@ export default {
       this.favtap = true
       this.fav++
     }
-    /* メモ
-    const start = new Date()
-    const date = new Date(this.toot.created_at)
-    const d = start - date
-    const a = (Math.floor(d)/ 1000).toString()
-    */
+  },
+  mounted () {
+    if (this.watchStime == true) {
+      setInterval(() => {
+        this.nowtime = new Date()
+      },5000)
+    } else if (this.watchMtime == true) {
+      setInterval(() => {
+        this.nowtime = new Date()
+      },50000)
+    }
   },
   methods: {
     reblogaction () {
       if (this.reblogtap == false) {
         axios({
           method: 'POST',
-          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/reblog',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/reblog',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -152,7 +211,7 @@ export default {
       } else {
         axios({
           method: 'POST',
-          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/unreblog',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/unreblog',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -165,7 +224,7 @@ export default {
       if (this.favtap == false) {
         axios({
           method: 'POST',
-          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/favourite',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/favourite',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -175,7 +234,7 @@ export default {
       } else {
         axios({
           method: 'POST',
-          url: this.toot.uri.replace('users/' + this.toot.account.acct, 'api/v1') + '/unfavourite',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/unfavourite',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -184,18 +243,9 @@ export default {
         })
       }
     },
-    mediaClick(i) {
-      if (this.mediainit == false) {
-        for (var media in this.toot.media_attachments) {
-          this.mediaurl.push(this.toot.media_attachments[media].url)
-        }
-      }
-      this.mediaindex = i
-      this.mediainit = true
-    }
   },
   components: {
-    VueGallerySlideshow
+    PlyrVideo: 'vue-plyr'
   }
 }
 </script>
@@ -204,10 +254,11 @@ export default {
 .tootcard {
   display: block;
 }
+
 .action {
   display: inline-block;
   margin-right: 25px;
-  height: 30px;
+  height: 25px;
 }
 .icon {
   display: block;
@@ -218,20 +269,24 @@ export default {
   margin: 4px 0 auto 0;
   border: 3px solid #909399;
 }
+.username {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .name {
   text-decoration: none;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .displayname {
   color: black;
   text-decoration: none;
-}
-.time {
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  float: right;
 }
 .fa {
   display: block;
@@ -245,6 +300,9 @@ export default {
 }
 .fa-retweet:active {
   transform: rotate(0deg);
+}
+.tootstatus {
+  display: inline-flex;
 }
 .tootcontent {
   display: block;
@@ -267,36 +325,50 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  height: 200px;
+  height: 250px;
   width: auto;
   object-fit: cover;
   overflow: hidden;
   border-radius: 5px;
   margin-top: 10px;
+  padding: 0 3px 3px 3px;
   grid-gap: 5px;
 }
 .style1 {
+  border: 1px solid #909399;
+  border-radius: 5px;
   display: grid;
-  grid-column: 1/3;
-  grid-row: 1/3;
+  grid-row: span 2;
+  grid-column: span 2;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   overflow: hidden;
 }
 .style2 {
+  border: 1px solid #909399;
+  border-radius: 5px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-row: span 2;
+  grid-column: span 1;
   height: 100%;
-  width: 50%;
+  width: 100%;
   object-position: 50% 50%;
   object-fit: cover;
   overflow: hidden;
 }
 .style4 {
+  border: 1px solid #909399;
+  border-radius: 5px;
   width: 100%;
   height: 100%;
   overflow: hidden;
   object-fit: cover;
-  border-radius: 5px;
+}
+.videoview {
+  display: grid;
+  grid-row: span 2;
+  grid-column: span 2;
 }
 .boost {
   float: right;

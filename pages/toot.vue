@@ -8,9 +8,7 @@
     <el-form-item>
       <i class="id">{{ id + "で投稿"}}</i>
       <transition name="cw">
-        <div v-show="cw">
-          <el-input placeholder="cw" v-model="form.cwContent"></el-input>
-        </div>
+        <el-input v-show="cw" placeholder="cw" v-model="form.cwContent"></el-input>
       </transition>
       <el-input
         type="textarea"
@@ -22,23 +20,15 @@
       </el-input>
       <div class="buttons">
         <div class="tootoption">
-          <div>
-            <el-upload
-              :limit="4"
-              :auto-upload="false"
-              :file-list="fileList"
-              :show-file-list="false"
-            >
-              <el-button
-                size="medium"
-                type="info"
-                icon="el-icon-picture-outline"
-                v-model="form.picture"
-                class="btn"
-                circle
-              >
-              </el-button>
-            </el-upload>
+          <div id="upload">
+            <el-button
+              size="medium"
+              type="info"
+              icon="el-icon-picture-outline"
+              v-model="form.picture"
+              class="btn"
+              circle
+            ></el-button>
           </div>
           <div>
             <el-button
@@ -78,6 +68,9 @@
         </div>
       </div>
     </el-form-item>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </el-form>
 </template>
 
@@ -91,8 +84,10 @@ export default {
         cwContent: '',
         sensitive: false,
         media: [],
+        imageurl: ''
       },
-      cw: false
+      cw: false,
+      dialogVisible: false
     }
   },
   computed: {
@@ -117,6 +112,10 @@ export default {
       this.form.TootContent = ''
       this.form.cwContent = ''
       this.form.media = []
+    },
+    handlePictureCardPreview(file) {
+      this.imageurl = file.url;
+      this.dialogVisible = true;
     }
   }
 }

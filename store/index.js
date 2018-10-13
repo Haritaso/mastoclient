@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
@@ -7,6 +8,7 @@ const store = () => new Vuex.Store({
     count: 0,
     first: false,
     activedata: false,
+    coloroption: false
   },
   mutations: {
     count (state, payload) {
@@ -48,9 +50,10 @@ const store = () => new Vuex.Store({
       state.users[payload.index].TLcount--
     },
     setGeneral (state, payload) {
-      state.users[payload.index].tcolor = payload.tcolor
-      state.users[payload.index].acolor = payload.acolor
-      state.users[payload.index].bcolor = payload.bcolor
+      state.coloroption = true
+      Vue.set(state.users[payload.index] ,'tcolor', payload.tcolor)
+      Vue.set(state.users[payload.index] ,'acolor', payload.acolor)
+      Vue.set(state.users[payload.index] ,'bcolor', payload.bcolor)
     }
   },
   getters: {
@@ -71,15 +74,6 @@ const store = () => new Vuex.Store({
     },
     getid: (state, getters) => {
       return state.activedata ? getters.getname + "@" + getters.getactive[0].url : null
-    },
-    getTcolor: (state, getters) => {
-      return state.activedata ? getters.getactive[0].tcolor : null
-    },
-    getAcolor: (state, getters) => {
-      return state.activedata ? getters.getactive[0].acolor : null
-    },
-    getBcolor: (state, getters) => {
-      return state.activedata ? getters.getactive[0].bcolor : null
     },
   },
   actions: {

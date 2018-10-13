@@ -20,7 +20,9 @@ module.exports = {
   },
   plugins: [
     '~plugins/element-ui',
-    { src: "~plugins/persistedstate.js", ssr: false }
+    { src: "~plugins/persistedstate.js", ssr: false },
+    '~plugins/v-img.js',
+    '~plugins/plyrvideo.js'
   ],
   css: [
     'element-ui/lib/theme-chalk/index.css',

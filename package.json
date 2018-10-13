@@ -15,7 +15,8 @@
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
     "nuxt": "^2.0.0",
-    "vue-gallery-slideshow": "^1.2.4",
+    "v-img": "^0.2.0",
+    "vue-plyr": "^4.0.0",
     "vue-server-renderer": "2.5.16",
     "vuex-persistedstate": "^2.5.4"
   },
