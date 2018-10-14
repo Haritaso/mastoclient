@@ -6,7 +6,7 @@
         <el-tag type="success" class="fas fa-sync-alt">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
       </div>
       <div v-if="toot.visibility == 'public'">
-         <el-tag type="Info" class="fas fa-users">公開</el-tag>
+        <el-tag type="Info" class="fas fa-users">公開</el-tag>
       </div>
       <div v-else-if="toot.visibility == 'unlisted'">
         <el-tag type="Info" class="fas fa-user-lock">未収載</el-tag>
@@ -19,6 +19,12 @@
       </div>
       <div v-if="toot.account.locked == true">
         <el-tag type="warning" class="fas fa-lock">承認制アカウント</el-tag>
+      </div>
+      <div v-if="mediastate == 'video'">
+        <el-tag type="success" class="fas fa-video">Video</el-tag>
+      </div>
+      <div v-else-if="mediastate == 'image'">
+        <el-tag type="success" class="fas fa-image">Image</el-tag>
       </div>
       <div v-if="toot.account.bot == true">
         <el-tag type="info" class="fas fa-robot">Bot</el-tag>
@@ -43,11 +49,21 @@
         <div v-html="toot.content"></div>
         <div class="mediapreview" v-if="mediaoption == true">
           <img v-if="mediastate == 'image'" v-img:group="{ group: tootid }" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.url" :key="i">
-          <vue-plyr v-else-if="mediastate == 'video'" class="videoview">
-            <video :poster="videoposter" class="style1">
-              <source :src="videosrc" type="video/mp4">
-            </video>
-          </vue-plyr>
+          <img v-else-if="mediastate == 'video'" :class="mediaclass" :src="toot.media_attachments[0].preview_url" @click="videowindow = !videowindow">
+          <el-dialog
+            title=""
+            :fullscreen=false
+            :modal=false
+            :append-to-body=true
+            :center=true
+            :visible.sync="videowindow"
+          >
+            <vue-plyr class="videoview">
+              <video :poster="videoposter" class="style1">
+                <source :src="videosrc" type="video/mp4">
+              </video>
+            </vue-plyr>
+          </el-dialog>
         </div>
         <div>
           <div class="action">
@@ -108,7 +124,8 @@ export default {
       watchMtime: false,
       mediastate: '',
       videosrc: '',
-      videoposter: ''
+      videoposter: '',
+      videowindow: false,
     }
   },
   computed: {
@@ -141,7 +158,7 @@ export default {
         return (a / 60).toFixed() + '分前'
       } else if ((a >= 3600) && (a < (3600 * 24))) {
         this.watchMtime = false
-        return (a / 3600).toFixed() + '時間前'
+        return Math.floor(a / 3600) + '時間前'
       } else if ((a >= (3600 * 24)) && (a <( 3600 * 24 * 7))){
         return Math.floor(a / (3600 * 24)) + '日前'
       } else {
@@ -325,7 +342,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  height: 250px;
+  height: 350px;
   width: auto;
   object-fit: cover;
   overflow: hidden;

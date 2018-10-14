@@ -10,9 +10,6 @@ body {
 .el-card__body {
   padding: 10px 5px 10px 5px;
 }
-.el-dialog {
-  width: 90%
-}
 .el-tag {
   height: auto;
 }
@@ -30,4 +27,12 @@ p {
 }
 .fas {
   line-height: 2!important;
+}
+.el-dialog {
+  width: 80%
+}
+.el-dialog.is-fullscreen {
+  margin-top: 10px;
+  height: 120%;
+  overflow: hidden;
 }
