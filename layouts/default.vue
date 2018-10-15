@@ -22,10 +22,10 @@
             </template>
             <el-menu-item-group title="既存のアカウントに切り替え">
               <el-menu-item
-                :default-active="2-1"
-                v-for="item in $store.state.users"
+                default-active="2-1"
+                v-for="(item, i) in $store.state.users"
                 :key="item.index"
-                :index="item.index"
+                :index="'2-'+ i"
                 @click="change(item.index)"
               >
               {{ item.id }}
@@ -116,7 +116,7 @@ export default {
     },
     Bcolor () {
       return this.setcolor ? this.$store.getters.getactive[0].bcolor : '#545c64'
-    }
+    },
   },
   mounted: function () {
     setTimeout(() => {

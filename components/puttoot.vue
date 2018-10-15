@@ -39,6 +39,7 @@
           <router-link class="name" :to=userlink>
             <span>
               <bdi class="displayname">{{ toot.account.display_name }}</bdi>
+              <bdi class="displayname" v-if="toot.account.display_name == ''">{{ toot.account.username }}</bdi>
               <span>{{ userid }}</span>
             </span>
           </router-link>
