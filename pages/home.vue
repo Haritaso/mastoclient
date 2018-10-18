@@ -12,10 +12,10 @@
         @click="isOpenbar = !isOpenbar"
       >
         Tootbar
-        <no-ssr>
-          <tootbar :isOpenbar="isOpenbar"></tootbar>
-        </no-ssr>
       </el-button>
+      <no-ssr>
+        <tootbar :isOpenbar="isOpenbar"></tootbar>
+      </no-ssr>
       <el-dialog title="新しいタイムラインを追加" :visible.sync="dialogFormVisible" :modal="false">
         <el-form :model="form">
           <el-form-item label="TL名" :label-width="formLabelWidth">

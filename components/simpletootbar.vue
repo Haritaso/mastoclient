@@ -6,7 +6,6 @@
         class="tootbar"
         :closeButton="true"
         :isOpen.sync="isOpenbar"
-        :isScrollable="true"
         :resizable="true"
         :minWidth="320"
         :maxWidth="800"

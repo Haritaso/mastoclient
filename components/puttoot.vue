@@ -47,7 +47,7 @@
             <time :datatime="this.toot.created_at">{{ time }}</time>
           </div>
         </div>
-        <div v-html="toot.content"></div>
+        <div class="toottext" v-html="toot.content"></div>
         <div class="mediapreview" v-if="mediaoption == true">
           <img v-if="mediastate == 'image'" v-img:group="{ group: tootid }" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.url" :key="i">
           <img v-else-if="mediastate == 'video'" :class="mediaclass" :src="toot.media_attachments[0].preview_url" @click="videowindow = !videowindow">
@@ -390,5 +390,8 @@ export default {
 }
 .boost {
   float: right;
+}
+.toottext {
+  margin: 10px 0 0 0;
 }
 </style>

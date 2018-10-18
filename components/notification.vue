@@ -1,16 +1,67 @@
 <template>
   <el-card :key="data.id" shadow="never" class="ncard">
-    <div v-if="data.type == 'favourite'">
-      <div class="el-icon-star-on">{{ data.account.acct + "さんがあなたのトゥートをお気に入り登録しました" }}</div>
+    <div class="toottype">
+      <div v-if="data.type == 'favourite'" class="el-icon-star-on typeline">{{ data.account.display_name + "さんがお気に入り登録" }}</div>
+      <div v-else-if="data.type == 'reblog'" class="el-icon-refresh typeline">{{ data.account.display_name + "さんがブースト"}}</div>
+      <div v-else-if="data.type == 'follow'" class="el-icon-circle-plus typeline">{{ data.account.display_name + "さんにフォローされました"}}</div>
+      <div v-else-if="data.type == 'mention'" class="typeline">{{ "@" + data.account.display_name + "さんからのリプライ"}}</div>
     </div>
-    <div v-else-if="data.type == 'reblog'">
-      <div class="el-icon-refresh">{{ data.account.acct + "さんがあなたのトゥートをブーストしました"}}</div>
-    </div>
-    <div v-else-if="data.type == 'follow'">
-      <div class="el-icon-circle-plus">{{ data.account.acct + "さんにフォローされました"}}</div>
-    </div>
-    <div v-else>
-      <div v-html="data.status.content"></div>
+    <div class="tootbox">
+      <div class="box">
+        <div class="icons">
+          <div v-if="data.type == 'favourite'">
+            <img class="undericon" :src="data.status.account.avatar">
+            <div>
+              <img class="actionicon" :src="data.account.avatar">
+            </div>
+          </div>
+          <div v-else-if="data.type == 'reblog'">
+            <img class="undericon" :src="data.status.account.avatar">
+            <div>
+              <img class="actionicon" :src="data.account.avatar">
+            </div>
+          </div>
+          <div v-else>
+            <img class="icon" :src="data.account.avatar">
+          </div>
+        </div>
+      </div>
+      <div class="tootcontent">
+        <div class="username">
+          <router-link class="name" :to=userlink>
+            <span v-if="data.type == ('favourite' || 'reblog')">
+              <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
+              <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
+              <span>{{ userid }}</span>
+            </span>
+            <span v-else>
+              <bdi class="displayname">{{ data.account.display_name }}</bdi>
+              <bdi class="displayname" v-if="data.account.display_name == ''">{{ data.account.username }}</bdi>
+              <span>{{ userid }}</span>
+            </span>
+          </router-link>
+          <div class="time">
+            <time :datatime="data.created_at">{{ time }}</time>
+          </div>
+        </div>
+        <div class="toot">
+          <div v-if="data.type == ('favourite' || 'reblog')" class="text">
+            <div v-html="data.status.content"></div>
+          </div>
+          <div v-else-if="data.type == 'follow'" class="followobj">
+            <div class="followdata">
+              <div class="followbioobj">
+                <div class="followbio" v-html="data.account.note"></div>
+              </div>
+              <div class="followcount">
+                <div class="followcount">{{ "フォロー:" + data.account.following_count }}</div>
+                <div class="followcount">{{ "フォロワー:" + data.account.followers_count }}</div>
+              </div>
+            </div>
+            <el-button type="primary" class="followbtn"><i class="fas fa-user-plus"></i></el-button>
+          </div>
+        </div>
+      </div>
     </div>
   </el-card>
 </template>
@@ -18,7 +69,71 @@
 <script>
 export default {
   name: 'notification',
-  props: ['data']
+  props: ['data'],
+  data () {
+    return {
+      nowtime: new Date(),
+      watchStime: false,
+      watchMtime: false
+    }
+  },
+  computed: {
+    userlink () {
+      const url = this.$store.getters.getactive[0].url
+      return '/users/' + url + "/" + this.data.account.id + '/toot'
+    },
+    rebloglink () {
+      const url = this.$store.getters.getactive[0].url
+      return '/users/' + url + "/" + this.data.reblog.account.id + '/toot'
+    },
+    userid () {
+      if (this.data.account.acct.indexOf('@') == true) {
+        if (this.data.type == ('favourite' || 'reblog')) {
+          return this.data.status.account.acct
+        } else {
+          return this.data.account.acct
+        }
+      } else {
+        if (this.data.type == ('favourite' || 'reblog')) {
+          return '@' + this.data.status.account.acct
+        } else {
+          return '@' + this.data.account.acct
+        }
+      }
+    },
+    time () {
+      const time = this.nowtime
+      const date = new Date(this.data.created_at)
+      const d = time.getTime() - date.getTime()
+      const a = (d / 1000).toFixed()
+      if (a < 60) {
+        this.watchStime = true
+        return a + '秒前'
+      } else if ((a >= 60) && (a < 3600)) {
+        this.watchStime = false
+        this.watchMtime = true
+        return (a / 60).toFixed() + '分前'
+      } else if ((a >= 3600) && (a < (3600 * 24))) {
+        this.watchMtime = false
+        return Math.floor(a / 3600) + '時間前'
+      } else if ((a >= (3600 * 24)) && (a <( 3600 * 24 * 7))){
+        return Math.floor(a / (3600 * 24)) + '日前'
+      } else {
+        return date.getMonth()+1 + '月' + date.getDate() + '日'
+      }
+    }
+  },
+  mounted () {
+    if (this.watchStime == true) {
+      setInterval(() => {
+        this.nowtime = new Date()
+      },5000)
+    } else if (this.watchMtime == true) {
+      setInterval(() => {
+        this.nowtime = new Date()
+      },50000)
+    }
+  }
 }
 </script>
 
@@ -31,5 +146,118 @@ export default {
 }
 .el-icon-circle-plus:before {
   color: #2b90d9;
+}
+.tootbox {
+  display: flex;
+  word-break: break-all;
+}
+.box {
+  display: inline-flex;
+  width: 62px;
+  max-width: 62px;
+}
+.toottype {
+  position: relative;
+  margin: 0px 0px 6px 0px;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.typeline {
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.action {
+  display: inline-block;
+  margin-right: 25px;
+  height: 25px;
+}
+.icons {
+  width: 62px;
+  max-width: 62px;
+}
+.icon {
+  display: block;
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
+  min-height: 50px;
+  margin: 0 0 auto 0;
+  border: 2px solid #909399;
+}
+.undericon {
+  display: block;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+  margin: 0 0 auto 0;
+  border: 2px solid #909399;
+}
+.actionicon {
+  display: block;
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  min-height: 30px;
+  margin: 2px 0 auto 0;
+  border: 2px solid #909399;
+  position: relative;
+  left: 25px;
+  bottom: 31px;
+}
+.text {
+  margin: 10px;
+}
+.tootcontent {
+  display: inline-grid;
+  width: 100%;
+}
+.username {
+  margin: 0px 0px 10px 0px;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.name {
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.displayname {
+  color: black;
+  text-decoration: none;
+}
+.followobj {
+  display: flex;
+  justify-content: space-between;
+}
+.followdata {
+  margin: 0px 25px 10px 0px;
+  width: 100%;
+  min-width: 80%;
+}
+.followcount{
+  display: flex;
+  justify-content: space-around;
+}
+.followbioobj {
+  border: 2px ridge black;
+  text-align: center;
+}
+.followbtn {
+  margin: 0 12px auto 0px;
+  height: 80px;
 }
 </style>

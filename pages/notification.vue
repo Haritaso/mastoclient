@@ -27,30 +27,35 @@ export default {
       reply: []
     }
   },
-  created: function () {
-    axios({
-      method: 'GET',
-      url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/notifications',
-      headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
-      params: {
-        limit: 15
-      }
-    })
-    .then (res => {
-      for (var i=0,d;d=res.data[i];i++) {
-        this.notifications.push(d)
-        if (d.type == 'mention') {
-          this.reply.push(d)
-        }
-      }
-      setTimeout(this.connectWs, 3000)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+  mounted () {
+    setTimeout(() => {
+      this.notification()
+    },1)
   },
   methods: {
-    connectWs: function () {
+    notification () {
+      axios({
+        method: 'GET',
+        url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/notifications',
+        headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        params: {
+          limit: 15
+        }
+      })
+      .then (res => {
+        for (var i=0,d;d=res.data[i];i++) {
+          this.notifications.push(d)
+          if (d.type == 'mention') {
+            this.reply.push(d)
+          }
+        }
+        setTimeout(this.connectWs, 3000)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    connectWs () {
       const wssurl =
         'wss://' +
         this.$store.getters.getactive[0].url +
@@ -78,7 +83,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
