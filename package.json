@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free-webfonts": "^1.0.9",
+    "@hscmap/vue-window": "^2.2.6",
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
     "nuxt": "^2.0.0",

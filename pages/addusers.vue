@@ -1,5 +1,5 @@
 <template>
-  <div :style="style">
+  <div>
     <div class="atom-spinner">
       <div class="spinner-inner">
         <div class="spinner-line"></div>

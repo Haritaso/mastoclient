@@ -15,14 +15,18 @@ module.exports = {
     vendor: [
       'element-ui',
       'vuex',
-      'axios'
+      'axios',
+      'VuePlyr',
+      'vue-window',
+      'StyleFactory',
     ],
   },
   plugins: [
     '~plugins/element-ui',
-    { src: "~plugins/persistedstate.js", ssr: false },
+    { src: '~plugins/persistedstate.js', ssr: false },
     '~plugins/v-img.js',
-    '~plugins/plyrvideo.js'
+    '~plugins/plyrvideo.js',
+    { src: '~plugins/vuewindow.js', ssr: false },
   ],
   css: [
     'element-ui/lib/theme-chalk/index.css',

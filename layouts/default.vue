@@ -118,7 +118,7 @@ export default {
       return this.setcolor ? this.$store.getters.getactive[0].bcolor : '#545c64'
     },
   },
-  mounted: function () {
+  mounted () {
     setTimeout(() => {
       this.getcolor()
     },1)

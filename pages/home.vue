@@ -1,13 +1,22 @@
 <template>
   <div>
+    <no-ssr>
+      <tootbar :isOpen="isOpen"></tootbar>
+    </no-ssr>
     <div style="margin-bottom: 20px;">
       <el-button
         size="small"
         @click="dialogFormVisible = true"
       >
-        add tab
+        タイムラインを追加
       </el-button>
-      <el-dialog title="新しいTLを追加" :visible.sync="dialogFormVisible" :modal="false">
+      <el-button
+        size="small"
+        @click="isOpen = ! isOpen"
+      >
+        Tootbar
+      </el-button>
+      <el-dialog title="新しいタイムラインを追加" :visible.sync="dialogFormVisible" :modal="false">
         <el-form :model="form">
           <el-form-item label="TL名" :label-width="formLabelWidth">
             <el-input v-model="form.title" auto-complete="off"></el-input>
@@ -70,9 +79,9 @@
 </template>
 
 <script>
+import tootbar from '@/components/simpletootbar.vue'
 import gettoot from '@/components/gettoot.vue'
 import axios from 'axios'
-
 export default {
   data() {
     return {
@@ -92,10 +101,11 @@ export default {
       },
       formLabelWidth: '160px',
       activeName: '0',
-      taberror: false
+      taberror: false,
+      isOpen: true
     }
   },
-  mounted: function () {
+  mounted () {
     setTimeout(() => {
       this.setTL()
     },0)
@@ -139,7 +149,6 @@ export default {
         this.editableTabsValue = newIndex
         this.form.title = ''
       }
-      
     },
     removeTab(targetName) {
       let tabs = this.$store.getters.getactive[0].TL
@@ -169,7 +178,8 @@ export default {
     }
   },
   components: {
-    gettoot
+    gettoot,
+    tootbar
   }
 }
 </script>

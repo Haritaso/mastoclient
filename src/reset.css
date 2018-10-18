@@ -36,3 +36,6 @@ p {
   height: 120%;
   overflow: hidden;
 }
+.el-button+.el-button {
+  margin-left: 0px;
+}
