@@ -1,7 +1,19 @@
 <template>
   <div>
     <component v-for="(style, name) in styles" :is="style" :key="name" :name="name">
-      <hsc-window id="target" :title="id + 'で投稿'" class="tootbar" :top.sync="top" :closeButton="true" :isOpen.sync="isOpen" :isScrollable="true">
+      <hsc-window
+        :title="id + 'で投稿'"
+        class="tootbar"
+        :closeButton="true"
+        :isOpen.sync="isOpenbar"
+        :isScrollable="true"
+        :resizable="true"
+        :minWidth="320"
+        :maxWidth="800"
+        :minHeight="100"
+        :maxHeight="100"
+        positionHint="20 / 50"
+      >
         <div class="postmenu">
           <el-input placeholder="今なにしてる？" v-model="toot.TootContent">
             <el-select v-model="toot.visibility" slot="prepend" placeholder="Select">
@@ -13,13 +25,18 @@
           </el-input>
           <el-button class="tootbtn" size="medium" type="primary" @click="tootaction">トゥート!</el-button>
         </div>
-        <div class="option">
+        <el-popover
+          placement="top-start"
+          width="300"
+          trigger="click"
+        >
           <el-input class="cwinput" v-show="cwtoggle" placeholder="cw" size="medium" v-model="toot.cwContent"></el-input>
           <div class="optionbtn">
             <el-button size="medium" type="info" icon="el-icon-view" circle @click="cwtoggle = !cwtoggle"></el-button>
             <el-button size="medium" type="info" icon="el-icon-picture-outline" circle></el-button>
           </div>
-        </div>
+          <el-button class="option" type="mini" slot="reference">Option</el-button>
+        </el-popover>
       </hsc-window>
     </component>
   </div>
@@ -54,7 +71,7 @@ if (process.browser) {
 const styles = { StyleUser }
 export default {
   name: 'tootbar',
-  props: ['isOpen'],
+  props: ['isOpenbar'],
   data () {
     return {
       toot: {
@@ -65,8 +82,6 @@ export default {
         media: [],
         imageurl: ''
       },
-      top: 0,
-      scrolly: 0,
       cwtoggle: false,
       styles
     }
@@ -84,10 +99,6 @@ export default {
       this.toot.TootContent = ''
       this.toot.cwContent = ''
       this.toot.media = []
-    },
-    handlePictureCardPreview(file) {
-      this.imageurl = file.url;
-      this.dialogVisible = true;
     }
   }
 }
@@ -99,33 +110,37 @@ export default {
 }
 .postmenu {
   display: inline-flex;
-}
-.option {
-  display: inline-flex;
-  margin-top: 8px;
-}
-.optionbtn {
-  min-width: 98px;
-  margin-left: auto;
   text-align: center;
-}
-.cwinput {
-  float:left;
-  max-width: 230px;
+  margin: auto 8px auto 8px;
 }
 .content {
   display: inline-grid;
 }
 .tootbtn {
   text-align: right;
-  margin-left: 8px;
+  margin: 0 12px 0 8px;
+  max-height: 40px;
+}
+.cwinput {
+  display: inline-flex;
+  margin: auto 0 auto 0;
+}
+.option {
+  display: inline-block;
+  margin: 0 8px 0 8px;
+  width: 95%;
+}
+.optionbtn {
+  min-width: 100px;
+  max-height: 36px;
+  margin: auto 6px auto auto;
+  display: inline-flex;
+  justify-content: space-around;
 }
 .tootbar {
   z-index: 100!important;
 }
 .window {
-  max-width: 377px;
-  min-width: 377px;
   border-radius: 4px!important;
   position: fixed!important;
 }

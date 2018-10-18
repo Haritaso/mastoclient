@@ -1,7 +1,7 @@
 <template>
   <div>
     <no-ssr>
-      <tootbar :isOpen="isOpen"></tootbar>
+      <tootbar :isOpenbar="isOpenbar"></tootbar>
     </no-ssr>
     <div style="margin-bottom: 20px;">
       <el-button
@@ -12,7 +12,7 @@
       </el-button>
       <el-button
         size="small"
-        @click="isOpen = ! isOpen"
+        @click="isOpenbar = !isOpenbar"
       >
         Tootbar
       </el-button>
@@ -102,7 +102,7 @@ export default {
       formLabelWidth: '160px',
       activeName: '0',
       taberror: false,
-      isOpen: true
+      isOpenbar: false
     }
   },
   mounted () {
@@ -112,15 +112,6 @@ export default {
   },
   methods: {
     addTab(form) {
-      for (var i=0,d;d=this.tabcontent[i];i++) {
-        if (d.title == form.title) {
-          this.taberror = true
-          this.$message({
-            message: '他のタブと同じ名前は付けられません',
-            type: 'warning'
-          })
-        }
-      }
       if (form.scope == null) {
         this.taberror = true
         this.$message({
@@ -175,6 +166,8 @@ export default {
     },
     setTL () {
       this.tabcontent = this.$store.getters.getactive[0].TL
+      console.log(this.tabcontent.length)
+      this.tabIndex = this.tabcontent.length
     }
   },
   components: {
