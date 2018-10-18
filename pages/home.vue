@@ -1,8 +1,5 @@
 <template>
   <div>
-    <no-ssr>
-      <tootbar :isOpenbar="isOpenbar"></tootbar>
-    </no-ssr>
     <div style="margin-bottom: 20px;">
       <el-button
         size="small"
@@ -15,6 +12,9 @@
         @click="isOpenbar = !isOpenbar"
       >
         Tootbar
+        <no-ssr>
+          <tootbar :isOpenbar="isOpenbar"></tootbar>
+        </no-ssr>
       </el-button>
       <el-dialog title="新しいタイムラインを追加" :visible.sync="dialogFormVisible" :modal="false">
         <el-form :model="form">
