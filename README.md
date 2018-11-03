@@ -1,23 +1,33 @@
-# mastoclient
+# 概要
 
-> Nuxt.js project
+趣味でマストドンのWebクライアントを作ってます。
 
-## Build Setup
+## 入れ方
 
-``` bash
-# install dependencies
-$ npm install # Or yarn install
+```fish
+# install
+yarn install
+yarn dev
 
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm start
-
-# generate static project
-$ npm run generate
+# build
+yarn build
+yarn start
 ```
 
-For detailed explanation on how things work, checkout the [Nuxt.js docs](https://github.com/nuxt/nuxt.js).
+## 使ってるもの
 
+```txt
+Nuxt.js
+```
+
+とか
+
+## 進捗
+
+だめです
+
+## ライセンス
+
+AGPL
+
+[ご用のある方はこちらまで](https://knzk.me/@hari_taso_)
