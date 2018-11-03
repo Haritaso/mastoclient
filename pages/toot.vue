@@ -20,16 +20,27 @@
       </el-input>
       <div class="buttons">
         <div class="tootoption">
-          <div id="upload">
+          <el-upload
+            class=""
+            :action="pictureUrl"
+            :headers="pictureHeader"
+            :show-file-list="false"
+            multiple
+            :limit="4"
+            :on-change="pictureAdd"
+            :on-progress="picturePro"
+            :on-success="pictureSuc"
+            :file-list="form.picture"
+            list-type="picture"
+          >
             <el-button
               size="medium"
               type="info"
               icon="el-icon-picture-outline"
-              v-model="form.picture"
               class="btn"
               circle
             ></el-button>
-          </div>
+          </el-upload>
           <div>
             <el-button
               size="medium"
@@ -38,6 +49,17 @@
               v-model="cw"
               circle
               @click="cw = !cw"
+              class="btn"
+            >
+            </el-button>
+          </div>
+          <div v-show="nsfw">
+            <el-button
+              size="medium"
+              type="info"
+              :icon="nsfwmode"
+              circle
+              @click="form.sensitive = !form.sensitive"
               class="btn"
             >
             </el-button>
@@ -63,59 +85,104 @@
         </div>
         <div>
           <div class="toot">
-            <el-button class="tootbtn" size="medium" type="primary" @click="tootaction">トゥート!</el-button>
+            <el-button :loading="loading" class="tootbtn" size="medium" type="primary" @click="tootaction">トゥート!</el-button>
           </div>
         </div>
       </div>
     </el-form-item>
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
   </el-form>
 </template>
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       form: {
-        TootContent: '',
-        visibility: 'public',
-        cwContent: '',
+        TootContent: "",
+        visibility: "public",
+        cwContent: "",
         sensitive: false,
         media: [],
-        imageurl: ''
       },
       cw: false,
-      dialogVisible: false
+      nsfw: false,
+      dialogVisible: false,
+      loading: false,
+      filelist: [],
+      first: false,
+      mediacount: 0
     }
   },
   computed: {
-    src: function () {
-      return this.$store.getters.geticon
+    src() {
+      return this.$store.getters.geticon;
     },
-    name: function () {
-      return this.$store.getters.getdisplayname
+    name() {
+      return this.$store.getters.getdisplayname;
     },
-    id: function () {
-      return this.$store.getters.getid
+    id() {
+      return this.$store.getters.getid;
+    },
+    token () {
+      return this.first ? this.$store.getters.getactive[0].accessToken : "dummy"
+    },
+    pictureUrl() {
+      return "https://" + this.$store.getters.geturl + "/api/v1/media";
+    },
+    pictureHeader() {
+      return {
+        Authorization: "Bearer " + this.token
+      }
+    },
+    nsfwmode () {
+      let a = ""
+      if (this.form.sensitive == false) {
+        a = "el-icon-question"
+      } else {
+        a = "el-icon-warning"
+      }
+      return a
     }
   },
+  mounted () {
+    setTimeout(() => {
+      this.first = true
+      this.loading = false
+    }, 1)
+  },
   methods: {
-    changeVisibility (command) {
-      this.$set(this.form, 'visibility', command)
+    changeVisibility(command) {
+      this.$set(this.form, "visibility", command);
     },
-    tootaction () {
-      this.$store.dispatch('tootaction', {
+    tootaction() {
+      this.$store.dispatch("tootaction", {
         data: this.form
-      })
-      this.form.TootContent = ''
-      this.form.cwContent = ''
+      });
+      this.form.TootContent = ""
+      this.form.cwContent = ""
       this.form.media = []
+      this.filelist = []
+      this.nsfw = true
     },
     handlePictureCardPreview(file) {
-      this.imageurl = file.url;
-      this.dialogVisible = true;
+      this.imageurl = file.url
+      this.dialogVisible = true
+    },
+    pictureAdd(file, filelist) {
+      this.filelist = filelist
+      this.loading = true
+    },
+    picturePro (event, file, filelist) {
+      console.log(event)
+    },
+    pictureSuc(response, file, filelist) {
+      this.filelist = filelist
+      this.form.media.push(filelist[this.mediacount].response.id)
+      this.mediacount++
+      this.nsfw = true
+      this.$nextTick(() => {
+        this.loading = false
+      })
     }
   }
 }

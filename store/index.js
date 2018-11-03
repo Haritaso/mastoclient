@@ -137,6 +137,19 @@ const store = () => new Vuex.Store({
         }
       })
     },
+    followaction (context, payload) {
+      axios({
+        method: 'POST',
+        url: 'https://' + context.getters.getactive[0].url + '/api/v1/accounts/' +  payload.id + payload.type,
+        headers: {Authorization: 'Bearer ' + context.getters.getactive[0].accessToken},
+      })
+      .then(response => {
+        console.log(payload.type + '成功')
+      })
+      .error(response => {
+        console.log(payload.type + '失敗')
+      })
+    }
   }
 })
 

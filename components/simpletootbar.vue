@@ -9,8 +9,8 @@
         :resizable="true"
         :minWidth="320"
         :maxWidth="800"
-        :minHeight="100"
-        :maxHeight="100"
+        :minHeight="98"
+        :maxHeight="110"
         positionHint="20 / 50"
       >
         <div class="postmenu">
@@ -125,9 +125,9 @@ export default {
   margin: auto 0 auto 0;
 }
 .option {
-  display: inline-block;
-  margin: 0 8px 0 8px;
-  width: 95%;
+  display: inline-flex;
+  margin: auto 20px auto 8px;
+  width: -webkit-fill-available;
 }
 .optionbtn {
   min-width: 100px;
@@ -138,13 +138,18 @@ export default {
 }
 .tootbar {
   z-index: 100!important;
+  max-height: 130px;
+  min-height: 120px;
+  margin-right: 15px;
 }
 .window {
   border-radius: 4px!important;
   position: fixed!important;
+  
 }
 .window .titlebar{
   border-radius: 0px!important;
+  
 }
 .title {
   font-size: 12px;

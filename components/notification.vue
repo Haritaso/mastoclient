@@ -29,7 +29,12 @@
       <div class="tootcontent">
         <div class="username">
           <router-link class="name" :to=userlink>
-            <span v-if="data.type == ('favourite' || 'reblog')">
+            <span v-if="data.type == 'favourite'">
+              <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
+              <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
+              <span>{{ userid }}</span>
+            </span>
+            <span v-else-if="data.type == 'reblog'">
               <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
               <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
               <span>{{ userid }}</span>
@@ -45,7 +50,10 @@
           </div>
         </div>
         <div class="toot">
-          <div v-if="data.type == ('favourite' || 'reblog')" class="text">
+          <div v-if="data.type == 'favourite'" class="text">
+            <div v-html="data.status.content"></div>
+          </div>
+          <div v-else-if="data.type == 'reblog'" class="text">
             <div v-html="data.status.content"></div>
           </div>
           <div v-else-if="data.type == 'follow'" class="followobj">
@@ -68,73 +76,73 @@
 
 <script>
 export default {
-  name: 'notification',
-  props: ['data'],
-  data () {
+  name: "notification",
+  props: ["data"],
+  data() {
     return {
       nowtime: new Date(),
       watchStime: false,
       watchMtime: false
-    }
+    };
   },
   computed: {
-    userlink () {
-      const url = this.$store.getters.getactive[0].url
-      return '/users/' + url + "/" + this.data.account.id + '/toot'
+    userlink() {
+      const url = this.$store.getters.getactive[0].url;
+      return "/users/" + url + "/" + this.data.account.id + "/toot";
     },
-    rebloglink () {
-      const url = this.$store.getters.getactive[0].url
-      return '/users/' + url + "/" + this.data.reblog.account.id + '/toot'
+    rebloglink() {
+      const url = this.$store.getters.getactive[0].url;
+      return "/users/" + url + "/" + this.data.reblog.account.id + "/toot";
     },
-    userid () {
-      if (this.data.account.acct.indexOf('@') == true) {
-        if (this.data.type == ('favourite' || 'reblog')) {
-          return this.data.status.account.acct
+    userid() {
+      if (this.data.account.acct.indexOf("@") == true) {
+        if (this.data.type == ("favourite" || "reblog")) {
+          return this.data.status.account.acct;
         } else {
-          return this.data.account.acct
+          return this.data.account.acct;
         }
       } else {
-        if (this.data.type == ('favourite' || 'reblog')) {
-          return '@' + this.data.status.account.acct
+        if (this.data.type == ("favourite" || "reblog")) {
+          return "@" + this.data.status.account.acct;
         } else {
-          return '@' + this.data.account.acct
+          return "@" + this.data.account.acct;
         }
       }
     },
-    time () {
-      const time = this.nowtime
-      const date = new Date(this.data.created_at)
-      const d = time.getTime() - date.getTime()
-      const a = (d / 1000).toFixed()
+    time() {
+      const time = this.nowtime;
+      const date = new Date(this.data.created_at);
+      const d = time.getTime() - date.getTime();
+      const a = (d / 1000).toFixed();
       if (a < 60) {
-        this.watchStime = true
-        return a + '秒前'
-      } else if ((a >= 60) && (a < 3600)) {
-        this.watchStime = false
-        this.watchMtime = true
-        return (a / 60).toFixed() + '分前'
-      } else if ((a >= 3600) && (a < (3600 * 24))) {
-        this.watchMtime = false
-        return Math.floor(a / 3600) + '時間前'
-      } else if ((a >= (3600 * 24)) && (a <( 3600 * 24 * 7))){
-        return Math.floor(a / (3600 * 24)) + '日前'
+        this.watchStime = true;
+        return a + "秒前";
+      } else if (a >= 60 && a < 3600) {
+        this.watchStime = false;
+        this.watchMtime = true;
+        return (a / 60).toFixed() + "分前";
+      } else if (a >= 3600 && a < 3600 * 24) {
+        this.watchMtime = false;
+        return Math.floor(a / 3600) + "時間前";
+      } else if (a >= 3600 * 24 && a < 3600 * 24 * 7) {
+        return Math.floor(a / (3600 * 24)) + "日前";
       } else {
-        return date.getMonth()+1 + '月' + date.getDate() + '日'
+        return date.getMonth() + 1 + "月" + date.getDate() + "日";
       }
     }
   },
-  mounted () {
+  mounted() {
     if (this.watchStime == true) {
       setInterval(() => {
-        this.nowtime = new Date()
-      },5000)
+        this.nowtime = new Date();
+      }, 5000);
     } else if (this.watchMtime == true) {
       setInterval(() => {
-        this.nowtime = new Date()
-      },50000)
+        this.nowtime = new Date();
+      }, 50000);
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -150,15 +158,16 @@ export default {
 .tootbox {
   display: flex;
   word-break: break-all;
+  margin-top: 4px;
 }
 .box {
   display: inline-flex;
   width: 62px;
   max-width: 62px;
+  margin-top: 5px;
 }
 .toottype {
   position: relative;
-  margin: 0px 0px 6px 0px;
   max-width: 100%;
   display: flex;
   justify-content: space-between;
@@ -210,17 +219,17 @@ export default {
   border: 2px solid #909399;
   position: relative;
   left: 25px;
-  bottom: 31px;
+  bottom: 21px;
 }
 .text {
-  margin: 10px;
+  margin: 0px 0px 10px 0px;
 }
 .tootcontent {
   display: inline-grid;
   width: 100%;
+  grid-template-rows: auto 1fr;
 }
 .username {
-  margin: 0px 0px 10px 0px;
   max-width: 100%;
   display: flex;
   justify-content: space-between;
@@ -244,11 +253,11 @@ export default {
   justify-content: space-between;
 }
 .followdata {
-  margin: 0px 25px 10px 0px;
+  margin: 0px 0px 10px 0px;
   width: 100%;
-  min-width: 80%;
+  min-width: 85%;
 }
-.followcount{
+.followcount {
   display: flex;
   justify-content: space-around;
 }
@@ -257,7 +266,10 @@ export default {
   text-align: center;
 }
 .followbtn {
-  margin: 0 12px auto 0px;
+  margin: 0 0 auto 12px;
   height: 80px;
+}
+.toot {
+  margin-right: 2px;
 }
 </style>

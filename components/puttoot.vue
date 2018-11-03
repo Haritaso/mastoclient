@@ -343,7 +343,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  height: 350px;
+  height: 250px;
   width: auto;
   object-fit: cover;
   overflow: hidden;

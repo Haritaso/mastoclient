@@ -93,78 +93,83 @@
 export default {
   data() {
     return {
-      nowindex: '1',
+      nowindex: "1",
       setcolor: false,
-      drawer: false,
-    }
+      drawer: false
+    };
   },
   computed: {
-    src () {
-      return this.$store.getters.geticon
+    src() {
+      return this.$store.getters.geticon;
     },
-    name () {
-      return this.$store.getters.getdisplayname
+    name() {
+      return this.$store.getters.getdisplayname;
     },
-    id () {
-      return this.$store.getters.getid
+    id() {
+      return this.$store.getters.getid;
     },
-    Tcolor () {
-      return this.setcolor ? this.$store.getters.getactive[0].tcolor : '#fff'
+    Tcolor() {
+      return this.setcolor ? this.$store.getters.getactive[0].tcolor : "#fff";
     },
-    Acolor () {
-      return this.setcolor ? this.$store.getters.getactive[0].acolor : '#409EFF'
+    Acolor() {
+      return this.setcolor
+        ? this.$store.getters.getactive[0].acolor
+        : "#409EFF";
     },
-    Bcolor () {
-      return this.setcolor ? this.$store.getters.getactive[0].bcolor : '#545c64'
-    },
+    Bcolor() {
+      return this.setcolor
+        ? this.$store.getters.getactive[0].bcolor
+        : "#545c64";
+    }
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
-      this.getcolor()
-    },1)
+      this.getcolor();
+    }, 1);
   },
   methods: {
-    change (index) {
-      this.$store.dispatch('changeActive', {
+    change(index) {
+      this.$store.dispatch("changeActive", {
         index: index
-      })
-      this.drawer = false
-      this.$router.push("loading?url=home")
+      });
+      this.drawer = false;
+      this.$router.push("loading?url=home");
     },
-    closetab () {
-      this.drawer = false
+    closetab() {
+      this.drawer = false;
     },
     openDialog1() {
-      this.$prompt('(例)knzk.me', 'インスタンス名を入力', {
-        confirmButtonText: 'Ok',
-        cancelButtonText: 'Cancel',
+      this.$prompt("(例)knzk.me", "インスタンス名を入力", {
+        confirmButtonText: "Ok",
+        cancelButtonText: "Cancel",
         inputPattern: /([A-Za-z0-9][A-Za-z0-9\-]{1,61}[A-Za-z0-9]\.)+[A-Za-z]+/,
-        inputErrorMessage: 'URLが不正です'
-      }).then(value => {
-        console.log(value.value)
-        this.$message({
-          type: 'success',
-          message: value.value + 'を確認中'
-        })
-        this.$store.dispatch('getAppName', {
-          url: value.value
-        })
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '入力をキャンセルしました。'
-        })
+        inputErrorMessage: "URLが不正です"
       })
+        .then(value => {
+          console.log(value.value);
+          this.$message({
+            type: "success",
+            message: value.value + "を確認中"
+          });
+          this.$store.dispatch("getAppName", {
+            url: value.value
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "入力をキャンセルしました。"
+          });
+        });
     },
-    handleSelect (key, keyPath) {
-    },
-    getcolor () {
-      if (this.$store.state.coloroption >=1 ) {
-        this.setcolor = true
+    handleSelect(key, keyPath) {},
+    getcolor() {
+      if (this.$store.state.coloroption >= 1) {
+        this.setcolor = true;
       }
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -207,7 +212,8 @@ export default {
 .tran-enter-active {
   transition-duration: 0.8s;
 }
-.tran-enter, .tran-leave-to {
+.tran-enter,
+.tran-leave-to {
   opacity: 0;
 }
 </style>
