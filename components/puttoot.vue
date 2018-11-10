@@ -1,5 +1,5 @@
 <template>
-  <el-card key="toot.id" shadow="never">
+  <el-card key="toot.id" shadow="never" class="elcardbody">
     <div class="tootstatus">
       <div v-if="toot.reblog == null"></div>
       <div v-else>
@@ -47,7 +47,7 @@
             <time :datatime="this.toot.created_at">{{ time }}</time>
           </div>
         </div>
-        <div class="toottext" v-html="toot.content"></div>
+        <div class="toottext" v-if="toot.content" v-html="toot.content"></div>
         <div class="mediapreview" v-if="mediaoption == true">
           <img v-if="mediastate == 'image'" v-img:group="{ group: tootid }" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.url" :key="i">
           <img v-else-if="mediastate == 'video'" :class="mediaclass" :src="toot.media_attachments[0].preview_url" @click="videowindow = !videowindow">
@@ -66,7 +66,7 @@
             </vue-plyr>
           </el-dialog>
         </div>
-        <div>
+        <div class="actionbar">
           <div class="action">
             <el-button class="fas fa-reply size" type="text"></el-button>
             <span v-if="detail == true">{{ reply }}</span>
@@ -269,17 +269,24 @@ export default {
 </script>
 
 <style scoped>
-.tootcard {
-  display: block;
+.elcardbody {
+  display: grid;
 }
-
+.tootcard {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+}
 .action {
-  display: inline-block;
-  margin-right: 25px;
-  height: 25px;
+  position: relative;
+  bottom: 1em;
+  min-width: 4em;
+}
+.actionbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 2em;
 }
 .icon {
-  display: block;
   width: 50px;
   min-width: 50px;
   height: 50px;
@@ -295,6 +302,9 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.toottext {
+  padding: 0.5em 0;
 }
 .name {
   text-decoration: none;
@@ -314,7 +324,7 @@ export default {
 .size {
   font-size: 20px;
   margin-right: 5px;
-  color:rgb(96, 105, 132);
+  color: rgb(96, 105, 132);
 }
 .fa-retweet:active {
   transform: rotate(0deg);
@@ -323,10 +333,9 @@ export default {
   display: inline-flex;
 }
 .tootcontent {
-  display: block;
+  display: grid;
+  grid-template-rows: 1.5em auto;
   position: relative;
-  bottom: 60px;
-  margin: 0 12px -60px 65px;
   word-break: break-all;
 }
 .fav {
@@ -348,7 +357,6 @@ export default {
   object-fit: cover;
   overflow: hidden;
   border-radius: 5px;
-  margin-top: 10px;
   padding: 0 3px 3px 3px;
   grid-gap: 5px;
 }
@@ -390,8 +398,5 @@ export default {
 }
 .boost {
   float: right;
-}
-.toottext {
-  margin: 10px 0 0 0;
 }
 </style>

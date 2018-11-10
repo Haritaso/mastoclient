@@ -57,16 +57,6 @@
             <div v-html="data.status.content"></div>
           </div>
           <div v-else-if="data.type == 'follow'" class="followobj">
-            <div class="followdata">
-              <div class="followbioobj">
-                <div class="followbio" v-html="data.account.note"></div>
-              </div>
-              <div class="followcount">
-                <div class="followcount">{{ "フォロー:" + data.account.following_count }}</div>
-                <div class="followcount">{{ "フォロワー:" + data.account.followers_count }}</div>
-              </div>
-            </div>
-            <el-button type="primary" class="followbtn"><i class="fas fa-user-plus"></i></el-button>
           </div>
         </div>
       </div>
@@ -158,13 +148,13 @@ export default {
 .tootbox {
   display: flex;
   word-break: break-all;
-  margin-top: 4px;
+  margin: 0 0 0.5em 0;
 }
 .box {
   display: inline-flex;
   width: 62px;
   max-width: 62px;
-  margin-top: 5px;
+  margin: 0.5em 0 0 0;
 }
 .toottype {
   position: relative;
@@ -175,6 +165,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin: 0.5em 0;
 }
 .typeline {
   text-decoration: none;
@@ -222,7 +213,7 @@ export default {
   bottom: 21px;
 }
 .text {
-  margin: 0px 0px 10px 0px;
+  margin: 0.5em 0;
 }
 .tootcontent {
   display: inline-grid;

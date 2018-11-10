@@ -1,7 +1,7 @@
 <template>
   <div class="settingframe">
     <el-collapse v-model="activeNames" accordion>
-      <el-collapse-item title="タブ" name="1">
+      <el-collapse-item title="タブ" name="1" class="titletab">
         <el-form
           label-position="left"
         >
@@ -19,7 +19,7 @@
           </el-form-item>
         </el-form>
       </el-collapse-item>
-      <el-collapse-item title="ユーザー設定" name="2">
+      <el-collapse-item title="ユーザー設定" name="2" class="titletab">
         <el-form
           label-position="left"
         >
@@ -136,8 +136,11 @@ export default {
   margin-left: 30px;
   text-align: left;
 }
+.titletab {
+  margin-left: 1em;
+}
 .usertitle {
-  margin: 0 30px 0 40px;
+  margin: 0 3em 0 2em;
 }
 .pickers {
   float: right;
