@@ -132,11 +132,11 @@ export default {
   computed: {
     userlink () {
       const url = this.$store.getters.getactive[0].url
-      return '/users/' + url + "/" + this.toot.account.id + '/toot'
+      return '/users?url=' + url + "&id=" + this.toot.account.id
     },
     rebloglink () {
       const url = this.$store.getters.getactive[0].url
-      return '/users/' + url + "/" + this.toot.reblog.account.id + '/toot'
+      return '/users?url=' + url + "&id=" + this.toot.reblog.account.id
     },
     userid () {
       if (this.toot.account.acct.indexOf('@') == true) {

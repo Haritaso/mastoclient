@@ -7,6 +7,9 @@ body {
 .el-card__body {
   padding: 0.5em;
 }
+.el-main {
+  padding: 0.5em;
+}
 .el-tag {
   height: auto;
 }
