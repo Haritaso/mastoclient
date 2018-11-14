@@ -11,7 +11,7 @@
           class="useraside"
           @select="handleSelect"
         >
-          <el-menu-item index="1" route='/home' class="usertab">
+          <el-menu-item index="1" :route="userpage" class="usertab">
             <img class="icon" :src=src>
             <span class="name">{{ name }}</span>
             <span class="id">{{ id }}</span>
@@ -95,7 +95,8 @@ export default {
     return {
       nowindex: "1",
       setcolor: false,
-      drawer: false
+      drawer: false,
+      setup: false
     };
   },
   computed: {
@@ -107,6 +108,9 @@ export default {
     },
     id() {
       return this.$store.getters.getid;
+    },
+    userpage () {
+      return this.setup ? '/users?url=' + this.$store.getters.geturl + "&id=" + this.$store.getters.getactive[0].data.id : '/home';
     },
     Tcolor() {
       return this.setcolor ? this.$store.getters.getactive[0].tcolor : "#fff";
@@ -124,7 +128,8 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.getcolor();
+      this.getcolor()
+      this.setup = true
     }, 1);
   },
   methods: {
@@ -162,7 +167,9 @@ export default {
           });
         });
     },
-    handleSelect(key, keyPath) {},
+    handleSelect(key, keyPath) {
+      this.drawer = false
+    },
     getcolor() {
       if (this.$store.state.coloroption >= 1) {
         this.setcolor = true;
@@ -184,6 +191,9 @@ export default {
 }
 .main {
   z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+  min-width: 380px;
 }
 .usertab .name {
   position: absolute;

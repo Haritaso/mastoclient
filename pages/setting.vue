@@ -89,7 +89,7 @@ export default {
         acolor: this.general.activetextColor,
         bcolor: this.general.backgroundColor
       });
-      this.$router.push("loading?url=setting");
+      this.$router.push("loading?url=setting")
     },
     getacountdata() {
       axios({
@@ -160,5 +160,8 @@ export default {
 .settingframe {
   border-radius: 4px;
   border: 2px solid #dcdfe6;
+  max-width: 640px;
+  margin: 0 auto;
+  min-width: 380px;
 }
 </style>

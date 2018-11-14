@@ -3,31 +3,31 @@
     <div class="tootstatus">
       <div v-if="toot.reblog == null"></div>
       <div v-else>
-        <el-tag type="success" class="fas fa-sync-alt">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
+        <el-tag type="success" class="fas fa-sync-alt tootstatusobj">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
       </div>
       <div v-if="toot.visibility == 'public'">
-        <el-tag type="Info" class="fas fa-users">公開</el-tag>
+        <el-tag type="Info" class="fas fa-users tootstatusobj">公開</el-tag>
       </div>
       <div v-else-if="toot.visibility == 'unlisted'">
-        <el-tag type="Info" class="fas fa-user-lock">未収載</el-tag>
+        <el-tag type="Info" class="fas fa-user-lock tootstatusobj">未収載</el-tag>
       </div>
       <div v-else-if="toot.visibility == 'private'">
-        <el-tag type="Info" class="fas fa-user-check">フォロワー限定</el-tag>
+        <el-tag type="Info" class="fas fa-user-check tootstatusobj">フォロワー限定</el-tag>
       </div>
       <div v-else-if="toot.visibility == 'direct'">
-        <el-tag type="danger" class="fas fa-comment-alt">DM</el-tag>
+        <el-tag type="danger" class="fas fa-comment-alt tootstatusobj">DM</el-tag>
       </div>
       <div v-if="toot.account.locked == true">
-        <el-tag type="warning" class="fas fa-lock">承認制アカウント</el-tag>
+        <el-tag type="warning" class="fas fa-lock tootstatusobj">承認制アカウント</el-tag>
       </div>
       <div v-if="mediastate == 'video'">
-        <el-tag type="success" class="fas fa-video">Video</el-tag>
+        <el-tag type="success" class="fas fa-video tootstatusobj">Video</el-tag>
       </div>
       <div v-else-if="mediastate == 'image'">
-        <el-tag type="success" class="fas fa-image">Image</el-tag>
+        <el-tag type="success" class="fas fa-image tootstatusobj">Image</el-tag>
       </div>
       <div v-if="toot.account.bot == true">
-        <el-tag type="info" class="fas fa-robot">Bot</el-tag>
+        <el-tag type="info" class="fas fa-robot tootstatusobj">Bot</el-tag>
       </div>
     </div>
     <div class="tootcard">
@@ -68,30 +68,34 @@
         </div>
         <div class="actionbar">
           <div class="action">
-            <el-button class="fas fa-reply size" type="text"></el-button>
-            <span v-if="detail == true">{{ reply }}</span>
+            <div  class="actionobj">
+              <el-button class="fas fa-reply size" type="text"></el-button>
+              <div v-if="detail == true" class="actionobj">{{ reply }}</div>
+            </div>
           </div>
           <div class="action">
-            <div v-if="toot.visibility == 'private'">
+            <div v-if="toot.visibility == 'private'" class="actionobj">
               <el-button type="text" disabled>
                 <i class="fas fa-lock size"></i>
               </el-button>
-              <span v-if="detail == true">✖</span>
+              <div v-if="detail == true" class="actionobj">✖</div>
             </div>
-            <div v-else>
+            <div v-else class="actionobj">
               <el-button type="text" @click="reblogaction()">
                 <i v-if="reblogtap == false" class="fas fa-sync-alt size"></i>
                 <i v-else class="fas fa-sync-alt size reblog"></i>
               </el-button>
-              <span v-if="detail == true">{{ reblog }}</span>
+              <div v-if="detail == true" class="actionobj">{{ reblog }}</div>
             </div>
           </div>
           <div class="action">
-            <el-button type="text" @click="favaction()">
-              <i v-if="favtap == false" class="fas fa-star size"></i>
-              <i v-else class="fas fa-star size fav"></i>
-            </el-button>
-            <span v-if="detail == true">{{ fav }}</span>
+            <div class="actionobj">
+              <el-button type="text" @click="favaction()">
+                <i v-if="favtap == false" class="fas fa-star size"></i>
+                <i v-else class="fas fa-star size fav"></i>
+              </el-button>
+              <div v-if="detail == true" class="actionobj">{{ fav }}</div>
+            </div>
           </div>
           <div class="action">
             <el-button class="fas fa-align-left size" type="text"></el-button>
@@ -133,10 +137,6 @@ export default {
     userlink () {
       const url = this.$store.getters.getactive[0].url
       return '/users?url=' + url + "&id=" + this.toot.account.id
-    },
-    rebloglink () {
-      const url = this.$store.getters.getactive[0].url
-      return '/users?url=' + url + "&id=" + this.toot.reblog.account.id
     },
     userid () {
       if (this.toot.account.acct.indexOf('@') == true) {
@@ -275,11 +275,16 @@ export default {
 .tootcard {
   display: grid;
   grid-template-columns: 60px 1fr;
+  margin-bottom: 0.5em;
 }
 .action {
   position: relative;
-  bottom: 1em;
   min-width: 4em;
+  display: inline-block;
+}
+.actionobj {
+  display: flex;
+  align-items: center;
 }
 .actionbar {
   display: grid;
@@ -331,6 +336,9 @@ export default {
 }
 .tootstatus {
   display: inline-flex;
+}
+.tootstatusobj {
+  line-height: 2;
 }
 .tootcontent {
   display: grid;
