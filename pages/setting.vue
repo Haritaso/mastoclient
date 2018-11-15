@@ -160,8 +160,5 @@ export default {
 .settingframe {
   border-radius: 4px;
   border: 2px solid #dcdfe6;
-  max-width: 640px;
-  margin: 0 auto;
-  min-width: 380px;
 }
 </style>

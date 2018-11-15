@@ -20,12 +20,6 @@
       <div v-if="toot.account.locked == true">
         <el-tag type="warning" class="fas fa-lock tootstatusobj">承認制アカウント</el-tag>
       </div>
-      <div v-if="mediastate == 'video'">
-        <el-tag type="success" class="fas fa-video tootstatusobj">Video</el-tag>
-      </div>
-      <div v-else-if="mediastate == 'image'">
-        <el-tag type="success" class="fas fa-image tootstatusobj">Image</el-tag>
-      </div>
       <div v-if="toot.account.bot == true">
         <el-tag type="info" class="fas fa-robot tootstatusobj">Bot</el-tag>
       </div>
@@ -48,59 +42,18 @@
           </div>
         </div>
         <div class="toottext" v-if="toot.content" v-html="toot.content"></div>
-        <div class="mediapreview" v-if="mediaoption == true">
-          <img v-if="mediastate == 'image'" v-img:group="{ group: tootid }" :class="mediaclass" v-for="(media, i) in toot.media_attachments" :src="media.url" :key="i">
-          <img v-else-if="mediastate == 'video'" :class="mediaclass" :src="toot.media_attachments[0].preview_url" @click="videowindow = !videowindow">
-          <el-dialog
-            title=""
-            :fullscreen=false
-            :modal=false
-            :append-to-body=true
-            :center=true
-            :visible.sync="videowindow"
-          >
-            <vue-plyr class="videoview">
-              <video :poster="videoposter" class="style1">
-                <source :src="videosrc" type="video/mp4">
-              </video>
-            </vue-plyr>
-          </el-dialog>
-        </div>
-        <div class="actionbar">
-          <div class="action">
-            <div  class="actionobj">
-              <el-button class="fas fa-reply size" type="text"></el-button>
-              <div v-if="detail == true" class="actionobj">{{ reply }}</div>
-            </div>
-          </div>
-          <div class="action">
-            <div v-if="toot.visibility == 'private'" class="actionobj">
-              <el-button type="text" disabled>
-                <i class="fas fa-lock size"></i>
-              </el-button>
-              <div v-if="detail == true" class="actionobj">✖</div>
-            </div>
-            <div v-else class="actionobj">
-              <el-button type="text" @click="reblogaction()">
-                <i v-if="reblogtap == false" class="fas fa-sync-alt size"></i>
-                <i v-else class="fas fa-sync-alt size reblog"></i>
-              </el-button>
-              <div v-if="detail == true" class="actionobj">{{ reblog }}</div>
-            </div>
-          </div>
-          <div class="action">
-            <div class="actionobj">
-              <el-button type="text" @click="favaction()">
-                <i v-if="favtap == false" class="fas fa-star size"></i>
-                <i v-else class="fas fa-star size fav"></i>
-              </el-button>
-              <div v-if="detail == true" class="actionobj">{{ fav }}</div>
-            </div>
-          </div>
-          <div class="action">
-            <el-button class="fas fa-align-left size" type="text"></el-button>
-          </div>
-        </div>
+        <mediaview :mdata="toot.media_attachments" />
+        <tootaction
+          :rp="reply"
+          :rb="reblog"
+          :fv="fav"
+          :rbtap="reblogtap"
+          :fvtap="favtap"
+          :urbtap="userreblog"
+          :visibility="toot.visibility"
+          :id="toot.id"
+          :detail="detail"
+        />
       </div>
     </div>
   </el-card>
@@ -108,8 +61,8 @@
 
 <script>
 import axios from 'axios'
-import { PlyrVideo } from 'vue-plyr'
-import 'vue-plyr/dist/vue-plyr.css'
+import mediaview from './mediaview'
+import tootaction from './tootaction'
 
 export default {
   name: 'toot',
@@ -121,16 +74,10 @@ export default {
       fav: this.toot.favourites_count,
       reblogtap: false,
       favtap: false,
-      mediaoption: false,
-      mediaclass: {},
       userreblog: false,
       nowtime: new Date(),
       watchStime: false,
       watchMtime: false,
-      mediastate: '',
-      videosrc: '',
-      videoposter: '',
-      videowindow: false,
     }
   },
   computed: {
@@ -166,42 +113,6 @@ export default {
         return date.getMonth()+1 + '月' + date.getDate() + '日'
       }
     },
-    tootid () {
-      return this.toot.id
-    }
-  },
-  created () {
-    if (!!this.toot.media_attachments[0]) {
-      this.mediaoption = true
-      if ((this.toot.media_attachments[0].type == "video") || (this.toot.media_attachments[0].type == "gifv")) {
-        this.mediastate = 'video'
-        this.videosrc = this.toot.media_attachments[0].url
-        this.videoposter = this.toot.media_attachments[0].preview_url
-      } else if (this.toot.media_attachments[0].type == "image") {
-        this.mediastate = 'image'
-      }
-      if (this.toot.media_attachments.length == 1) {
-        this.mediaclass = "style1"
-      } else if (this.toot.media_attachments.length == 2) {
-        this.mediaclass = "style2"
-      } else {
-        this.mediaclass = "style4"
-      }
-    } else {
-      if (this.toot.reblog == null) {
-        this.userreblog = false
-      } else {
-        this.userreblog = true
-      }
-    }
-    if (this.toot.reblogged == true) {
-      this.reblogtap = true
-      this.reblog++
-    }
-    if (this.toot.favourited == true) {
-      this.favtap = true
-      this.fav++
-    }
   },
   mounted () {
     if (this.watchStime == true) {
@@ -214,56 +125,26 @@ export default {
       },50000)
     }
   },
+  created () {
+    if (this.toot.reblog == null) {
+      this.userreblog = false
+    } else {
+      this.userreblog = true
+    }
+    if (this.toot.reblogged == true) {
+      this.reblogtap = true
+      this.reblog++
+    }
+    if (this.toot.favourited == true) {
+      this.favtap = true
+      this.fav++
+    }
+  },
   methods: {
-    reblogaction () {
-      if (this.reblogtap == false) {
-        axios({
-          method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/reblog',
-          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
-        })
-        .then (res => {
-          this.reblogtap = !this.reblogtap
-          this.reblog++
-        })
-      } else {
-        axios({
-          method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/unreblog',
-          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
-        })
-        .then (res => {
-          this.reblogtap = !this.reblogtap
-          this.reblog--
-        })
-      }
-    },
-    favaction () {
-      if (this.favtap == false) {
-        axios({
-          method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/favourite',
-          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
-        })
-        .then (res => {
-          this.favtap = !this.favtap
-          this.fav++
-        })
-      } else {
-        axios({
-          method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/unfavourite',
-          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
-        })
-        .then (res => {
-          this.favtap = !this.favtap
-          this.fav--
-        })
-      }
-    },
   },
   components: {
-    PlyrVideo: 'vue-plyr'
+    mediaview,
+    tootaction
   }
 }
 </script>
@@ -276,20 +157,6 @@ export default {
   display: grid;
   grid-template-columns: 60px 1fr;
   margin-bottom: 0.5em;
-}
-.action {
-  position: relative;
-  min-width: 4em;
-  display: inline-block;
-}
-.actionobj {
-  display: flex;
-  align-items: center;
-}
-.actionbar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 2em;
 }
 .icon {
   width: 50px;
@@ -326,11 +193,6 @@ export default {
   font-weight: normal;
   font-size: inherit;
 }
-.size {
-  font-size: 20px;
-  margin-right: 5px;
-  color: rgb(96, 105, 132);
-}
 .fa-retweet:active {
   transform: rotate(0deg);
 }
@@ -345,64 +207,6 @@ export default {
   grid-template-rows: 1.5em auto;
   position: relative;
   word-break: break-all;
-}
-.fav {
-  transform: rotate(360deg);
-  transition: 0.8s;
-  color: #ca8f04;
-}
-.reblog {
-  transform: rotate(360deg);
-  transition: 0.8s;
-  color: #2b90d9;
-}
-.mediapreview {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  height: 250px;
-  width: auto;
-  object-fit: cover;
-  overflow: hidden;
-  border-radius: 5px;
-  padding: 0 3px 3px 3px;
-  grid-gap: 5px;
-}
-.style1 {
-  border: 1px solid #909399;
-  border-radius: 5px;
-  display: grid;
-  grid-row: span 2;
-  grid-column: span 2;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  overflow: hidden;
-}
-.style2 {
-  border: 1px solid #909399;
-  border-radius: 5px;
-  display: grid;
-  grid-row: span 2;
-  grid-column: span 1;
-  height: 100%;
-  width: 100%;
-  object-position: 50% 50%;
-  object-fit: cover;
-  overflow: hidden;
-}
-.style4 {
-  border: 1px solid #909399;
-  border-radius: 5px;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  object-fit: cover;
-}
-.videoview {
-  display: grid;
-  grid-row: span 2;
-  grid-column: span 2;
 }
 .boost {
   float: right;

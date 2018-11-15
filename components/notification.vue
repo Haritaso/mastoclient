@@ -1,70 +1,122 @@
 <template>
-  <el-card :key="data.id" shadow="never" class="ncard">
-    <div class="toottype">
-      <div v-if="data.type == 'favourite'" class="el-icon-star-on typeline">{{ data.account.display_name + "さんがお気に入り登録" }}</div>
-      <div v-else-if="data.type == 'reblog'" class="el-icon-refresh typeline">{{ data.account.display_name + "さんがブースト"}}</div>
-      <div v-else-if="data.type == 'follow'" class="el-icon-circle-plus typeline">{{ data.account.display_name + "さんにフォローされました"}}</div>
-      <div v-else-if="data.type == 'mention'" class="typeline">{{ "@" + data.account.display_name + "さんからのリプライ"}}</div>
+  <section v-if="error">
+    error
+  </section>
+  <section v-else>
+    <div v-if="loading">
+      <el-card :key="data.id" shadow="never">
+        <ContentLoader speed=1 height=95>
+          <rect x="0" y="0" rx="5" ry="5" width="200" height="22" />
+          <rect x="0" y="27" rx="0" ry="0" width="40" height="40" />
+          <rect x="50" y="27" rx="8" ry="8" width="120" height="16" />
+          <rect x="50" y="50" rx="8" ry="8" width="500" height="16" />
+        </ContentLoader>
+      </el-card>
     </div>
-    <div class="tootbox">
-      <div class="box">
-        <div class="icons">
-          <div v-if="data.type == 'favourite'">
-            <img class="undericon" :src="data.status.account.avatar">
-            <div>
-              <img class="actionicon" :src="data.account.avatar">
+    <div v-else>
+      <el-card :key="data.id" shadow="never">
+        <div class="ncard">
+          <div class="toottype">
+            <div v-if="data.type == 'favourite'">
+              <el-tag type="warning" class="fas fa-star status">
+                {{ data.account.display_name + "さんがお気に入り登録" }}
+              </el-tag>
+            </div>
+            <div v-else-if="data.type == 'reblog'">
+              <el-tag type="success" class="fas fa-sync-alt status">
+                {{data.account.display_name + "さんがブースト"}}
+              </el-tag>
+            </div>
+            <div v-else-if="data.type == 'follow'">
+              <el-tag type="primary" class="fas fa-user-plus status">
+                {{ data.account.display_name + "さんにフォローされました"}}
+              </el-tag>
+            </div>
+            <div v-else-if="data.type == 'mention'">
+              <el-tag type="info" class="fas fa-at status">
+                {{ data.account.display_name + "さんからのリプライ"}}
+              </el-tag>
             </div>
           </div>
-          <div v-else-if="data.type == 'reblog'">
-            <img class="undericon" :src="data.status.account.avatar">
-            <div>
-              <img class="actionicon" :src="data.account.avatar">
+          <div class="tootbox">
+            <div class="box">
+              <div>
+                <div class="icons" v-if="data.type == 'favourite'">
+                  <img class="undericon" :src="underIcon">
+                  <img class="actionicon" :src="data.account.avatar">
+                </div>
+                <div class="icons" v-else-if="data.type == 'reblog'">
+                  <img class="undericon" :src="underIcon">
+                  <img class="actionicon" :src="data.account.avatar">
+                </div>
+                <div class="singleicon" v-else>
+                  <img class="icon" :src="data.account.avatar">
+                </div>
+              </div>
+            </div>
+            <div class="tootcontent">
+              <div class="username">
+                <router-link class="name" :to=userlink>
+                  <span v-if="data.type == 'favourite'">
+                    <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
+                    <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
+                    <span>{{ userid }}</span>
+                  </span>
+                  <span v-else-if="data.type == 'reblog'">
+                    <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
+                    <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
+                    <span>{{ userid }}</span>
+                  </span>
+                  <span v-else>
+                    <bdi class="displayname">{{ data.account.display_name }}</bdi>
+                    <bdi class="displayname" v-if="data.account.display_name == ''">{{ data.account.username }}</bdi>
+                    <span>{{ userid }}</span>
+                  </span>
+                </router-link>
+                <div class="time">
+                  <time :datatime="data.created_at">{{ time }}</time>
+                </div>
+              </div>
+              <div class="toot">
+                <div v-if="data.type == 'favourite'" class="text">
+                  <div v-html="data.status.content"></div>
+                  <mediaview :mdata="data.status.media_attachments" />
+                </div>
+                <div v-else-if="data.type == 'reblog'" class="text">
+                  <div v-html="data.status.content"></div>
+                  <mediaview :mdata="data.status.media_attachments" />
+                </div>
+                <div v-else-if="data.type == 'mention'" class="reply text">
+                  <div v-html="data.status.content"></div>
+                  <mediaview :mdata="data.status.media_attachments" />
+                  <tootaction
+                    :rp="0"
+                    :rb="0"
+                    :fv="0"
+                    :rbtap="reblogtap"
+                    :fvtap="favtap"
+                    :urbtap="userreblog"
+                    :visibility="data.status.visibility"
+                    :id="data.id"
+                    :detail="false"
+                  />
+                </div>
+                <div v-else-if="data.type == 'follow'" class="followobj">
+                </div>
+              </div>
             </div>
           </div>
-          <div v-else>
-            <img class="icon" :src="data.account.avatar">
-          </div>
         </div>
-      </div>
-      <div class="tootcontent">
-        <div class="username">
-          <router-link class="name" :to=userlink>
-            <span v-if="data.type == 'favourite'">
-              <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
-              <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
-              <span>{{ userid }}</span>
-            </span>
-            <span v-else-if="data.type == 'reblog'">
-              <bdi class="displayname">{{ data.status.account.display_name }}</bdi>
-              <bdi class="displayname" v-if="data.status.account.display_name == ''">{{ data.status.account.username }}</bdi>
-              <span>{{ userid }}</span>
-            </span>
-            <span v-else>
-              <bdi class="displayname">{{ data.account.display_name }}</bdi>
-              <bdi class="displayname" v-if="data.account.display_name == ''">{{ data.account.username }}</bdi>
-              <span>{{ userid }}</span>
-            </span>
-          </router-link>
-          <div class="time">
-            <time :datatime="data.created_at">{{ time }}</time>
-          </div>
-        </div>
-        <div class="toot">
-          <div v-if="data.type == 'favourite'" class="text">
-            <div v-html="data.status.content"></div>
-          </div>
-          <div v-else-if="data.type == 'reblog'" class="text">
-            <div v-html="data.status.content"></div>
-          </div>
-          <div v-else-if="data.type == 'follow'" class="followobj">
-          </div>
-        </div>
-      </div>
+      </el-card>
     </div>
-  </el-card>
+  </section>
 </template>
 
 <script>
+import puttoot from '../components/puttoot'
+import { ContentLoader } from 'vue-content-loader'
+import mediaview from './mediaview'
+import tootaction from './tootaction'
 export default {
   name: "notification",
   props: ["data"],
@@ -72,17 +124,18 @@ export default {
     return {
       nowtime: new Date(),
       watchStime: false,
-      watchMtime: false
+      watchMtime: false,
+      loading: true,
+      error: false
     };
   },
   computed: {
     userlink() {
       const url = this.$store.getters.getactive[0].url;
-      return '/users?url=' + url + "&id=" + this.toot.account.id
+      return '/users?url=' + url + "&id=" + this.data.account.id
     },
-    rebloglink() {
-      const url = this.$store.getters.getactive[0].url;
-      return '/users?url=' + url + "&id=" + this.toot.reblog.account.id
+    underIcon () {
+      return !this.loading ? this.data.status.account.avatar : 'dummy'
     },
     userid() {
       if (this.data.account.acct.indexOf("@") == true) {
@@ -122,6 +175,13 @@ export default {
     }
   },
   mounted() {
+    console.log(this.data)
+    setTimeout(() => {
+      this.loading = false
+    },1000)
+    if (this.data.status == null) {
+      this.error = true
+    }
     if (this.watchStime == true) {
       setInterval(() => {
         this.nowtime = new Date();
@@ -131,41 +191,41 @@ export default {
         this.nowtime = new Date();
       }, 50000);
     }
+  },
+  components: {
+    puttoot,
+    ContentLoader,
+    mediaview,
+    tootaction
   }
 };
 </script>
 
 <style scoped>
-.el-icon-star-on:before {
-  color: #ca8f04;
+.status {
+  line-height: 2;
 }
-.el-icon-refresh:before {
-  color: #2b90d9;
-}
-.el-icon-circle-plus:before {
-  color: #2b90d9;
+.ncard {
+  display: grid;
+  grid-template-rows: 2em 1fr;
 }
 .tootbox {
-  display: flex;
+  display: grid;
+  grid-template-columns: 54px 1fr;
   word-break: break-all;
   margin: 0 0 0.5em 0;
 }
 .box {
-  display: inline-flex;
-  width: 62px;
-  max-width: 62px;
-  margin: 0.5em 0 0 0;
 }
 .toottype {
   position: relative;
   max-width: 100%;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0.5em 0;
 }
 .typeline {
   text-decoration: none;
@@ -179,8 +239,10 @@ export default {
   height: 25px;
 }
 .icons {
-  width: 62px;
-  max-width: 62px;
+  display: grid;
+  grid-template-rows: 44px 34px 1fr;
+}
+.singleicon {
 }
 .icon {
   display: block;
@@ -188,7 +250,6 @@ export default {
   min-width: 50px;
   height: 50px;
   min-height: 50px;
-  margin: 0 0 auto 0;
   border: 2px solid #909399;
 }
 .undericon {
@@ -197,7 +258,6 @@ export default {
   min-width: 40px;
   height: 40px;
   min-height: 40px;
-  margin: 0 0 auto 0;
   border: 2px solid #909399;
 }
 .actionicon {
@@ -206,19 +266,18 @@ export default {
   min-width: 30px;
   height: 30px;
   min-height: 30px;
-  margin: 2px 0 auto 0;
   border: 2px solid #909399;
+  justify-self: end;
   position: relative;
-  left: 25px;
-  bottom: 21px;
+  bottom: 20px;
 }
 .text {
   margin: 0.5em 0;
 }
 .tootcontent {
   display: inline-grid;
-  width: 100%;
-  grid-template-rows: auto 1fr;
+  margin: 0 0.5em;
+  grid-template-rows: 1.5em 1fr;
 }
 .username {
   max-width: 100%;
@@ -262,5 +321,6 @@ export default {
 }
 .toot {
   margin-right: 2px;
+  align-self: start;
 }
 </style>

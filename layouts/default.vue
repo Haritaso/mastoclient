@@ -192,8 +192,9 @@ export default {
 .main {
   z-index: 2;
   max-width: 640px;
-  margin: 0 auto;
+  width: 100%;
   min-width: 380px;
+  margin: 0 auto;
 }
 .usertab .name {
   position: absolute;

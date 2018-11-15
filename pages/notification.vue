@@ -30,7 +30,7 @@ export default {
   mounted () {
     setTimeout(() => {
       this.notification()
-    },1)
+    },0)
   },
   methods: {
     notification () {

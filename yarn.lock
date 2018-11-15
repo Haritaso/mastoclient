@@ -5934,6 +5934,12 @@ vue-cli-plugin-element-ui@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vue-cli-plugin-element-ui/-/vue-cli-plugin-element-ui-1.1.2.tgz#b8b34d4fd9ab8d010b802be6a7a6004f4eee7bf7"
 
+vue-content-loader@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/vue-content-loader/-/vue-content-loader-0.2.1.tgz#0eb332e2a72643d57fb209d72d6526573b191f5a"
+  dependencies:
+    babel-helper-vue-jsx-merge-props "^2.0.3"
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"

@@ -19,6 +19,7 @@ module.exports = {
       'VuePlyr',
       'vue-window',
       'StyleFactory',
+      'vue-content-loader',
     ],
   },
   plugins: [
@@ -40,7 +41,7 @@ module.exports = {
     //middleware: 'auth'
   },
   build: {
-    extend (config) {
+    extend(config) {
       if (process.server && process.browser) {
         config.module.rules.push({
           enforce: 'pre',
