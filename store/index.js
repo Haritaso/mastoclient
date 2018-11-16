@@ -88,7 +88,7 @@ const store = () => new Vuex.Store({
       axios.post('https://' + payload.url + '/api/v1/apps', {
         scopes: 'read write follow',
         client_name: 'MastoClient',
-        redirect_uris: 'http://mastoclient.netlify.com/addusers'
+        redirect_uris: 'https://mastoclient.netlify.com/addusers'
       })
         .then(response => {
           console.log(response)
@@ -110,7 +110,7 @@ const store = () => new Vuex.Store({
           this.openurl = 'https://' +
             payload.url +
             '/oauth/authorize?response_type=code&redirect_uri=' +
-            'http://mastoclient.netlify.com/addusers' +
+            'https://mastoclient.netlify.com/addusers' +
             '&scope=read+write+follow&client_id=' +
             this.client_id
           console.log(this.openurl)
