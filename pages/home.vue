@@ -1,18 +1,22 @@
 <template>
   <div>
     <div style="margin-bottom: 20px;">
-      <el-button
-        size="small"
-        @click="dialogFormVisible = true"
-      >
-        タイムラインを追加
-      </el-button>
-      <el-button
-        size="small"
-        @click="isOpenbar = !isOpenbar"
-      >
-        Tootbar
-      </el-button>
+      <div class="subfield" :style="substyle">
+        <el-button
+          class="subaction1"
+          type="primary"
+          @click="dialogFormVisible = true"
+        >
+          <i class="far fa-plus-square"></i>
+        </el-button>
+        <el-button
+          class="subaction2"
+          type="primary"
+          @click="isOpenbar = !isOpenbar"
+        >
+          <i class="far fa-comment-alt"></i>
+        </el-button>
+      </div>
       <no-ssr>
         <tootbar :isOpenbar="isOpenbar"></tootbar>
       </no-ssr>
@@ -102,7 +106,15 @@ export default {
       formLabelWidth: '160px',
       activeName: '0',
       taberror: false,
-      isOpenbar: false
+      isOpenbar: false,
+      loading: true
+    }
+  },
+  computed: {
+    substyle() {
+      return {
+        'border-color': !this.loading ? this.$store.getters.getactive[0].acolor: "#409EFF"
+      }
     }
   },
   mounted () {
@@ -167,6 +179,7 @@ export default {
     setTL () {
       this.tabcontent = this.$store.getters.getactive[0].TL
       this.tabIndex = this.tabcontent.length
+      this.loading = false
     }
   },
   components: {
@@ -176,3 +189,22 @@ export default {
 }
 </script>
 
+<style scoped>
+.subfield {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-row-gap: 10px;
+  align-content: space-around;
+  position: fixed;
+  right: 8px;
+  top: 80px;
+  z-index: 6;
+  height: 100px;
+}
+.subaction1 {
+  grid-row: 1 / 2;
+}
+.subaction2 {
+  grid-row: 2 / 3;
+}
+</style>

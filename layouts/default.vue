@@ -66,7 +66,7 @@
       </div>
     </transition>
     <el-container>
-      <el-header>
+      <el-header :style="headerstyle">
         <el-menu
           class="header"
           :default-active="nowindex"
@@ -79,11 +79,11 @@
           <el-menu-item index="1" @click="drawer = !drawer">
             <i class="el-icon-menu"></i>
           </el-menu-item>
-          <el-menu-item index="2">MastoClient</el-menu-item>
+          <el-menu-item index="2">{{ logo }}</el-menu-item>
         </el-menu>
       </el-header>
       <el-main class="main">
-        <nuxt/>
+        <nuxt :nuxt-child-key="$route.fullPath" />
       </el-main>
     </el-container>
   </el-container>
@@ -124,6 +124,22 @@ export default {
       return this.setcolor
         ? this.$store.getters.getactive[0].bcolor
         : "#545c64";
+    },
+    logo () {
+      if (this.drawer == false) {
+        var a = 'MastoClient'
+      } else {
+        var a = '<閉じる'
+      }
+      return a
+    },
+    headerstyle() {
+      if (this.drawer == true) {
+        var a = '-260px'
+      }
+      return {
+        'right': a
+      }
     }
   },
   mounted() {
@@ -151,7 +167,6 @@ export default {
         inputErrorMessage: "URLが不正です"
       })
         .then(value => {
-          console.log(value.value);
           this.$message({
             type: "success",
             message: value.value + "を確認中"
@@ -183,18 +198,18 @@ export default {
 .header {
   display: flex;
 }
-.aside {
-  z-index: 1;
-}
 .useraside {
-  height: auto;
+  height: 100%;
+  width: calc(280px + 20px);
+  padding-right: 20px;
+  overflow-y: auto;
 }
 .main {
   z-index: 2;
   max-width: 640px;
   width: 100%;
-  min-width: 380px;
-  margin: 0 auto;
+  min-width: 320px;
+  margin: 55px auto;
 }
 .usertab .name {
   position: absolute;
@@ -221,7 +236,8 @@ export default {
   border: 3px solid #909399;
 }
 .tran-enter-active {
-  transition-duration: 0.8s;
+  z-index: 6;
+  transition-duration: 0s;
 }
 .tran-enter,
 .tran-leave-to {

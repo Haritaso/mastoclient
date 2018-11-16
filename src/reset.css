@@ -7,12 +7,32 @@ body {
 }
 .el-header {
   padding: 0px;
+  position: fixed;
+  width: 100%;
+  z-index: 6;
+}
+.el-aside {
+  position: fixed;
+  height: 100%;
+  overflow: hidden;
+  z-index: 6;
+  width: 260px!important;
+}
+.el-submenu__icon-arrow {
+  position: relative;
+  top: 0%;
+  right: -100px;
+  margin-top: 0px;
+}
+.el-container.is-vertical {
+  min-width: 400px;
 }
 .el-card__body {
   padding: 0.5em;
 }
 .el-main {
   padding: 0.5em;
+  z-index: 1;
 }
 .el-tag {
   height: auto;

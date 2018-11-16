@@ -110,9 +110,11 @@ export default {
       rdata: [],
       mdata: [],
       following: null,
-      followers: null
+      followers: null,
+      match: false
     }
   },
+  watchQuery: true,
   computed: {
     id () {
       if (!this.userdata.acct.match('@')) {
@@ -121,13 +123,6 @@ export default {
         var userid = '@' + this.userdata.acct
       }
       return userid
-    },
-    match () {
-      var match = false
-      if (this.userdata.url === this.$store.getters.getactive[0].data.url) {
-        var match = true
-      }
-      return match
     },
     userurl () {
       return this.$store.getters.geturl
@@ -300,7 +295,7 @@ export default {
 .headerbase {
   display: grid;
   position: relative;
-  grid-template: 10px 100px auto 10px / minmax(70px, 120px) minmax(160px, 260px) minmax(
+  grid-template: 10px 100px auto 10px / minmax(70px, 120px) minmax(100px, 200px) minmax(
       150px,
       260px
     );
