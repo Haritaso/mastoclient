@@ -42,11 +42,11 @@
           <div class="tootcard">
             <div>
               <img class="icon" :src="toot.account.avatar">
-              <div v-if="media == true">
+              <div v-if="toot.sensitive == true">
                 <el-button v-if="nsfw == false" type="primary" plain class="nsfwbutton" @click="nsfw = true">
                   <i class="fas fa-eye-slash"></i>
                 </el-button>
-                <el-button v-else type="primary" plain class="nsfwbutton">
+                <el-button v-else type="primary" plain class="nsfwbutton" @click="nsfw = false">
                   <i class="fas fa-eye"></i>
                 </el-button>
               </div>
