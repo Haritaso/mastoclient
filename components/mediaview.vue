@@ -25,7 +25,7 @@ import VueImg from 'v-img'
 import 'vue-plyr/dist/vue-plyr.css'
 export default {
   name: 'mediaview',
-  props: ['mdata'],
+  props: ['mdata', 'preid'],
   data () {
     return {
       mediaoption: false,
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     tootid () {
-      return this.mdata[0].id
+      return this.mdata[0].id + this.preid
     }
   },
   created () {

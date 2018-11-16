@@ -8,9 +8,9 @@
       <div class="username">
         <router-link class="name" :to=userlink>
           <span>
-            <bdi class="displayname">{{ data.display_name }}</bdi>
-            <bdi class="displayname" v-if="data.display_name == ''">{{ data.username }}</bdi>
-            <span>{{ userid }}</span>
+            <div class="displayname">{{ data.display_name }}</div>
+            <div class="displayname" v-if="data.display_name == ''">{{ data.username }}</div>
+            <div>{{ userid }}</div>
           </span>
           </router-link>
       </div>

@@ -166,7 +166,6 @@ export default {
     },
     setTL () {
       this.tabcontent = this.$store.getters.getactive[0].TL
-      console.log(this.tabcontent.length)
       this.tabIndex = this.tabcontent.length
     }
   },

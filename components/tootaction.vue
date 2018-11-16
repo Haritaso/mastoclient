@@ -99,7 +99,7 @@ export default {
       }
     }
   },
-  created () {
+  mounted () {
     this.reply = this.rp
     this.reblog = this.rb
     this.fav = this.fv
@@ -119,12 +119,13 @@ export default {
 <style scoped>
 .actionbar {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 2em;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 .action {
   position: relative;
   min-width: 4em;
+  max-height: 24px;
+  align-self: center;
   display: inline-block;
 }
 .actionobj {

@@ -5,11 +5,12 @@
   <section v-else>
     <div v-if="loading">
       <el-card :key="data.id" shadow="never">
-        <ContentLoader speed=1 height=95>
-          <rect x="0" y="0" rx="5" ry="5" width="200" height="22" />
-          <rect x="0" y="27" rx="0" ry="0" width="40" height="40" />
-          <rect x="50" y="27" rx="8" ry="8" width="120" height="16" />
-          <rect x="50" y="50" rx="8" ry="8" width="500" height="16" />
+        <ContentLoader :speed="1" :height="95">
+          <rect x="0" y="0" rx="4" ry="4" width="200" height="20" />
+          <rect x="0" y="22" rx="0" ry="0" width="40" height="40" />
+          <rect x="45" y="22" rx="8" ry="8" width="120" height="16" />
+          <rect x="45" y="45" rx="8" ry="8" width="300" height="16" />
+          <rect x="45" y="68" rx="8" ry="8" width="180" height="16" />
         </ContentLoader>
       </el-card>
     </div>
@@ -93,9 +94,9 @@
                     :rp="0"
                     :rb="0"
                     :fv="0"
-                    :rbtap="reblogtap"
-                    :fvtap="favtap"
-                    :urbtap="userreblog"
+                    :rbtap="false"
+                    :fvtap="false"
+                    :urbtap="false"
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"
@@ -175,13 +176,9 @@ export default {
     }
   },
   mounted() {
-    console.log(this.data)
     setTimeout(() => {
       this.loading = false
     },1000)
-    if (this.data.status == null) {
-      this.error = true
-    }
     if (this.watchStime == true) {
       setInterval(() => {
         this.nowtime = new Date();
@@ -242,8 +239,6 @@ export default {
   display: grid;
   grid-template-rows: 44px 34px 1fr;
 }
-.singleicon {
-}
 .icon {
   display: block;
   width: 50px;
@@ -283,6 +278,7 @@ export default {
   max-width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;

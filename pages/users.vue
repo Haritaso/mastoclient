@@ -45,6 +45,7 @@
                     :key="toot.id"
                     :toot="toot"
                     :detail="true"
+                    :preid="1"
                   ></puttoot>
                 </div>
               </el-tab-pane>
@@ -53,6 +54,7 @@
                   :key="toot.id"
                   :toot="toot"
                   :detail="true"
+                  :preid="2"
                   ></puttoot>
               </el-tab-pane>
               <el-tab-pane label="メディア" name="media">
@@ -60,6 +62,7 @@
                   :key="toot.id"
                   :toot="toot"
                   :detail="true"
+                  :preid="3"
                   ></puttoot>
               </el-tab-pane>
             </el-tabs>
@@ -99,7 +102,6 @@ export default {
     return {
       userdata: null,
       check: false,
-      match: false,
       followstatus: false,
       loading: true,
       error: false,

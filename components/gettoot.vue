@@ -1,15 +1,33 @@
 <template>
   <div>
+    <div v-for="(dummy, i) in 40"
+      :key="i"
+    >
+      <div v-if="loading">
+        <el-card shadow="never">
+          <content-loader :speed="3" :height="100">
+            <rect x="0" y="0" rx="4" ry="4" width="55" height="18" />
+            <rect x="56" y="0" rx="4" ry="4" width="120" height="18" />
+            <rect x="0" y="22" rx="0" ry="0" width="40" height="40" />
+            <rect x="45" y="22" rx="8" ry="8" width="120" height="16" />
+            <rect x="45" y="45" rx="8" ry="8" width="350" height="16" />
+            <rect x="45" y="68" rx="8" ry="8" width="180" height="16" />
+          </content-loader>
+        </el-card>
+      </div>
+    </div>
     <toot v-for="toot in toots"
       :key="toot.id"
       :toot="toot"
       :detail="detail"
+      :loading="loading"
     ></toot>
   </div>
 </template>
 
 <script>
 import toot from '@/components/puttoot.vue'
+import { ContentLoader } from 'vue-content-loader'
 import axios from 'axios'
 
 export default {
@@ -19,13 +37,7 @@ export default {
       newdata: [],
       newscope: '',
       wsscope: '',
-    }
-  },
-  watch: {
-    toots () {
-      if (this.toots.length == 51) {
-        this.toots.pop()
-      }
+      loading: true
     }
   },
   props: ['scope', 'media', 'stream', 'detail'],
@@ -56,6 +68,9 @@ export default {
         setTimeout(this.connectWs, 3000)
       }
     })
+    .finally(() =>
+      this.loading = false
+    )
   },
   methods: {
     connectWs () {
@@ -63,7 +78,6 @@ export default {
       if (this.scope == 'home') {
         this.wsscope = 'user'
       }
-      console.log(this.wsscope)
       const wssurl =
         'wss://' +
         this.$store.getters.getactive[0].url +
@@ -93,7 +107,6 @@ export default {
       const deletetoot = (deleteid) => {
         for (var i=0,d;d=this.toots[i];i++) {
           if (d.id == deleteid) {
-            console.log(this.toots[i])
             this.toots.splice(i, 1)
           }
         }
@@ -101,7 +114,8 @@ export default {
     }
   },
   components: {
-    toot
+    toot,
+    ContentLoader
   }
 }
 </script>
