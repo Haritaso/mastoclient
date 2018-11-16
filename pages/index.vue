@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="index">
     <el-input class="grid-content" placeholder="インスタンス名を入力" v-model="input">
       <template slot="prepend">https://</template>
     </el-input>
@@ -31,6 +31,9 @@ export default {
 <style>
 .loginbutton {
   text-align: right;
+}
+.index {
+  margin: 55px 0;
 }
 </style>
 
