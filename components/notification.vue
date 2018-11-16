@@ -212,8 +212,6 @@ export default {
   word-break: break-all;
   margin: 0 0 0.5em 0;
 }
-.box {
-}
 .toottype {
   position: relative;
   max-width: 100%;

@@ -38,7 +38,7 @@ export default {
           "https://" + this.$store.getters.getactive[0].url + "/oauth/token",
           {
             grant_type: "authorization_code",
-            redirect_uri: "http://localhost:3000/addusers",
+            redirect_uri: "https://mastoclient.netlify.com/addusers",
             client_id: this.$store.getters.getactive[0].client_id,
             client_secret: this.$store.getters.getactive[0].client_secret,
             code: this.$route.query.code
@@ -130,7 +130,7 @@ export default {
 .atom-spinner .spinner-circle {
   display: block;
   position: absolute;
-  color: #409EFF;
+  color: #409eff;
   font-size: calc(60px * 0.24);
   top: 50%;
   left: 50%;
@@ -145,7 +145,7 @@ export default {
   animation-duration: 1s;
   border-left-width: calc(60px / 25);
   border-top-width: calc(60px / 25);
-  border-left-color: #409EFF;
+  border-left-color: #409eff;
   border-left-style: solid;
   border-top-style: solid;
   border-top-color: transparent;
