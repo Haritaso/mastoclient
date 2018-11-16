@@ -1,25 +1,7 @@
 <template>
   <div class="settingframe">
     <el-collapse v-model="activeNames" accordion>
-      <el-collapse-item title="タブ" name="1" class="titletab">
-        <el-form
-          label-position="left"
-        >
-          <el-form-item label="文字色" class="title">
-            <el-color-picker v-model="general.textColor" show-alpha class="pickers"></el-color-picker>
-          </el-form-item>
-          <el-form-item label="アクティブ文字色" class="title">
-            <el-color-picker v-model="general.activetextColor" show-alpha class="pickers"></el-color-picker>
-          </el-form-item>
-          <el-form-item label="タブ背景色" class="title">
-            <el-color-picker v-model="general.backgroundColor" show-alpha class="pickers"></el-color-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="generalsetting" class="settingbutton">設定を適用</el-button>
-          </el-form-item>
-        </el-form>
-      </el-collapse-item>
-      <el-collapse-item title="ユーザー設定" name="2" class="titletab">
+      <el-collapse-item title="ユーザー設定" name="1" class="titletab">
         <el-form
           label-position="left"
         >
@@ -44,43 +26,82 @@
           </el-form-item>
         </el-form>
       </el-collapse-item>
+      <el-collapse-item title="タブ" name="2" class="titletab">
+        <el-form
+          label-position="left"
+        >
+          <el-form-item label="文字色" class="title">
+            <el-color-picker v-model="general.textColor" show-alpha class="pickers"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="アクティブ文字色" class="title">
+            <el-color-picker v-model="general.activetextColor" show-alpha class="pickers"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="タブ背景色" class="title">
+            <el-color-picker v-model="general.backgroundColor" show-alpha class="pickers"></el-color-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="generalsetting" class="settingbutton">設定を適用</el-button>
+          </el-form-item>
+        </el-form>
+      </el-collapse-item>
+      <el-collapse-item title="タイムライン" name="3" class="titletab">
+        <el-form
+          label-position="left"
+        >
+          <el-form-item label="NSFW投稿のマスキングカラー" class="title">
+            <el-color-picker v-model="timeline.backcolor" show-alpha class="pickers"></el-color-picker>
+          </el-form-item>
+          <el-form-item label="CWテキストカラー" class="title">
+            <el-color-picker v-model="timeline.textcolor" show-alpha class="pickers"></el-color-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="cwcolorsetting" class="settingbutton">設定を適用</el-button>
+          </el-form-item>
+        </el-form>
+      </el-collapse-item>
     </el-collapse>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
 export default {
   data() {
     return {
-      activeNames: ["1"],
+      activeNames: ['1'],
       general: {
         textColor: null,
         activetextColor: null,
         backgroundColor: null
       },
       user: {
-        displayname: "",
-        bio: "",
+        displayname: '',
+        bio: '',
         icon: [],
         header: [],
         lock: true
       },
-      url: ""
+      timeline: {
+        backcolor: '',
+        textcolor: ''
+      },
+      url: ''
     };
   },
-  mounted: function() {
+  mounted () {
     setTimeout(() => {
-      this.getcolor();
-      this.getacountdata();
-      this.url = this.$store.getters.getactive[0].url;
-    }, 1);
+      this.getcolor()
+      this.getacountdata()
+      this.url = this.$store.getters.getactive[0].url
+    }, 1)
   },
   methods: {
     getcolor() {
-      this.general.textColor = this.$store.getters.getactive[0].tcolor;
-      this.general.activetextColor = this.$store.getters.getactive[0].acolor;
-      this.general.backgroundColor = this.$store.getters.getactive[0].bcolor;
+      this.general.textColor = this.$store.getters.getactive[0].tcolor
+      this.general.activetextColor = this.$store.getters.getactive[0].acolor
+      this.general.backgroundColor = this.$store.getters.getactive[0].bcolor
+      this.timeline.backcolor = this.$store.getters.getactive[0].cwBackcolor
+      this.timeline.textcolor = this.$store.getters.getactive[0].cwTextcolor
     },
     generalsetting() {
       this.$store.commit("setGeneral", {
@@ -88,6 +109,14 @@ export default {
         tcolor: this.general.textColor,
         acolor: this.general.activetextColor,
         bcolor: this.general.backgroundColor
+      });
+      this.$router.push("loading?url=setting")
+    },
+    cwcolorsetting() {
+      this.$store.commit("setCwcolor", {
+        index: this.$store.getters.getactive[0].index,
+        cwBackcolor: this.timeline.backcolor,
+        cwTextcolor: this.timeline.textcolor,
       });
       this.$router.push("loading?url=setting")
     },
@@ -107,7 +136,7 @@ export default {
         this.user.bio = res.data.source.note;
         this.user.lock = res.data.locked;
         this.user.bot = res.data.bot;
-      });
+      })
     },
     updateuserdata() {
       axios({
@@ -125,10 +154,10 @@ export default {
           note: this.user.bio,
           locked: this.user.lock
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>

@@ -163,12 +163,12 @@ export default {
     },
     nsfwscreen () {
       return {
-        'background-color' : '#333131'
+        'background-color': !this.loading ? this.$store.getters.getactive[0].cwBackcolor : '#d9e1e8'
       }
     },
     nsfwtext () {
       return {
-        'color' : 'rgb(0, 250, 100)'
+        'color': !this.loading ? this.$store.getters.getactive[0].cwTextcolor : '#000'
       }
     }
   },
