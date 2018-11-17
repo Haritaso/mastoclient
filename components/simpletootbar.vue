@@ -11,7 +11,7 @@
         :maxWidth="800"
         :minHeight="98"
         :maxHeight="110"
-        positionHint="20 / 50"
+        positionHint="0 / -15"
       >
         <div class="postmenu">
           <el-input placeholder="今なにしてる？" v-model="toot.TootContent">
@@ -28,6 +28,7 @@
           placement="top-start"
           width="300"
           trigger="click"
+          class="optionspace"
         >
           <el-input class="cwinput" v-show="cwtoggle" placeholder="cw" size="medium" v-model="toot.cwContent"></el-input>
           <div class="optionbtn">
@@ -208,14 +209,14 @@ export default {
 .postmenu {
   display: inline-flex;
   text-align: center;
-  margin: auto 8px auto 8px;
+  margin: auto 8px;
 }
 .content {
-  display: inline-grid;
+  display: grid;
 }
 .tootbtn {
   text-align: right;
-  margin: 0 12px 0 8px;
+  margin: 0 0 0 8px;
   max-height: 40px;
 }
 .cwinput {
@@ -224,12 +225,14 @@ export default {
 }
 .option {
   display: inline-flex;
-  margin: auto 20px auto 8px;
   width: -webkit-fill-available;
 }
 .optionbtn {
   max-height: 36px;
   display: block;
+}
+.optionspace {
+  margin: 0 8px;
 }
 .optionbtn1 {
   display: inline-flex;
@@ -239,14 +242,16 @@ export default {
   z-index: 100 !important;
   max-height: 130px;
   min-height: 120px;
-  margin-right: 15px;
+  width: -webkit-fill-available;
 }
 .window {
-  border-radius: 4px !important;
   position: fixed !important;
 }
 .window .titlebar {
   border-radius: 0px !important;
+}
+.titlebar {
+  padding: 0.3em;
 }
 .title {
   font-size: 12px;
