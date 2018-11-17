@@ -18,7 +18,7 @@
           <div v-if="match == true" class="editbtn">
             <el-button type="primary" class="btnsize" size="medium" @click="gotosetting">
               <i class="fas fa-user-edit editicon"></i>
-              プロフィールを編集
+              プロフィール
             </el-button>
           </div>
           <div v-else class="editbtn">
@@ -295,10 +295,12 @@ export default {
 .headerbase {
   display: grid;
   position: relative;
-  grid-template: 10px 100px auto 10px / minmax(70px, 120px) minmax(100px, 200px) auto minmax(
-      150px,
-      260px
-    );
+  grid-template:
+    10px 80px auto 10px / minmax(50px, 100px) minmax(100px, 250px) minmax(
+      0px,
+      1000px
+    )
+    minmax(100px, 200px);
   border-bottom-width: 0px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
 }
@@ -334,43 +336,39 @@ export default {
 }
 .headertext {
   grid-row: 3 / 4;
-  grid-column: 2 / 3;
+  grid-column: 2 / 5;
   justify-self: start;
   align-self: end;
   max-width: 100%;
+  font-size: calc(100% + 0.4vw);
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   z-index: 3;
-  font-size: 1.4vmin;
 }
 .headername {
-  max-inline-size: 220px;
-  font-size: 3em;
+  font-size: 110%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .headerid {
-  font-size: 2em;
+  font-size: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .editbtn {
-  grid-row: 3 / 4;
+  grid-row: 2 / 3;
   grid-column: 4 / 5;
-  margin: 0 10px 0 0;
+  margin: 10px 10px 0 0;
   justify-self: end;
-  align-self: end;
+  align-self: start;
   z-index: 3;
 }
 .btnsize {
-  font-size: 1vw;
-}
-.editicon {
-  font-size: 1vw;
+  font-size: 0.5em;
 }
 .counttab {
   display: flex;
