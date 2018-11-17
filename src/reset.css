@@ -32,7 +32,10 @@ body {
 }
 .el-main {
   padding: 0.5em;
-  z-index: 1;
+  z-index: 2;
+  max-width: 640px;
+  width: 100%;
+  margin: 55px auto;
 }
 .el-tag {
   height: auto;

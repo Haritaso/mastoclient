@@ -281,7 +281,7 @@ export default {
       })
     },
     gotosetting () {
-      this.$router.push("loading?url=setting")
+      this.$router.push("/loading?url=setting")
     },
   },
   components: {
@@ -295,7 +295,7 @@ export default {
 .headerbase {
   display: grid;
   position: relative;
-  grid-template: 10px 100px auto 10px / minmax(70px, 120px) minmax(100px, 200px) minmax(
+  grid-template: 10px 100px auto 10px / minmax(70px, 120px) minmax(100px, 200px) auto minmax(
       150px,
       260px
     );
@@ -307,7 +307,7 @@ export default {
 }
 #header {
   grid-row: 1 / 5;
-  grid-column: 1 / 4;
+  grid-column: 1 / 5;
   border-radius: 4px 4px 0 0;
   background-size: cover;
   width: 100%;
@@ -360,7 +360,7 @@ export default {
 }
 .editbtn {
   grid-row: 3 / 4;
-  grid-column: 3 / 4;
+  grid-column: 4 / 5;
   margin: 0 10px 0 0;
   justify-self: end;
   align-self: end;

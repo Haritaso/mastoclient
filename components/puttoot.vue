@@ -7,80 +7,82 @@
       <div v-if="loading">
       </div>
       <div v-else>
-        <el-card key="toot.id" shadow="never" class="elcardbody">
-          <div class="tootstatus">
-            <div v-if="toot.reblog == null"></div>
-            <div v-else>
-              <a :href=userrebloglink>
-                <el-tag type="success" class="fas fa-sync-alt tootstatusobj">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
-              </a>
-            </div>
-            <div v-if="toot.visibility == 'public'">
-              <el-tag type="Info" class="fas fa-users tootstatusobj">公開</el-tag>
-            </div>
-            <div v-else-if="toot.visibility == 'unlisted'">
-              <el-tag type="Info" class="fas fa-user-lock tootstatusobj">未収載</el-tag>
-            </div>
-            <div v-else-if="toot.visibility == 'private'">
-              <el-tag type="Info" class="fas fa-user-check tootstatusobj">フォロワー限定</el-tag>
-            </div>
-            <div v-else-if="toot.visibility == 'direct'">
-              <el-tag type="danger" class="fas fa-comment-alt tootstatusobj">DM</el-tag>
-            </div>
-            <div v-if="toot.account.locked == true">
-              <el-tag type="warning" class="fas fa-lock tootstatusobj">承認制アカウント</el-tag>
-            </div>
-            <div v-if="toot.account.bot == true">
-              <el-tag type="info" class="fas fa-robot tootstatusobj">Bot</el-tag>
-            </div>
-            <div>
-              <a :href=userurllink>
-                <el-tag type="info" class="fas fa-at tootstatusobj">{{ userurl }}</el-tag>
-              </a>
-            </div>
-          </div>
-          <div class="tootcard">
-            <div>
-              <img class="icon" :src="toot.account.avatar">
-              <div v-if="toot.sensitive == true">
-                <el-button v-if="nsfw == false" type="primary" plain class="nsfwbutton" @click="nsfw = true">
-                  <i class="fas fa-eye-slash"></i>
-                </el-button>
-                <el-button v-else type="primary" plain class="nsfwbutton" @click="nsfw = false">
-                  <i class="fas fa-eye"></i>
-                </el-button>
+        <el-card key="toot.id" shadow="never">
+          <div class="elcardbody">
+            <div class="tootstatus">
+              <div v-if="toot.reblog == null"></div>
+              <div v-else>
+                <a :href=userrebloglink>
+                  <el-tag type="success" class="fas fa-sync-alt tootstatusobj">{{ toot.reblog.display_name + "さんがブースト" }}</el-tag>
+                </a>
+              </div>
+              <div v-if="toot.visibility == 'public'">
+                <el-tag type="Info" class="fas fa-users tootstatusobj">公開</el-tag>
+              </div>
+              <div v-else-if="toot.visibility == 'unlisted'">
+                <el-tag type="Info" class="fas fa-user-lock tootstatusobj">未収載</el-tag>
+              </div>
+              <div v-else-if="toot.visibility == 'private'">
+                <el-tag type="Info" class="fas fa-user-check tootstatusobj">フォロワー限定</el-tag>
+              </div>
+              <div v-else-if="toot.visibility == 'direct'">
+                <el-tag type="danger" class="fas fa-comment-alt tootstatusobj">DM</el-tag>
+              </div>
+              <div v-if="toot.account.locked == true">
+                <el-tag type="warning" class="fas fa-lock tootstatusobj">承認制アカウント</el-tag>
+              </div>
+              <div v-if="toot.account.bot == true">
+                <el-tag type="info" class="fas fa-robot tootstatusobj">Bot</el-tag>
+              </div>
+              <div>
+                <a :href=userurllink>
+                  <el-tag type="info" class="fas fa-at tootstatusobj">{{ userurl }}</el-tag>
+                </a>
               </div>
             </div>
-            <div class="tootcontent">
-              <div class="username">
-                <router-link class="name" :to=userlink>
-                  <span>
-                    <bdi class="displayname">{{ toot.account.display_name }}</bdi>
-                    <bdi class="displayname" v-if="toot.account.display_name == ''">{{ toot.account.username }}</bdi>
-                    <span>{{ userid }}</span>
-                  </span>
-                </router-link>
-                <div class="time">
-                  <time :datatime="this.toot.created_at">{{ time }}</time>
+            <div class="tootcard">
+              <div>
+                <img class="icon" :src="toot.account.avatar">
+                <div v-if="toot.sensitive == true">
+                  <el-button v-if="nsfw == false" type="primary" plain class="nsfwbutton" @click="nsfw = true">
+                    <i class="fas fa-eye-slash"></i>
+                  </el-button>
+                  <el-button v-else type="primary" plain class="nsfwbutton" @click="nsfw = false">
+                    <i class="fas fa-eye"></i>
+                  </el-button>
                 </div>
               </div>
-              <div v-show="nsfw" :style="nsfwscreen" :class="nsfwclass" @click="nsfw = false">
-                <div class="cwtext" :style="nsfwtext" v-if="toot.spoiler_text == ''">クリックで表示</div>
-                <div class="cwtext" :style="nsfwtext" v-else>{{ toot.spoiler_text }}</div>
+              <div class="tootcontent">
+                <div class="username">
+                  <router-link class="name" :to=userlink>
+                    <span>
+                      <bdi class="displayname">{{ toot.account.display_name }}</bdi>
+                      <bdi class="displayname" v-if="toot.account.display_name == ''">{{ toot.account.username }}</bdi>
+                      <span>{{ userid }}</span>
+                    </span>
+                  </router-link>
+                  <div class="time">
+                    <time :datatime="this.toot.created_at">{{ time }}</time>
+                  </div>
+                </div>
+                <div v-show="nsfw" :style="nsfwscreen" :class="nsfwclass" @click="nsfw = false">
+                  <div class="cwtext" :style="nsfwtext" v-if="toot.spoiler_text == ''">クリックで表示</div>
+                  <div class="cwtext" :style="nsfwtext" v-else>{{ toot.spoiler_text }}</div>
+                </div>
+                <div class="toottext" v-html="toot.content"></div>
+                <mediaview :mdata="toot.media_attachments" :preid="preid" />
+                <tootaction
+                  :rp="reply"
+                  :rb="reblog"
+                  :fv="fav"
+                  :rbtap="reblogtap"
+                  :fvtap="favtap"
+                  :urbtap="userreblog"
+                  :visibility="toot.visibility"
+                  :id="toot.id"
+                  :detail="detail"
+                />
               </div>
-              <div class="toottext" v-html="toot.content"></div>
-              <mediaview :mdata="toot.media_attachments" :preid="preid" />
-              <tootaction
-                :rp="reply"
-                :rb="reblog"
-                :fv="fav"
-                :rbtap="reblogtap"
-                :fvtap="favtap"
-                :urbtap="userreblog"
-                :visibility="toot.visibility"
-                :id="toot.id"
-                :detail="detail"
-              />
             </div>
           </div>
         </el-card>
@@ -220,8 +222,10 @@ export default {
 <style scoped>
 .elcardbody {
   display: grid;
+  grid-template-rows: 26px 1fr;
 }
 .tootcard {
+  grid-row: 2 / 3;
   display: grid;
   grid-template-columns: 60px 1fr;
   margin-bottom: 1em;
@@ -266,6 +270,8 @@ export default {
   transform: rotate(0deg);
 }
 .tootstatus {
+  grid-row: 1 / 2;
+  position: absolute;
   display: inline-flex;
 }
 .tootstatusobj {

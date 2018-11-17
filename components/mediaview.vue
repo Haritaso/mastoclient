@@ -71,7 +71,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  height: 250px;
+  height: 150px;
   width: auto;
   object-fit: cover;
   overflow: hidden;

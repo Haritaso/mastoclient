@@ -204,13 +204,6 @@ export default {
   padding-right: 20px;
   overflow-y: auto;
 }
-.main {
-  z-index: 2;
-  max-width: 640px;
-  width: 100%;
-  min-width: 320px;
-  margin: 55px auto;
-}
 .usertab .name {
   position: absolute;
   bottom: 12px;

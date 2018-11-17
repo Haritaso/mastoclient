@@ -119,7 +119,7 @@ export default {
 <style scoped>
 .actionbar {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-auto-flow: column;
 }
 .action {
   position: relative;
