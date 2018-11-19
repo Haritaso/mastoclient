@@ -8,7 +8,6 @@
     "dev": "BASE_URL=http://localhost:3000 nuxt",
     "start": "nuxt start",
     "generate": "nuxt generate",
-    "net": "BASE_URL=https://mastoclient.netlify.com nuxt generate",
     "precommit": "npm run lint"
   },
   "dependencies": {
