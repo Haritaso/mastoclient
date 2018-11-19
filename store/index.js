@@ -34,6 +34,22 @@ const store = () => new Vuex.Store({
       state.users[payload.index].active = true
       state.activedata = true
     },
+    removecount(state) {
+      state.count--
+    },
+    remove(state, payload) {
+      if (state.users[payload.index].active == true) {
+        state.users[payload.index].active = false
+        state.users.splice(payload.index, 1)
+        if (state.count == 0) {
+          localStorage.clear()
+        } else {
+          state.users[0].active = true
+        }
+      } else {
+        state.users.splice(payload.index, 1)
+      }
+    },
     registerUI(state, payload) {
       state.users[payload.index].TL = []
       state.users[payload.index].TLcount = 0
@@ -84,14 +100,12 @@ const store = () => new Vuex.Store({
   },
   actions: {
     getAppName(context, payload) {
-      console.log(payload)
       axios.post('https://' + payload.url + '/api/v1/apps', {
         scopes: 'read write follow',
         client_name: 'MastoClient',
         redirect_uris: process.env.baseUrl + '/addusers'
       })
         .then(response => {
-          console.log(response)
           this.client_id = response.data.client_id
           if (context.state.first === true) {
             context.commit('addnext', {
@@ -126,6 +140,12 @@ const store = () => new Vuex.Store({
         index: context.getters.getactive[0].index
       })
       context.commit('change', {
+        index: payload.index
+      })
+    },
+    removeAccount(context, payload) {
+      context.commit('removecount')
+      context.commit('remove', {
         index: payload.index
       })
     },

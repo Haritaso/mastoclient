@@ -1,25 +1,29 @@
 <template>
-  <div>
-    <div class="atom-spinner">
-      <div class="spinner-inner">
-        <div class="spinner-line"></div>
-        <div class="spinner-line"></div>
-        <div class="spinner-line"></div>
-        <!--Chrome renders little circles malformed :(-->
-        <div class="spinner-circle">
-          &#9679;
-        </div>
+  <div class="base">
+    <div class='loader'>
+      <moon-loader
+        class="load"
+        :loading="loading"
+        :color="color"
+        :sizeUnit="px"
+        :size="120"
+      ></moon-loader>
       </div>
-    </div>
     <div class="back"></div>
   </div>
 </template>
 
 <script>
 import axios from "axios"
-
+import { MoonLoader } from '@saeris/vue-spinners'
 export default {
   layout: 'index',
+  data () {
+    return {
+      loading: true,
+      color: "#fff"
+    }
+  },
   computed: {
     userdata () {
       return this.$store.getters.getactive[0]
@@ -32,7 +36,6 @@ export default {
   },
   methods: {
     register() {
-      console.log(this.$store.getters.getactive[0])
       axios
         .post(
           "https://" + this.$store.getters.getactive[0].url + "/oauth/token",
@@ -45,7 +48,6 @@ export default {
           }
         )
         .then(response => {
-          console.log(response.data.access_token)
           this.$store.commit("addtoken", {
             index: this.$store.getters.getactive[0].index,
             accessToken: response.data.access_token
@@ -87,100 +89,55 @@ export default {
         })
     }
   },
+  components: {
+    MoonLoader
+  },
 };
 </script>
 
 <style scoped>
-.atom-spinner,
-.atom-spinner * {
-  box-sizing: border-box;
-}
-
 .back {
-  z-index: 1999;
+  z-index: 2000;
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   opacity: 0.9;
-  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5);
 }
-
-.atom-spinner {
+.base .load {
+  z-index: 2001;
+  display: flex;
+  position: relative;
+  text-align: -webkit-match-parent;
+  margin: 0;
+}
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.load {
+  text-align: left;
+}
+.loader {
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  width: 300px;
+  height: 300px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  position: relative;
+  flex: 0 0 auto;
+  padding: 20px;
+  margin-top: 55px;
+  border-width: 0.5px;
+  border-image: initial;
   z-index: 2000;
-  position: relative;
-  top: auto;
-  bottom: auto;
-  right: auto;
-  left: auto;
-  margin: auto;
-  width: 120px;
-  height: 120px;
-  border-radius: 100%;
-}
-
-.atom-spinner .spinner-inner {
-  position: relative;
-  display: block;
-  height: 100%;
-  width: 100%;
-}
-
-.atom-spinner .spinner-circle {
-  display: block;
-  position: absolute;
-  color: #409eff;
-  font-size: calc(60px * 0.24);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.atom-spinner .spinner-line {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  animation-duration: 1s;
-  border-left-width: calc(60px / 25);
-  border-top-width: calc(60px / 25);
-  border-left-color: #409eff;
-  border-left-style: solid;
-  border-top-style: solid;
-  border-top-color: transparent;
-}
-
-.atom-spinner .spinner-line:nth-child(1) {
-  animation: atom-spinner-animation-1 1s linear infinite;
-  transform: rotateZ(120deg) rotateX(66deg) rotateZ(0deg);
-}
-
-.atom-spinner .spinner-line:nth-child(2) {
-  animation: atom-spinner-animation-2 1s linear infinite;
-  transform: rotateZ(240deg) rotateX(66deg) rotateZ(0deg);
-}
-
-.atom-spinner .spinner-line:nth-child(3) {
-  animation: atom-spinner-animation-3 1s linear infinite;
-  transform: rotateZ(360deg) rotateX(66deg) rotateZ(0deg);
-}
-
-@keyframes atom-spinner-animation-1 {
-  100% {
-    transform: rotateZ(120deg) rotateX(66deg) rotateZ(360deg);
-  }
-}
-
-@keyframes atom-spinner-animation-2 {
-  100% {
-    transform: rotateZ(240deg) rotateX(66deg) rotateZ(360deg);
-  }
-}
-
-@keyframes atom-spinner-animation-3 {
-  100% {
-    transform: rotateZ(360deg) rotateX(66deg) rotateZ(360deg);
-  }
 }
 </style>

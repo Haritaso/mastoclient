@@ -20,6 +20,7 @@ module.exports = {
       'vue-window',
       'StyleFactory',
       'vue-content-loader',
+      'moon-loader'
     ],
   },
   plugins: [
@@ -37,11 +38,8 @@ module.exports = {
     '@fortawesome/fontawesome-free-webfonts/css/fa-regular.css',
     '@fortawesome/fontawesome-free-webfonts/css/fa-solid.css',
   ],
-  router: {
-    //middleware: 'auth'
-  },
   env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+    baseUrl: process.env.BASE_URL
   },
   modules: [
     '@nuxtjs/dotenv',

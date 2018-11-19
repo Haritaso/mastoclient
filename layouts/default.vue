@@ -22,13 +22,24 @@
             </template>
             <el-menu-item-group title="既存のアカウントに切り替え">
               <el-menu-item
-                default-active="2-1"
+                default-active="2-0"
                 v-for="(item, i) in $store.state.users"
                 :key="item.index"
                 :index="'2-'+ i"
-                @click="change(item.index)"
+                route="/loading?url=home"
               >
-              {{ item.id }}
+                <div class="username">
+                  <div @click="change(item.index)">{{ item.id }}</div>
+                  <el-button
+                    @click="remove(item.index)"
+                    type="danger"
+                    size="mini"
+                    class="removebtn"
+                    plain
+                  >
+                    <i class="fas fa-user-minus"></i>
+                  </el-button>
+                </div>
               </el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="新しいアカウントを追加">
@@ -150,11 +161,15 @@ export default {
   },
   methods: {
     change(index) {
-      this.$store.dispatch("changeActive", {
+      this.$store.dispatch('changeActive', {
         index: index
       });
       this.drawer = false;
-      this.$router.push("loading?url=home");
+    },
+    remove(index) {
+      this.$store.dispatch('removeAccount', {
+        index: index
+      })
     },
     closetab() {
       this.drawer = false;
@@ -200,9 +215,19 @@ export default {
 }
 .useraside {
   height: 100%;
-  width: calc(280px + 20px);
-  padding-right: 20px;
+  width: calc(280px + 2px);
+  padding-right: 2px;
   overflow-y: auto;
+}
+.removebtn {
+  position: absolute;
+  left: 200px;
+  top: 10px;
+  bottom: 10px;
+}
+.username {
+  display: flex;
+  justify-content: space-between;
 }
 .main {
   z-index: 2;
