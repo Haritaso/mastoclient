@@ -38,7 +38,7 @@ export default {
           "https://" + this.$store.getters.getactive[0].url + "/oauth/token",
           {
             grant_type: "authorization_code",
-            redirect_uri: "https://mastoclient.netlify.com/addusers",
+            redirect_uri: process.env.baseUrl + "/addusers",
             client_id: this.$store.getters.getactive[0].client_id,
             client_secret: this.$store.getters.getactive[0].client_secret,
             code: this.$route.query.code

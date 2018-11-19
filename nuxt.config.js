@@ -40,6 +40,12 @@ module.exports = {
   router: {
     //middleware: 'auth'
   },
+  env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
+  modules: [
+    '@nuxtjs/dotenv',
+  ],
   build: {
     extend(config) {
       if (process.server && process.browser) {
