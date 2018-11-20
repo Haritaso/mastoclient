@@ -26,7 +26,7 @@
                 v-for="(item, i) in $store.state.users"
                 :key="item.index"
                 :index="'2-'+ i"
-                route="/loading?url=home"
+                route="/home"
               >
                 <div class="username">
                   <div @click="change(item.index)">{{ item.id }}</div>
@@ -164,12 +164,16 @@ export default {
       this.$store.dispatch('changeActive', {
         index: index
       });
-      this.drawer = false;
+      this.drawer = false
+      this.$router.push("/loading?url=home")
     },
     remove(index) {
+      this.setup = false
+      this.setcolor = false
       this.$store.dispatch('removeAccount', {
         index: index
       })
+      this.$router.push("/loading?url=home")
     },
     closetab() {
       this.drawer = false;

@@ -4,8 +4,8 @@
       <moon-loader
         class="load"
         loading=true
-        :color="this.$store.getters.getactive[0].acolor"
-        :sizeUnit="px"
+        :color="Acolor"
+        sizeUnit="px"
         :size="120"
       ></moon-loader>
       </div>
@@ -18,6 +18,16 @@ import { MoonLoader } from '@saeris/vue-spinners'
 export default {
   name: "loading",
   layout: "index",
+  data () {
+    return {
+      setcolor: false,
+    }
+  },
+  computed: {
+    Acolor() {
+      return this.setcolor ? this.$store.getters.getactive[0].acolor : "#409EFF"
+    }
+  },
   mounted() {
     setTimeout(this.next, 2000)
   },
@@ -26,6 +36,7 @@ export default {
       if (this.$store.state.users.length == 0) {
         this.$router.push('/')
       } else {
+        this.setcolor = true
         var query = this.$route.query.url
         this.$router.push('/' + query)
       }

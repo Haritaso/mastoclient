@@ -5,7 +5,7 @@
         class="load"
         :loading="loading"
         :color="color"
-        :sizeUnit="px"
+        sizeUnit="px"
         :size="120"
       ></moon-loader>
       </div>
@@ -21,7 +21,7 @@ export default {
   data () {
     return {
       loading: true,
-      color: "#fff"
+      color: "#409EFF"
     }
   },
   computed: {

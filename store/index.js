@@ -40,10 +40,13 @@ const store = () => new Vuex.Store({
     remove(state, payload) {
       if (state.users[payload.index].active == true) {
         state.users[payload.index].active = false
-        state.users.splice(payload.index, 1)
         if (state.count == 0) {
-          localStorage.clear()
+          state.first = false
+          state.coloroption = false
+          state.activedata = false
+          state.users.splice(0, 1)
         } else {
+          state.users.splice(payload.index, 1)
           state.users[0].active = true
         }
       } else {
