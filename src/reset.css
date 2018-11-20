@@ -24,7 +24,8 @@ body {
   right: -100px;
   margin-top: 0px;
 }
-.el-container.is-vertical {
+.el-submenu__title {
+  padding: 0;
 }
 .el-card__body {
   padding: 0.5em;

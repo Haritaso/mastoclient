@@ -87,7 +87,7 @@
           :active-text-color="Acolor"
           @select="handleSelect"
         >
-          <el-menu-item index="1" @click="drawer = !drawer">
+          <el-menu-item index="1" @click="drawer = !drawer" v-show="drawer == false">
             <i class="el-icon-menu"></i>
           </el-menu-item>
           <el-menu-item index="2">{{ logo }}</el-menu-item>
@@ -140,7 +140,7 @@ export default {
       if (this.drawer == false) {
         var a = 'MastoClient'
       } else {
-        var a = '<閉じる'
+        var a = '<戻る'
       }
       return a
     },
@@ -219,9 +219,10 @@ export default {
 }
 .useraside {
   height: 100%;
-  width: calc(280px + 2px);
+  width: calc(270px + 13px);
   padding-right: 2px;
   overflow-y: auto;
+  margin-left: -5px;
 }
 .removebtn {
   position: absolute;
