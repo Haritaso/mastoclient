@@ -223,11 +223,12 @@ export default {
 .elcardbody {
   display: grid;
   grid-template-rows: 26px 1fr;
+  grid-template-columns: 100%;
 }
 .tootcard {
   grid-row: 2 / 3;
   display: grid;
-  grid-template-columns: 56px minmax(90%, 100%);
+  grid-template-columns: 56px calc(100% - 56px);
 }
 .icon {
   width: 50px;
@@ -238,8 +239,9 @@ export default {
   border: 3px solid #909399;
 }
 .username {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 3em;
+  grid-template-rows: 1.5em;
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -250,10 +252,21 @@ export default {
   z-index: 4;
 }
 .name {
+  grid-row: 1 /2;
+  grid-column: 1 /2;
+  max-width: 100%;
+  justify-self: start;
+  align-self: center;
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.time {
+  grid-row: 1 /2;
+  grid-column: 2 /3;
+  justify-self: end;
+  align-self: end;
 }
 .displayname {
   color: black;
@@ -281,7 +294,6 @@ export default {
   grid-template-columns: 100%;
   position: relative;
   word-break: break-all;
-  max-width: calc(100% - 56px);
 }
 .boost {
   float: right;
@@ -317,5 +329,8 @@ export default {
 }
 .nsfwbutton {
   width: 56px;
+}
+.size {
+  padding: 0;
 }
 </style>

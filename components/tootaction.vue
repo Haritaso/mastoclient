@@ -298,6 +298,7 @@ export default {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: auto 0px;
+  padding: 0.5em 0;
 }
 .replyaction {
   grid-row: 2 / 3;
@@ -353,7 +354,6 @@ export default {
 }
 .action {
   position: relative;
-  min-width: 4em;
   align-self: center;
   grid-row: 1;
   display: inline-block;
@@ -376,5 +376,8 @@ export default {
   transform: rotate(360deg);
   transition: 0.8s;
   color: #2b90d9;
+}
+.el-button {
+  padding: 0;
 }
 </style>
