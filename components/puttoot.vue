@@ -1,7 +1,7 @@
 <template>
   <div>
     <section v-if="error">
-      error
+      取得エラー
     </section>
     <section v-else>
       <div v-if="loading">
@@ -227,8 +227,7 @@ export default {
 .tootcard {
   grid-row: 2 / 3;
   display: grid;
-  grid-template-columns: 60px 1fr;
-  margin-bottom: 1em;
+  grid-template-columns: 56px minmax(90%, 100%);
 }
 .icon {
   width: 50px;
@@ -239,7 +238,6 @@ export default {
   border: 3px solid #909399;
 }
 .username {
-  max-width: 100%;
   display: flex;
   justify-content: space-between;
   text-decoration: none;
@@ -280,8 +278,10 @@ export default {
 .tootcontent {
   display: grid;
   grid-template-rows: 1.5em auto;
+  grid-template-columns: 100%;
   position: relative;
   word-break: break-all;
+  max-width: calc(100% - 56px);
 }
 .boost {
   float: right;

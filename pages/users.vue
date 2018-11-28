@@ -340,7 +340,7 @@ export default {
   justify-self: start;
   align-self: end;
   max-width: 100%;
-  font-size: calc(100% + 0.4vw);
+  font-size: calc(100% + 0.2vw);
   text-decoration: none;
   overflow: hidden;
   text-overflow: ellipsis;

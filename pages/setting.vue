@@ -110,7 +110,7 @@ export default {
         acolor: this.general.activetextColor,
         bcolor: this.general.backgroundColor
       });
-      this.$router.push("loading?url=setting")
+      this.$router.push("/loading?url=setting")
     },
     cwcolorsetting() {
       this.$store.commit("setCwcolor", {
@@ -118,7 +118,7 @@ export default {
         cwBackcolor: this.timeline.backcolor,
         cwTextcolor: this.timeline.textcolor,
       });
-      this.$router.push("loading?url=setting")
+      this.$router.push("/loading?url=setting")
     },
     getacountdata() {
       axios({
