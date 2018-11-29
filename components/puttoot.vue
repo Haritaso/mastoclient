@@ -195,6 +195,9 @@ export default {
       this.media = false
       this.nsfwclass = "nsfw"
     }
+  },
+  created () {
+    this.nowloading = this.loading
     if (this.toot.reblog == null) {
       this.userreblog = false
     } else {
@@ -208,9 +211,6 @@ export default {
       this.favtap = true
       this.fav++
     }
-  },
-  created () {
-    this.nowloading = this.loading
   },
   components: {
     mediaview,

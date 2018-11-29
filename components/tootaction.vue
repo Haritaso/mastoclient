@@ -132,14 +132,14 @@
 import axios from 'axios'
 export default {
   name: 'tootaction',
-  props: ['rp', 'rb', 'fv', 'rbtap', ' fvtap', 'urbtap', 'visibility', 'id' ,'detail'],
+  props: ['rp', 'rb', 'fv', 'rbtap', 'fvtap', 'urbtap', 'visibility', 'id' ,'detail'],
   data () {
     return {
       reply: 0,
       reblog: 0,
       fav: 0,
       reblogtap: false,
-      favtap: false,
+      favtap: Boolean,
       userreblog: false,
       replyaction: false,
       form: {
@@ -274,7 +274,7 @@ export default {
       })
     },
   },
-  mounted () {
+  created() {
     this.first = true
     this.loading = false
     this.reply = this.rp
