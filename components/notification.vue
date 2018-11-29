@@ -82,10 +82,32 @@
                 <div v-if="data.type == 'favourite'" class="text">
                   <div v-html="data.status.content"></div>
                   <mediaview :mdata="data.status.media_attachments" />
+                  <tootaction
+                    :rp="0"
+                    :rb="0"
+                    :fv="0"
+                    :rbtap="false"
+                    :fvtap="false"
+                    :urbtap="false"
+                    :visibility="data.status.visibility"
+                    :id="data.id"
+                    :detail="false"
+                  />
                 </div>
                 <div v-else-if="data.type == 'reblog'" class="text">
                   <div v-html="data.status.content"></div>
                   <mediaview :mdata="data.status.media_attachments" />
+                  <tootaction
+                    :rp="0"
+                    :rb="0"
+                    :fv="0"
+                    :rbtap="false"
+                    :fvtap="false"
+                    :urbtap="false"
+                    :visibility="data.status.visibility"
+                    :id="data.id"
+                    :detail="false"
+                  />
                 </div>
                 <div v-else-if="data.type == 'mention'" class="reply text">
                   <div v-html="data.status.content"></div>
@@ -210,7 +232,6 @@ export default {
   display: grid;
   grid-template-columns: 54px 1fr;
   word-break: break-all;
-  margin: 0 0 0.5em 0;
 }
 .toottype {
   position: relative;
@@ -265,7 +286,7 @@ export default {
   bottom: 20px;
 }
 .text {
-  margin: 0.5em 0;
+  margin: 0.5em 0 0 0;
 }
 .tootcontent {
   display: inline-grid;

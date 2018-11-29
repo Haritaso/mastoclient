@@ -298,7 +298,7 @@ export default {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: auto 0px;
-  padding: 0.5em 0;
+  padding: 0.5em 0 0 0;
 }
 .replyaction {
   grid-row: 2 / 3;
@@ -378,6 +378,6 @@ export default {
   color: #2b90d9;
 }
 .el-button {
-  padding: 0;
+  padding: 5px 5px;
 }
 </style>
