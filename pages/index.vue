@@ -4,6 +4,7 @@
       <template slot="prepend">https://</template>
     </el-input>
     <div class="loginbutton">
+      <el-button type="warning" @click="reload">ローカルストレージの削除</el-button>
       <el-button type="primary" @click="register">Login</el-button>
     </div>
   </div>
@@ -21,6 +22,10 @@ export default {
       this.$store.dispatch('getAppName', {
         url: this.input
       })
+    },
+    reload() {
+      localStorage.clear()
+      location.reload()
     }
   },
   layout: 'index'
