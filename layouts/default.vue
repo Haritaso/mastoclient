@@ -26,7 +26,7 @@
                 v-for="(item, i) in $store.state.users"
                 :key="item.index"
                 :index="'2-'+ i"
-                route="/home"
+                route="/loading?url=home"
               >
                 <div class="username">
                   <div @click="change(item.index)">{{ item.id }}</div>
@@ -36,6 +36,7 @@
                     size="mini"
                     class="removebtn"
                     plain
+                    route="/loading"
                   >
                     <i class="fas fa-user-minus"></i>
                   </el-button>

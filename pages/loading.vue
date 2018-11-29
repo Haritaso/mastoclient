@@ -3,7 +3,7 @@
     <div class='loader'>
       <moon-loader
         class="load"
-        loading=true
+        :loading="true"
         :color="Acolor"
         sizeUnit="px"
         :size="120"
@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     next() {
-      if (this.$store.state.users.length == 0) {
+      if (this.$store.state.count == 0) {
         this.$router.push('/')
       } else {
         this.setcolor = true
