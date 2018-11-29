@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <el-input class="grid-content" placeholder="インスタンス名を入力" v-model="input">
+    <el-input class="grid-content" placeholder="インスタンス名を入力" v-model="input" auto-complete="off">
       <template slot="prepend">https://</template>
     </el-input>
     <div class="loginbutton">

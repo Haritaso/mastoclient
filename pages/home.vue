@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div style="margin-bottom: 20px;">
+    <div>
       <div class="subfield" :style="substyle">
         <el-button
           class="subaction1"
           type="primary"
           @click="dialogFormVisible = true"
+          :style="removeaction"
         >
           <i class="far fa-plus-square"></i>
         </el-button>
@@ -13,34 +14,50 @@
           class="subaction2"
           type="primary"
           @click="isOpenbar = !isOpenbar"
+          :style="removeaction"
         >
           <i class="far fa-comment-alt"></i>
+        </el-button>
+        <el-button
+          class="subaction3"
+          type="primary"
+          @click="showsubitem = !showsubitem"
+          :style="removeaction2"
+        >
+          <i class="fas fa-eye"></i>
         </el-button>
       </div>
       <no-ssr>
         <tootbar :isOpenbar="isOpenbar"></tootbar>
       </no-ssr>
-      <el-dialog title="新しいタイムラインを追加" :visible.sync="dialogFormVisible" :modal="false">
-        <el-form :model="form">
-          <el-form-item label="TL名" :label-width="formLabelWidth">
+      <el-dialog
+        title="タイムラインを追加"
+        :visible.sync="dialogFormVisible"
+        :modal="false"
+        width="80%"
+        :center="true"
+        >
+        <el-form :model="form" label-position="left" label-width="8em">
+          <el-form-item label="TL名">
             <el-input v-model="form.title" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="TL種類" :label-width="formLabelWidth">
+          <el-form-item label="TL種類">
             <el-select v-model="form.scope" placeholder="選択">
               <el-option label="ホーム" value="home"></el-option>
               <el-option label="ローカル" value="public?local"></el-option>
               <el-option label="連合" value="public"></el-option>
+              <el-option label="ダイレクトメッセージ" value="direct"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="Streamを許可" :label-width="formLabelWidth">
+          <el-form-item label="Streamを許可">
             <el-switch v-model="form.stream">
             </el-switch>
           </el-form-item>
-          <el-form-item label="Mediaのみ" :label-width="formLabelWidth">
+          <el-form-item label="Mediaのみ">
             <el-switch v-model="form.media">
             </el-switch>
           </el-form-item>
-          <el-form-item label="Tootの詳細表示" :label-width="formLabelWidth">
+          <el-form-item label="Tootの詳細表示">
             <el-switch v-model="form.detail">
             </el-switch>
           </el-form-item>
@@ -86,17 +103,37 @@ export default {
         detail: false,
         mix: false,
       },
-      formLabelWidth: '160px',
       activeName: '0',
       taberror: false,
       isOpenbar: false,
-      loading: true
+      loading: true,
+      showsubitem: false,
     }
   },
   computed: {
     substyle() {
       return {
         'border-color': !this.loading ? this.$store.getters.getactive[0].acolor: "#409EFF"
+      }
+    },
+    removeaction() {
+      if (this.showsubitem == false) {
+        var a = "0px"
+      } else {
+        var a = "100px"
+      }
+      return {
+        'transform': 'translateX('+ a +')',
+      }
+    },
+    removeaction2() {
+      if (this.showsubitem == false) {
+        var a = "0px"
+      } else {
+        var a = "-20px"
+      }
+      return {
+        'transform': 'translateY('+ a +')',
       }
     }
   },
@@ -175,19 +212,26 @@ export default {
 <style scoped>
 .subfield {
   display: grid;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   grid-row-gap: 10px;
   align-content: space-around;
   position: fixed;
   right: 8px;
-  top: 80px;
-  z-index: 6;
-  height: 100px;
+  top: 60px;
+  z-index: 7;
 }
 .subaction1 {
-  grid-row: 1 / 2;
+  grid-row: 2 / 3;
+  position: relative;
+  transition: 0.75s all ease 0s;
 }
 .subaction2 {
-  grid-row: 2 / 3;
+  grid-row: 3 / 4;
+  position: relative;
+  transition: 0.75s all ease-out 0s;
+}
+.subaction3 {
+  grid-row: 1 / 2;
+  transition: 0.5s all ease-out 0s;
 }
 </style>

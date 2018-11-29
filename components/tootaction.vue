@@ -139,7 +139,7 @@ export default {
       reblog: 0,
       fav: 0,
       reblogtap: false,
-      favtap: Boolean,
+      favtap: false,
       userreblog: false,
       replyaction: false,
       form: {

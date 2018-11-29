@@ -65,11 +65,7 @@
             <i class="el-icon-star-off" />
             <span>お気に入り一覧</span>
           </el-menu-item>
-          <el-menu-item index="7" route='/direct_message' @click="closetab">
-            <i class="el-icon-message" />
-            <span>DM</span>
-          </el-menu-item>
-          <el-menu-item index="8" route='/setting' @click="closetab">
+          <el-menu-item index="7" route='/setting' @click="closetab">
             <i class="el-icon-more-outline" />
             <span>設定</span>
           </el-menu-item>

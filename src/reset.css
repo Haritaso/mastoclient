@@ -73,3 +73,10 @@ p {
   text-align: center;
   position: absolute;
 }
+.el-input-group__prepend .el-input {
+  font-size: inherit;
+  width: 95px;
+}
+.el-form-item {
+  margin-bottom: 0px;
+}

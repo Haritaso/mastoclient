@@ -203,9 +203,6 @@ export default {
   float: right;
   display: inline-flex;
 }
-.el-select .el-input {
-  width: 95px;
-}
 .postmenu {
   display: inline-flex;
   text-align: center;
