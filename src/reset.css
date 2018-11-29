@@ -66,3 +66,10 @@ p {
 .el-tabs--card>.el-tabs__header {
   border-bottom: 0px;
 }
+.el-loading-spinner {
+  top: auto;
+  margin-top: 0;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+}

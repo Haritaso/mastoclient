@@ -240,7 +240,7 @@ export default {
 }
 .username {
   display: grid;
-  grid-template-columns: 1fr 3em;
+  grid-template-columns: 1fr 4em;
   grid-template-rows: 1.5em;
   text-decoration: none;
   overflow: hidden;

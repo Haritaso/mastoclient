@@ -47,6 +47,16 @@
                     :detail="true"
                     :preid="1"
                   ></puttoot>
+                  <el-card shadow="hover" class="reloadcard">
+                    <el-button
+                      type="text"
+                      :loading="oldload"
+                      class="reloadbtn"
+                      @click="getoldToot()"
+                    >
+                    さらに読み込む
+                    </el-button>
+                  </el-card>
                 </div>
               </el-tab-pane>
               <el-tab-pane label="リプライ" name="tootreply">
@@ -56,6 +66,16 @@
                   :detail="true"
                   :preid="2"
                   ></puttoot>
+                <el-card shadow="hover" class="reloadcard">
+                  <el-button
+                    type="text"
+                    :loading="oldload"
+                    class="reloadbtn"
+                    @click="getoldR()"
+                  >
+                  さらに読み込む
+                  </el-button>
+                </el-card>
               </el-tab-pane>
               <el-tab-pane label="メディア" name="media">
                 <puttoot v-for="toot in mdata"
@@ -64,6 +84,16 @@
                   :detail="true"
                   :preid="3"
                   ></puttoot>
+                <el-card shadow="hover" class="reloadcard">
+                  <el-button
+                    type="text"
+                    :loading="oldload"
+                    class="reloadbtn"
+                    @click="getoldM()"
+                  >
+                  さらに読み込む
+                  </el-button>
+                </el-card>
               </el-tab-pane>
             </el-tabs>
           </el-tab-pane>
@@ -111,7 +141,8 @@ export default {
       mdata: [],
       following: null,
       followers: null,
-      match: false
+      match: false,
+      oldload: false
     }
   },
   watchQuery: true,
@@ -210,7 +241,28 @@ export default {
         }
       })
     },
-    getRdata (url, id) {
+    getoldToot() {
+      axios({
+        method: 'GET',
+        url: 'https://' + this.$route.query.url + '/api/v1/accounts/' + this.$route.query.id + '/statuses',
+        headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        params: {
+          exclude_replies: true,
+          max_id: this.tootdata[this.tootdata.length - 1].id
+        }
+      })
+      .then (res => {
+        for (var i=0,d;d=res.data[i];i++) {
+          if (d.reblog == null) {
+            this.tootdata.push(d)
+          } else {
+            this.tootdata.push(d.reblog)
+            this.tootdata[i].reblog = d.account
+          }
+        }
+      })
+    },
+    getRdata(url, id) {
       axios({
         method: 'GET',
         url: 'https://' + url + '/api/v1/accounts/' + id + '/statuses',
@@ -218,6 +270,27 @@ export default {
         params: {
           exclude_replies: false,
           limit: 40,
+        }
+      })
+      .then (res => {
+        for (var i=0,d;d=res.data[i];i++) {
+          if (d.reblog == null) {
+            this.rdata.push(d)
+          } else {
+            this.rdata.push(d.reblog)
+            this.rdata[i].reblog = d.account
+          }
+        }
+      })
+    },
+    getoldR() {
+      axios({
+        method: 'GET',
+        url: 'https://' + this.$route.query.url + '/api/v1/accounts/' + this.$route.query.id + '/statuses',
+        headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        params: {
+          exclude_replies: false,
+          max_id: this.rdata[this.rdata.length - 1].id
         }
       })
       .then (res => {
@@ -245,6 +318,27 @@ export default {
         for (var i=0,d;d=res.data[i];i++) {
           if (d.reblog == null) {
             this.mdata.push(d)
+          } else {
+            this.mdata.push(d.reblog)
+            this.mdata[i].reblog = d.account
+          }
+        }
+      })
+    },
+    getoldM() {
+      axios({
+        method: 'GET',
+        url: 'https://' + this.$route.query.url + '/api/v1/accounts/' + this.$route.query.id + '/statuses',
+        headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        params: {
+          only_media: true,
+          max_id: this.mdata[this.mdata.length - 1].id
+        }
+      })
+      .then (res => {
+        for (var i=0,d;d=res.data[i];i++) {
+          if (d.reblog == null) {
+            this.rdata.push(d)
           } else {
             this.mdata.push(d.reblog)
             this.mdata[i].reblog = d.account
@@ -373,5 +467,10 @@ export default {
 .counttab {
   display: flex;
   height: 45px;
+}
+.reloadcard {
+  margin-top: 0.5em;
+  display: flex;
+  justify-content: center;
 }
 </style>

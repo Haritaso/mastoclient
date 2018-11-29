@@ -22,6 +22,15 @@
       :detail="detail"
       :loading="loading"
     ></toot>
+    <el-card shadow="hover" class="reloadcard">
+      <el-button
+        type="text"
+        :loading="oldload"
+        class="reloadbtn"
+        @click="getoldload()"
+      >
+      さらに読み込む</el-button>
+    </el-card>
   </div>
 </template>
 
@@ -37,11 +46,12 @@ export default {
       newdata: [],
       newscope: '',
       wsscope: '',
+      oldload: false,
       loading: true
     }
   },
   props: ['scope', 'media', 'stream', 'detail'],
-  created: function () {
+  created () {
     this.newscope = this.scope
     if (this.scope == 'public?local') {
       this.newscope = this.scope + '=true'
@@ -55,7 +65,7 @@ export default {
         limit: 40
       }
     })
-    .then (res => {
+    .then(res => {
       for (var i=0,d;d=res.data[i];i++) {
         if (d.reblog == null) {
           this.toots.push(d)
@@ -65,7 +75,7 @@ export default {
         }
       }
       if (this.stream == true) {
-        setTimeout(this.connectWs, 3000)
+        setTimeout(this.connectWs, 1000)
       }
     })
     .finally(() =>
@@ -111,7 +121,31 @@ export default {
           }
         }
       }
-    }
+    },
+    getoldload() {
+      this.load = true
+      axios({
+        method: 'GET',
+        url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/timelines/' + this.newscope,
+        headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        params: {
+          only_media: this.media,
+          max_id: this.toots[this.toots.length - 1].id
+        }
+      })
+      .then(res => {
+        for (var i=0,d;d=res.data[i];i++) {
+          if (d.reblog == null) {
+            this.toots.push(d)
+          } else {
+            this.toots.push(d.reblog)
+          }
+        }
+      })
+      .finally(res => {
+        this.load = false
+      })
+    },
   },
   components: {
     toot,
@@ -119,3 +153,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.reloadcard {
+  margin-top: 0.5em;
+  display: flex;
+  justify-content: center;
+}
+</style>
