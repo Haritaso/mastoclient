@@ -83,12 +83,7 @@
                   <div v-html="data.status.content"></div>
                   <mediaview :mdata="data.status.media_attachments" />
                   <tootaction
-                    :rp="0"
-                    :rb="0"
-                    :fv="0"
-                    :rbtap="false"
-                    :fvtap="false"
-                    :urbtap="false"
+                    :toot="data"
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"
@@ -98,12 +93,7 @@
                   <div v-html="data.status.content"></div>
                   <mediaview :mdata="data.status.media_attachments" />
                   <tootaction
-                    :rp="0"
-                    :rb="0"
-                    :fv="0"
-                    :rbtap="false"
-                    :fvtap="false"
-                    :urbtap="false"
+                    :toot="data"
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"
@@ -113,12 +103,7 @@
                   <div v-html="data.status.content"></div>
                   <mediaview :mdata="data.status.media_attachments" />
                   <tootaction
-                    :rp="0"
-                    :rb="0"
-                    :fv="0"
-                    :rbtap="false"
-                    :fvtap="false"
-                    :urbtap="false"
+                    :toot="data"
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"

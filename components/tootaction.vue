@@ -32,7 +32,22 @@
         </div>
       </div>
       <div class="action">
-        <el-button class="fas fa-align-left size" type="text"></el-button>
+        <el-dropdown>
+          <span class="">
+            <i class="fas fa-align-left size"></i>
+          </span>
+          <el-dropdown-menu v-if="me" slot="dropdown">
+            <el-dropdown-item>詳細を表示</el-dropdown-item>
+            <el-dropdown-item>投稿を削除</el-dropdown-item>
+          </el-dropdown-menu>
+          <el-dropdown-menu v-else slot="dropdown">
+            <el-dropdown-item>詳細を表示</el-dropdown-item>
+            <el-dropdown-item>プロフィールを表示</el-dropdown-item>
+            <el-dropdown-item>このユーザーをブロック</el-dropdown-item>
+            <el-dropdown-item>このユーザーをミュート</el-dropdown-item>
+            <el-dropdown-item>このユーザーを通報</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
       <div v-if="cw == true" class="dummyarea cwarea">
         <el-input placeholder="cw" class="inputanime" v-model="form.cwContent"></el-input>
@@ -132,12 +147,12 @@
 import axios from 'axios'
 export default {
   name: 'tootaction',
-  props: ['rp', 'rb', 'fv', 'rbtap', 'fvtap', 'urbtap', 'visibility', 'id' ,'detail'],
+  props: ['toot', 'visibility', 'detail', 'userid'],
   data () {
     return {
-      reply: 0,
-      reblog: 0,
-      fav: 0,
+      reply: this.toot.replies_count,
+      reblog: this.toot.reblogs_count,
+      fav: this.toot.favourites_count,
       reblogtap: false,
       favtap: false,
       userreblog: false,
@@ -148,6 +163,7 @@ export default {
         cwContent: "",
         sensitive: false,
         media: [],
+        replyid: this.toot.id
       },
       cw: false,
       nsfw: false,
@@ -155,7 +171,9 @@ export default {
       loading: false,
       filelist: [],
       first: false,
-      mediacount: 0
+      mediacount: 0,
+      matchdata: {},
+      me: false
     }
   },
   computed: {
@@ -226,7 +244,7 @@ export default {
       if (this.reblogtap == false) {
         axios({
           method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.id + '/reblog',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/reblog',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -236,7 +254,7 @@ export default {
       } else {
         axios({
           method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.id + '/unreblog',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/unreblog',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -249,7 +267,7 @@ export default {
       if (this.favtap == false) {
         axios({
           method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.id + '/favourite',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/favourite',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -259,7 +277,7 @@ export default {
       } else {
         axios({
           method: 'POST',
-          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.id + '/unfavourite',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/statuses/' + this.toot.id + '/unfavourite',
           headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         })
         .then (res => {
@@ -273,22 +291,43 @@ export default {
         this.replyaction = !this.replyaction
       })
     },
+    checkstate() {
+      axios({
+        method: 'GET',
+        url:  'https://' + this.$store.getters.geturl + '/api/v1/accounts/relationships',
+        headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        params: {
+          id: this.toot.account.id
+        }
+      })
+      .then (res => {
+        this.matchdata = res.data
+        if (res.data[0].id == this.$store.getters.getactive[0].data.id) {
+          this.me = true
+        }
+        if (this.me == false) {
+          this.form.TootContent = this.userid + ' '
+        }
+      })
+    }
   },
   created() {
     this.first = true
     this.loading = false
-    this.reply = this.rp
-    this.reblog = this.rb
-    this.fav = this.fv
-    this.userreblog = this.urbtap
-    if (this.rbtap == true) {
+    if (this.toot.reblog == null) {
+      this.userreblog = false
+    } else {
+      this.userreblog = true
+    }
+    if (this.toot.reblogged == true) {
       this.reblogtap = true
-      this.reblog++
     }
-    if (this.fvtap == true) {
+    if (this.toot.favourited == true) {
       this.favtap = true
-      this.fav++
     }
+    setTimeout(() => {
+      this.checkstate()
+    },1)
   },
 }
 </script>

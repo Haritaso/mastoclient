@@ -72,15 +72,11 @@
                 <div class="toottext" v-html="toot.content"></div>
                 <mediaview :mdata="toot.media_attachments" :preid="preid" />
                 <tootaction
-                  :rp="reply"
-                  :rb="reblog"
-                  :fv="fav"
-                  :rbtap="reblogtap"
-                  :fvtap="favtap"
-                  :urbtap="userreblog"
+                  :toot="toot"
                   :visibility="toot.visibility"
-                  :id="toot.id"
                   :detail="detail"
+                  :url="userurl"
+                  :userid="userid"
                 />
               </div>
             </div>
@@ -101,12 +97,6 @@ export default {
   props: ['toot', 'detail', 'loading', 'preid'],
   data () {
     return {
-      reply: this.toot.replies_count,
-      reblog: this.toot.reblogs_count,
-      fav: this.toot.favourites_count,
-      reblogtap: false,
-      favtap: false,
-      userreblog: false,
       nowtime: new Date(),
       watchStime: false,
       watchMtime: false,
@@ -198,19 +188,6 @@ export default {
   },
   created () {
     this.nowloading = this.loading
-    if (this.toot.reblog == null) {
-      this.userreblog = false
-    } else {
-      this.userreblog = true
-    }
-    if (this.toot.reblogged == true) {
-      this.reblogtap = true
-      this.reblog++
-    }
-    if (this.toot.favourited == true) {
-      this.favtap = true
-      this.fav++
-    }
   },
   components: {
     mediaview,
@@ -228,13 +205,13 @@ export default {
 .tootcard {
   grid-row: 2 / 3;
   display: grid;
-  grid-template-columns: 56px calc(100% - 56px);
+  grid-template-columns: 50px calc(100% - 50px);
 }
 .icon {
-  width: 50px;
-  min-width: 50px;
-  height: 50px;
-  min-height: 50px;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
   margin: 4px 0 auto 0;
   border: 3px solid #909399;
 }
@@ -294,6 +271,7 @@ export default {
   grid-template-columns: 100%;
   position: relative;
   word-break: break-all;
+  padding-left: 0.5em;
 }
 .boost {
   float: right;

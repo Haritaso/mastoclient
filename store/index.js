@@ -8,12 +8,20 @@ const store = () => new Vuex.Store({
     count: 0,
     first: false,
     activedata: false,
-    coloroption: false
+    coloroption: false,
+    manuallogin: false,
   },
   mutations: {
     count(state, payload) {
       state.users[state.count] = payload
       state.count++
+    },
+    manuallogin(state) {
+      state.manuallogin = true
+      state.activedata = false
+    },
+    active(state) {
+      state.activedata = true
     },
     register(state) {
       state.first = true
@@ -28,7 +36,6 @@ const store = () => new Vuex.Store({
     update(state, payload) {
       state.users[payload.index].data = payload.data
       state.users[payload.index].id = payload.id
-      state.activedata = true
     },
     change(state, payload) {
       state.users[payload.index].active = true
@@ -138,6 +145,26 @@ const store = () => new Vuex.Store({
           console.log(error)
         })
     },
+    getTestApp(context, payload) {
+      if (context.state.first === true) {
+        context.commit('addnext', {
+          index: 0
+        })
+      } else {
+        context.commit('register')
+      }
+      context.commit('count', {
+        client_id: '0000000',
+        client_secret: '000000',
+        url: payload.url,
+        index: context.state.count,
+        active: true
+      })
+      context.commit('addtoken', {
+        index: 0,
+        accessToken: payload.token
+      })
+    },
     changeActive(context, payload) {
       context.commit('addnext', {
         index: context.getters.getactive[0].index
@@ -163,7 +190,7 @@ const store = () => new Vuex.Store({
           spoiler_text: payload.data.cwContent,
           sensitive: payload.data.sensitive,
           media_ids: payload.data.media,
-          in_reply_to_id: payload.data.reply
+          in_reply_to_id: payload.data.replyid
         }
       })
     },
