@@ -32,13 +32,13 @@
         </div>
       </div>
       <div class="action">
-        <el-dropdown>
+        <el-dropdown @command='tootoption'>
           <span class="">
             <i class="fas fa-align-left size"></i>
           </span>
           <el-dropdown-menu v-if="me" slot="dropdown">
             <el-dropdown-item>詳細を表示</el-dropdown-item>
-            <el-dropdown-item>投稿を削除</el-dropdown-item>
+            <el-dropdown-item command="del">投稿を削除</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu v-else slot="dropdown">
             <el-dropdown-item>詳細を表示</el-dropdown-item>
@@ -147,7 +147,7 @@
 import axios from 'axios'
 export default {
   name: 'tootaction',
-  props: ['toot', 'visibility', 'detail', 'userid'],
+  props: ['toot', 'visibility', 'detail', 'userid', 'deletetoot'],
   data () {
     return {
       reply: this.toot.replies_count,
@@ -207,6 +207,44 @@ export default {
     }
   },
   methods: {
+    tootoption(command) {
+      if (command == 'del') {
+        if (this.$store.getters.getactive[0].tlalert == true) {
+          this.$confirm('本当に投稿を削除しますか？', 'Warning', {
+            confirmButtonText: '削除',
+            cancelButtonText: 'やっぱりやめとく',
+            type: 'warning'
+          })
+          .then(() => {
+            axios({
+              method: 'DELETE',
+              url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/statuses/' + this.toot.id,
+              headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+            })
+            this.$emit('set')
+            this.$message({
+              type: 'success',
+              message: '削除に成功しました'
+            })
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: 'キャンセルしました'
+            })
+          })
+        } else {
+          axios({
+            method: 'DELETE',
+            url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/statuses/' + this.toot.id,
+            headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+          })
+          this.$emit('set')
+        }
+      } else if (a) {
+
+      }
+    },
     changeVisibility(command) {
       this.$set(this.form, "visibility", command);
     },

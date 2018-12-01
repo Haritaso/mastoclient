@@ -7,7 +7,7 @@
       <div v-if="loading">
       </div>
       <div v-else>
-        <el-card key="toot.id" shadow="never">
+        <el-card key="toot.id" shadow="never" v-show="deletetoot">
           <div class="elcardbody">
             <div class="tootstatus">
               <div v-if="toot.reblog == null"></div>
@@ -77,6 +77,8 @@
                   :detail="detail"
                   :url="userurl"
                   :userid="userid"
+                  :deletetoot="deletetoot"
+                  @set="deleteaction"
                 />
               </div>
             </div>
@@ -107,6 +109,7 @@ export default {
       nsfwid: '',
       nsfwclass: '',
       nsfwshow: false,
+      deletetoot: true,
     }
   },
   computed: {
@@ -184,6 +187,13 @@ export default {
     } else {
       this.media = false
       this.nsfwclass = "nsfw"
+    }
+  },
+  methods: {
+    deleteaction() {
+      this.$nextTick(() => {
+        this.deletetoot = false
+      })
     }
   },
   created () {

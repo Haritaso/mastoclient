@@ -54,6 +54,9 @@
           <el-form-item label="CWテキストカラー" class="title">
             <el-color-picker v-model="timeline.textcolor" show-alpha class="pickers"></el-color-picker>
           </el-form-item>
+          <el-form-item label="Toot削除時に警告を出す" class="title">
+            <el-switch v-model="timeline.alert"></el-switch>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="cwcolorsetting" class="settingbutton">設定を適用</el-button>
           </el-form-item>
@@ -83,7 +86,8 @@ export default {
       },
       timeline: {
         backcolor: '',
-        textcolor: ''
+        textcolor: '',
+        alert: true,
       },
       url: ''
     };
@@ -92,6 +96,7 @@ export default {
     setTimeout(() => {
       this.getcolor()
       this.getacountdata()
+      this.getotheruserdata()
       this.url = this.$store.getters.getactive[0].url
     }, 1)
   },
@@ -155,6 +160,9 @@ export default {
           locked: this.user.lock
         }
       })
+    },
+    getotheruserdata() {
+      this.timeline.alert = this.$store.getters.getactive[0].tlalert
     }
   }
 }

@@ -36,6 +36,7 @@ const store = () => new Vuex.Store({
     update(state, payload) {
       state.users[payload.index].data = payload.data
       state.users[payload.index].id = payload.id
+      state.activedata = true
     },
     change(state, payload) {
       state.users[payload.index].active = true
@@ -68,6 +69,7 @@ const store = () => new Vuex.Store({
       state.users[payload.index].bcolor = '#545c64'
       state.users[payload.index].cwBackcolor = '#d9e1e8'
       state.users[payload.index].cwTextcolor = '#000'
+      state.users[payload.index].tlalert = true
     },
     setUserTL(state, payload) {
       state.users[payload.index].TL.push(payload.TL)
