@@ -43,7 +43,7 @@ export default {
       accurl: '',
       acctoken: '',
       tokenlogin: false,
-      active: ["1", "2"]
+      active: ["1"]
     }
   },
   methods: {
