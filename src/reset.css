@@ -80,3 +80,18 @@ p {
 .el-form-item {
   margin-bottom: 0px;
 }
+.el-popper[x-placement^=bottom] {
+  z-index: 2!important;
+  margin-top: 12px;
+}
+.el-message-box {
+  width: 70%;
+  overflow: auto;
+}
+.el-message {
+  min-width: 95%;
+  overflow: auto;
+}
+.el-popup-parent--hidden {
+  overflow: auto;
+}
