@@ -38,6 +38,8 @@
           </span>
           <el-dropdown-menu v-if="me" slot="dropdown">
             <el-dropdown-item>詳細を表示</el-dropdown-item>
+            <el-dropdown-item command="pin" v-if="pinned == false">プロフィールにピン留め</el-dropdown-item>
+            <el-dropdown-item command="unpin" v-else>ピン留めを外す</el-dropdown-item>
             <el-dropdown-item command="del">投稿を削除</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu v-else slot="dropdown">
@@ -173,7 +175,8 @@ export default {
       first: false,
       mediacount: 0,
       matchdata: {},
-      me: false
+      me: false,
+      pinned: false,
     }
   },
   computed: {
@@ -241,8 +244,20 @@ export default {
           })
           this.$emit('set')
         }
-      } else if (a) {
-
+      } else if (command == 'pin') {
+        axios({
+          method: 'POST',
+          url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/statuses/' + this.toot.id + '/pin',
+          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        })
+        this.pinned = true
+      } else if (command == 'unpin') {
+        axios({
+          method: 'POST',
+          url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/statuses/' + this.toot.id + '/unpin',
+          headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
+        })
+        this.pinned = false
       }
     },
     changeVisibility(command) {
@@ -362,6 +377,9 @@ export default {
     }
     if (this.toot.favourited == true) {
       this.favtap = true
+    }
+    if (this.toot.pinned == true) {
+      this.pinned = true
     }
     setTimeout(() => {
       this.checkstate()
