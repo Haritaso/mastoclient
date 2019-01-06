@@ -15,19 +15,6 @@
           <el-button type="primary" @click="register" size="medium">Login</el-button>
         </div>
       </el-collapse-item>
-      <el-collapse-item title="上級者向け" name="2">
-        <div class="inputblock">
-          <el-input class="grid-content" placeholder="インスタンス名を入力" v-model="accurl" auto-complete="off" size="medium">
-            <template slot="prepend">https://</template>
-          </el-input>
-        </div>
-        <div class="inputblock">
-          <el-input class="grid-content" placeholder="アクセストークン" v-model="acctoken" auto-complete="off" size="medium" />
-        </div>
-        <div class="loginbutton">
-          <el-button type="success" @click="accregister" size="medium">アクセストークンでLogin</el-button>
-        </div>
-      </el-collapse-item>
     </el-collapse>
     <router-link to="/home">既に一度ログイン済みの場合</router-link>
   </div>
