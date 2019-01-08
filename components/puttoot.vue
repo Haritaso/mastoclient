@@ -132,14 +132,14 @@ export default {
       const time = this.nowtime
       const date = new Date(this.toot.created_at)
       const d = time.getTime() - date.getTime()
-      const a = (d / 1000).toFixed()
+      const a = Math.floor(d / 1000)
       if (a < 60) {
         this.watchStime = true
         return a + '秒前'
       } else if ((a >= 60) && (a < 3600)) {
         this.watchStime = false
         this.watchMtime = true
-        return (a / 60).toFixed() + '分前'
+        return Math.floor(a / 60) + '分前'
       } else if ((a >= 3600) && (a < (3600 * 24))) {
         this.watchMtime = false
         return Math.floor(a / 3600) + '時間前'
@@ -316,7 +316,8 @@ export default {
   z-index: 6;
 }
 .nsfwbutton {
-  width: 56px;
+  width: 50px;
+  padding: 12px 17px;
 }
 .size {
   padding: 0;
