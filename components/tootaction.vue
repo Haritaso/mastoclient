@@ -381,9 +381,9 @@ export default {
     if (this.toot.pinned == true) {
       this.pinned = true
     }
-    setTimeout(() => {
-      this.checkstate()
-    },1)
+    // setTimeout(() => {
+    //  this.checkstate()
+    //},1)
   },
 }
 </script>
