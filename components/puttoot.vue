@@ -44,7 +44,7 @@
               <div>
                 <img class="icon" :src="toot.account.avatar">
                 <div v-if="toot.sensitive == true">
-                  <el-button v-if="nsfw == false" type="primary" plain class="nsfwbutton" @click="changesensi">
+                  <el-button v-if="cw == false" type="primary" plain class="nsfwbutton" @click="changesensi">
                     <i class="fas fa-eye-slash"></i>
                   </el-button>
                   <el-button v-else type="primary" plain class="nsfwbutton" @click="changesensi">

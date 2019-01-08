@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div v-if="tabIndex == 0">
+      <p>タイムラインがありません！</p>
+      <p>右上の<i class="far fa-plus-square"></i>からあなただけのタイムラインを作成しましょう！</p>
+    </div>
     <div>
       <div class="subfield" :style="substyle">
         <el-button
