@@ -37,17 +37,17 @@
             <i class="fas fa-align-left size"></i>
           </span>
           <el-dropdown-menu v-if="me" slot="dropdown">
-            <el-dropdown-item>詳細を表示</el-dropdown-item>
+            <el-dropdown-item disabled>詳細を表示</el-dropdown-item>
             <el-dropdown-item command="pin" v-if="pinned == false">プロフィールにピン留め</el-dropdown-item>
             <el-dropdown-item command="unpin" v-else>ピン留めを外す</el-dropdown-item>
             <el-dropdown-item command="del">投稿を削除</el-dropdown-item>
           </el-dropdown-menu>
           <el-dropdown-menu v-else slot="dropdown">
-            <el-dropdown-item>詳細を表示</el-dropdown-item>
-            <el-dropdown-item>プロフィールを表示</el-dropdown-item>
-            <el-dropdown-item>このユーザーをブロック</el-dropdown-item>
-            <el-dropdown-item>このユーザーをミュート</el-dropdown-item>
-            <el-dropdown-item>このユーザーを通報</el-dropdown-item>
+            <el-dropdown-item disabled>詳細を表示</el-dropdown-item>
+            <el-dropdown-item disabled>プロフィールを表示</el-dropdown-item>
+            <el-dropdown-item disabled>このユーザーをブロック</el-dropdown-item>
+            <el-dropdown-item disabled>このユーザーをミュート</el-dropdown-item>
+            <el-dropdown-item disabled>このユーザーを通報</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
