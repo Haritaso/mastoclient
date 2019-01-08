@@ -44,10 +44,10 @@
               <div>
                 <img class="icon" :src="toot.account.avatar">
                 <div v-if="toot.sensitive == true">
-                  <el-button v-if="nsfw == false" type="primary" plain class="nsfwbutton" @click="nsfw = true">
+                  <el-button v-if="nsfw == false" type="primary" plain class="nsfwbutton" @click="changesensi">
                     <i class="fas fa-eye-slash"></i>
                   </el-button>
-                  <el-button v-else type="primary" plain class="nsfwbutton" @click="nsfw = false">
+                  <el-button v-else type="primary" plain class="nsfwbutton" @click="changesensi">
                     <i class="fas fa-eye"></i>
                   </el-button>
                 </div>
@@ -65,9 +65,11 @@
                     <time :datatime="this.toot.created_at">{{ time }}</time>
                   </div>
                 </div>
-                <div v-show="nsfw" :style="nsfwscreen" :class="nsfwclass" @click="nsfw = false">
-                  <div class="cwtext" :style="nsfwtext" v-if="toot.spoiler_text == ''">クリックで表示</div>
-                  <div class="cwtext" :style="nsfwtext" v-else>{{ toot.spoiler_text }}</div>
+                <div v-show="cw" :style="nsfwscreen" class="cw" @click="cw = false">
+                  <div class="cwtext" :style="nsfwtext">{{ toot.spoiler_text }}</div>
+                </div>
+                <div v-show="nsfw" :style="nsfwscreen" class="nsfw" @click="nsfw = false">
+                  <div class="cwtext" :style="nsfwtext">閲覧注意</div>
                 </div>
                 <div class="toottext" v-html="toot.content"></div>
                 <mediaview :mdata="toot.media_attachments" :preid="preid" />
@@ -105,9 +107,9 @@ export default {
       error: false,
       nowloading: true,
       media: false,
+      cw: false,
       nsfw: false,
       nsfwid: '',
-      nsfwclass: '',
       nsfwshow: false,
       deletetoot: true,
     }
@@ -178,15 +180,13 @@ export default {
       },50000)
     }
     if (this.toot.sensitive == true) {
-      this.nsfw = true
-      this.nsfwid = this.toot.id
-    }
-    if (!!this.toot.media_attachments[0]) {
-      this.media = true
-      this.nsfwclass = "nsfwmedia"
-    } else {
-      this.media = false
-      this.nsfwclass = "nsfw"
+      if (!!this.toot.media_attachments[0]) {
+        this.nsfw = true
+        this.nsfwid = this.toot.id
+      }
+      if (!this.toot.spoiler_text == '') {
+        this.cw = true
+      }
     }
   },
   methods: {
@@ -194,6 +194,13 @@ export default {
       this.$nextTick(() => {
         this.deletetoot = false
       })
+    },
+    changesensi() {
+      if (!!this.toot.media_attachments[0]) {
+        this.nsfw = true
+      }
+      this.cw = true
+      
     }
   },
   created () {
@@ -286,20 +293,16 @@ export default {
 .boost {
   float: right;
 }
-.nsfw {
+.toottext {
   grid-row: 2 / 3;
   grid-column: 1 / 2;
-  height: 100%;
-  width: 100%;
-  display: grid;
-  background-size: cover;
-  overflow: hidden;
-  position: absolute;
-  border-radius: 5px;
-  z-index: 5;
 }
-.nsfwmedia {
-  grid-row: 2 / 4;
+.mediapreview {
+  grid-row: 3 / 4;
+  grid-column: 1 / 2;
+}
+.nsfw {
+  grid-row: 3 / 4;
   grid-column: 1 / 2;
   height: 100%;
   width: 100%;
@@ -310,14 +313,25 @@ export default {
   border-radius: 5px;
   z-index: 5;
 }
-.cwtext {
-  justify-self: center;
-  align-self: center;
-  z-index: 6;
+.cw {
+  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  height: 95%;
+  width: 100%;
+  display: grid;
+  background-size: cover;
+  overflow: hidden;
+  position: absolute;
+  border-radius: 5px;
+  z-index: 5;
 }
 .nsfwbutton {
   width: 50px;
   padding: 12px 17px;
+}
+.cwtext {
+  justify-self: center;
+  align-self: center;
 }
 .size {
   padding: 0;
