@@ -17,19 +17,20 @@
     "@saeris/vue-spinners": "^1.0.8",
     "axios": "^0.18.0",
     "element-ui": "^2.4.6",
+    "lodash": ">=4.17.11",
     "nuxt": "^2.0.0",
     "v-img": "^0.2.0",
     "vue-content-loader": "^0.2.1",
-    "vue-plyr": "^4.0.0",
-    "vue-server-renderer": "2.5.16",
+    "vue-plyr": "^5.1.0",
+    "vue-server-renderer": "2.6.4",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.1",
-    "eslint": "^4.15.0",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-vue": "^4.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.13.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-vue": "^5.1.0",
     "vue-cli-plugin-element-ui": "^1.1.2"
   }
 }
