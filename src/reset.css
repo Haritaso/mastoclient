@@ -95,3 +95,10 @@ p {
 .el-popup-parent--hidden {
   overflow: auto;
 }
+
+.bbcode-pulse-loading {
+  -webkit-animation: pulse 1s ease-in-out infinite;
+  animation: pulse 1s ease-in-out infinite;
+  -webkit-animation-direction: alternate;
+  animation-direction: alternate;
+}
