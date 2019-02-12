@@ -183,6 +183,7 @@ export default {
         this.tabIndex++
         this.editableTabsValue = newIndex
         this.form.title = ''
+        this.form.tagscope = ''
       }
     },
     removeTab(targetName) {
