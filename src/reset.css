@@ -92,12 +92,17 @@ p {
   min-width: 95%;
   overflow: auto;
 }
+
 .el-popup-parent--hidden {
   overflow: auto;
 }
 
 .el-select {
-  width: 100%;
+  min-width: 100%;
+}
+
+.el-input.el-input-group.el-input-group--prepend {
+  padding-bottom: 4px;
 }
 
 .bbcode-pulse-loading {
