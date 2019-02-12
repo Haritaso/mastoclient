@@ -87,6 +87,7 @@
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"
+                    :userid="userid"
                   />
                 </div>
                 <div v-else-if="data.type == 'reblog'" class="text">
@@ -97,6 +98,7 @@
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"
+                    :userid="userid"
                   />
                 </div>
                 <div v-else-if="data.type == 'mention'" class="reply text">
@@ -107,6 +109,7 @@
                     :visibility="data.status.visibility"
                     :id="data.id"
                     :detail="false"
+                    :userid="userid"
                   />
                 </div>
                 <div v-else-if="data.type == 'follow'" class="followobj">
@@ -146,7 +149,7 @@ export default {
       return !this.loading ? this.data.status.account.avatar : 'dummy'
     },
     userid() {
-      if (this.data.account.acct.indexOf("@") == true) {
+      if (this.data.account.acct.indexOf('@') === true) {
         if (this.data.type == ("favourite" || "reblog")) {
           return this.data.status.account.acct;
         } else {

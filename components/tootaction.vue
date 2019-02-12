@@ -342,6 +342,7 @@ export default {
     showreply() {
       this.$nextTick(() => {
         this.replyaction = !this.replyaction
+        this.form.TootContent = this.userid + ' '
       })
     },
     checkstate() {
