@@ -96,6 +96,10 @@ p {
   overflow: auto;
 }
 
+.el-select {
+  width: 100%;
+}
+
 .bbcode-pulse-loading {
   -webkit-animation: pulse 1s ease-in-out infinite;
   animation: pulse 1s ease-in-out infinite;

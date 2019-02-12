@@ -50,19 +50,25 @@
               <el-option label="ホーム" value="home"></el-option>
               <el-option label="ローカル" value="public?local"></el-option>
               <el-option label="連合" value="public"></el-option>
+              <el-option label="タグ" value="tag"></el-option>
               <el-option label="ダイレクトメッセージ" value="direct"></el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item v-show="form.scope == 'tag'" label="追加するタグ">
+            <el-input placeholder="" v-model="form.tagscope" auto-complete="off">
+              <template slot="prepend">#</template>
+            </el-input>
           </el-form-item>
           <el-form-item label="Streamを許可">
             <el-switch v-model="form.stream">
             </el-switch>
           </el-form-item>
-          <el-form-item label="Mediaのみ">
-            <el-switch v-model="form.media">
-            </el-switch>
-          </el-form-item>
           <el-form-item label="Tootの詳細表示">
             <el-switch v-model="form.detail">
+            </el-switch>
+          </el-form-item>
+          <el-form-item label="Mediaのみ">
+            <el-switch v-model="form.media">
             </el-switch>
           </el-form-item>
         </el-form>
@@ -79,7 +85,7 @@
           :label="item.title"
           :name="item.name"
         >
-          <gettoot :scope="item.scope" :media="item.media" :stream="item.stream" :detail="item.detail" />
+          <gettoot :scope="item.scope" :tagscope="item.tagscope" :media="item.media" :stream="item.stream" :detail="item.detail" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -101,10 +107,11 @@ export default {
       form: {
         title: '',
         name: '',
+        tagscope: '',
         scope: null,
         media: false,
-        stream: false,
-        detail: false,
+        stream: true,
+        detail: true,
         mix: false,
       },
       activeName: '0',
@@ -166,6 +173,7 @@ export default {
             title: form.title,
             name: newIndex,
             scope: form.scope,
+            tagscope: form.tagscope,
             media: form.media,
             stream: form.stream,
             detail: form.detail,

@@ -50,15 +50,18 @@ export default {
       loading: true
     }
   },
-  props: ['scope', 'media', 'stream', 'detail'],
+  props: ['scope', 'tagscope', 'media', 'stream', 'detail'],
   created () {
     this.newscope = this.scope
     if (this.scope == 'public?local') {
       this.newscope = this.scope + '=true'
     }
+    if (this.scope == 'tag') {
+      this.newscope = this.scope + '/'
+    }
     axios({
       method: 'GET',
-      url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/timelines/' + this.newscope,
+      url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/timelines/' + this.newscope + this.tagscope,
       headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
       params: {
         only_media: this.media,
@@ -85,8 +88,13 @@ export default {
   methods: {
     connectWs () {
       this.wsscope = this.scope.replace('?',':')
+      this.newtagscope = ''
       if (this.scope == 'home') {
         this.wsscope = 'user'
+      }
+      if (this.scope == 'tag') {
+        this.wsscope = 'hashtag'
+        this.newtagscope = '&tag=' + this.tagscope
       }
       const wssurl =
         'wss://' +
@@ -94,7 +102,8 @@ export default {
         '/api/v1/streaming?access_token=' +
         this.$store.getters.getactive[0].accessToken +
         '&stream=' +
-        this.wsscope
+        this.wsscope +
+        this.newtagscope
       const ws = new WebSocket(wssurl)
       ws.onmessage = function (message) {
         const wssresponse = JSON.parse(message.data)
