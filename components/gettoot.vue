@@ -133,9 +133,13 @@ export default {
     },
     getoldload() {
       this.load = true
+      this.newscope = this.scope
+      if (this.scope == 'tag') {
+        this.newscope = this.scope + '/'
+      }
       axios({
         method: 'GET',
-        url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/timelines/' + this.newscope,
+        url: 'https://' + this.$store.getters.getactive[0].url + '/api/v1/timelines/' + this.newscope + this.tagscope,
         headers: {Authorization: 'Bearer ' + this.$store.getters.getactive[0].accessToken},
         params: {
           only_media: this.media,
