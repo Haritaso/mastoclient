@@ -110,6 +110,11 @@ p {
   line-height: 50px;
 }
 
+img.tootemoji {
+  width: 1em;
+  height: 1em;
+}
+
 .bbcode-pulse-loading {
   -webkit-animation: pulse 1s ease-in-out infinite;
   animation: pulse 1s ease-in-out infinite;

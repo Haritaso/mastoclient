@@ -71,7 +71,7 @@
                 <div v-show="nsfw" :style="nsfwscreen" class="nsfw" @click="nsfw = false">
                   <div class="cwtext" :style="nsfwtext">閲覧注意</div>
                 </div>
-                <div class="toottext" v-html="toot.content"></div>
+                <div class="toottext" v-html="tootcontent"></div>
                 <mediaview :mdata="toot.media_attachments" :preid="preid" />
                 <tootaction
                   :toot="toot"
@@ -167,6 +167,22 @@ export default {
       return {
         'color': !this.loading ? this.$store.getters.getactive[0].cwTextcolor : '#000'
       }
+    },
+    tootcontent () {
+      const tootcontent = this.toot.content
+      if (this.toot.emojis == '') {
+        return tootcontent
+      } else {
+        let toot = this.toot.content
+        for (const emoji in this.toot.emojis) {
+          const data = ':' + this.toot.emojis[emoji].shortcode + ':'
+          toot = toot.replace(
+            RegExp(data, 'g'),
+            '<img src=' + this.toot.emojis[emoji].url + ' class="tootemoji">'
+          )
+        }
+        return toot
+      }
     }
   },
   mounted () {
@@ -200,7 +216,7 @@ export default {
         this.nsfw = true
       }
       this.cw = true
-      
+
     }
   },
   created () {
@@ -242,7 +258,7 @@ export default {
   white-space: nowrap;
 }
 .toottext {
-  padding: 0.5em 0;
+  padding: 0.5em 0 0 0;
   z-index: 4;
 }
 .name {
