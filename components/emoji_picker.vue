@@ -47,8 +47,22 @@ export default {
 
 }
 .pickspace {
-  height: 400px;
-  overflow: scroll;
+  height: 300px;
+  overflow: visible;
+  overflow-y: scroll;
+}
+.pickspace::-webkit-scrollbar{
+  width: 10px;
+}
+.pickspace::-webkit-scrollbar-track{
+  background: #ebebeb;
+  border: none;
+  border-radius: 8px;
+}
+.pickspace::-webkit-scrollbar-thumb{
+  background: #aaa;
+  border-radius: 10px;
+  box-shadow: none;
 }
 .emojipick {
   margin: 0 6px 6px 0;
