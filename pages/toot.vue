@@ -7,6 +7,14 @@
   >
     <el-form-item>
       <i class="id">{{ id + "で投稿"}}</i>
+      <el-popover
+        placement="left-start"
+        width="300"
+        trigger="click"
+        class="emoji">
+        <emojipicker @tap="addemoji"></emojipicker>
+        <el-button slot="reference">Emoji</el-button>
+      </el-popover>
       <transition name="cw">
         <el-input v-show="cw" placeholder="cw" v-model="form.cwContent"></el-input>
       </transition>
@@ -16,6 +24,7 @@
         :autosize="{ minRows: 5, maxRows: 10}"
         v-model="form.TootContent"
         class="tootinput"
+        spellcheck="false"
       >
       </el-input>
       <div class="buttons">
@@ -97,6 +106,7 @@
 </template>
 
 <script>
+import emojipicker from '@/components/emoji_picker'
 export default {
   data() {
     return {
@@ -191,12 +201,23 @@ export default {
       this.$nextTick(() => {
         this.loading = false
       })
+    },
+    addemoji(name) {
+      this.form.TootContent += ':' + name + ': '
     }
+  },
+  components: {
+    emojipicker,
   }
 }
 </script>
 
 <style scoped>
+.emoji {
+  position: absolute;
+  top: 45px;
+  right: 10px;
+}
 .cw-enter-active {
   transition-duration: 0.5s;
 }

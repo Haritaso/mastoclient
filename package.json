@@ -21,6 +21,7 @@
     "nuxt": "^2.0.0",
     "v-img": "^0.2.0",
     "vue-content-loader": "^0.2.1",
+    "vue-lazyload": "^1.2.6",
     "vue-plyr": "^5.1.0",
     "vue-server-renderer": "2.6.4",
     "vuex-persistedstate": "^2.5.4"

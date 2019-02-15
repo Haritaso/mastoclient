@@ -20,7 +20,8 @@ module.exports = {
       'vue-window',
       'StyleFactory',
       'vue-content-loader',
-      'moon-loader'
+      'moon-loader',
+      'vue-lazyload'
     ],
   },
   plugins: [
@@ -29,6 +30,7 @@ module.exports = {
     '~plugins/v-img.js',
     '~plugins/plyrvideo.js',
     { src: '~plugins/vuewindow.js', ssr: false },
+    '~plugins/vue-lazyload.js'
   ],
   css: [
     'element-ui/lib/theme-chalk/index.css',
