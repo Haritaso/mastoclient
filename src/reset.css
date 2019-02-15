@@ -111,8 +111,8 @@ p {
 }
 
 img.tootemoji {
-  width: 1em;
-  height: 1em;
+  width: 24px;
+  height: 24px;
 }
 
 .bbcode-pulse-loading {
