@@ -85,6 +85,9 @@
         </div>
         <div>
           <div class="toot">
+            <el-tooltip class="item" effect="dark" content="対応しているサーバーでのみ機能します" placement="bottom-end">
+              <el-checkbox class="tootbtn" v-model="localonly" label="ローカル限定" border></el-checkbox>
+            </el-tooltip>
             <el-button :loading="loading" class="tootbtn" size="medium" type="primary" @click="tootaction">トゥート!</el-button>
           </div>
         </div>
@@ -110,7 +113,8 @@ export default {
       loading: false,
       filelist: [],
       first: false,
-      mediacount: 0
+      mediacount: 0,
+      localonly: false,
     }
   },
   computed: {
@@ -155,6 +159,9 @@ export default {
       this.$set(this.form, "visibility", command);
     },
     tootaction() {
+      if (this.localonly == true) {
+        this.form.TootContent += ' 👁️'
+      }
       this.$store.dispatch("tootaction", {
         data: this.form
       });
@@ -162,7 +169,8 @@ export default {
       this.form.cwContent = ""
       this.form.media = []
       this.filelist = []
-      this.nsfw = true
+      this.nsfw = false
+      this.localonly = false
     },
     handlePictureCardPreview(file) {
       this.imageurl = file.url
