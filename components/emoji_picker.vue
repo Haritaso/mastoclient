@@ -1,10 +1,13 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="pickerhead">
-      <span>Emoji Picker</span>
+      <el-input placeholder="検索…" v-model="search"></el-input>
     </div>
-    <div v-lazy-container="{ selector: 'img' }" class="pickspace">
+    <div v-if="searchstart" v-lazy-container="{ selector: 'img' }" class="pickspace">
       <img v-for="emoji in emojis" :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
+    </div>
+    <div v-else v-lazy-container="{ selector: 'img' }" class="pickspace">
+      <img v-for="emoji in searchfilter" :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
     </div>
   </el-card>
 </template>
@@ -18,7 +21,26 @@ export default {
   data() {
     return {
       emojis: [],
+      search: ''
     }
+  },
+  computed: {
+    searchstart() {
+      if(this.search === '') {
+        return true
+      }
+      return false
+    },
+    searchfilter() {
+      let emojis = []
+      for(const i in this.emojis) {
+        let searchdata = this.emojis[i]
+        if(searchdata.shortcode.startsWith(this.search)) {
+          emojis.push(searchdata)
+        }
+      }
+      return emojis
+    },
   },
   mounted() {
     setTimeout(() => {

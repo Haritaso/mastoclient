@@ -4,7 +4,7 @@ import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload)
 
 Vue.use(VueLazyload, {
-  preLoad: 0.4,
+  preLoad: 0.6,
   error: '',
   loading: '',
   attempt: 2,
