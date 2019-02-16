@@ -30,7 +30,7 @@ module.exports = {
     '~plugins/v-img.js',
     '~plugins/plyrvideo.js',
     { src: '~plugins/vuewindow.js', ssr: false },
-    '~plugins/vue-lazyload.js'
+    { src:'~plugins/vue-lazyload.js', ssr: false },
   ],
   css: [
     'element-ui/lib/theme-chalk/index.css',

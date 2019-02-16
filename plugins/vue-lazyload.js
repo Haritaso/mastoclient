@@ -9,5 +9,9 @@ Vue.use(VueLazyload, {
   loading: '',
   attempt: 2,
   observer: true,
+  observerOptions: {
+    rootMargin: '0px',
+    threshold: 0.1
+  },
   listenEvents: ['scroll', 'wheel', 'mousewheel']
 })

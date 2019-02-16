@@ -8,7 +8,7 @@
     <el-form-item>
       <i class="id">{{ id + "で投稿"}}</i>
       <el-popover
-        placement="left-start"
+        placement="bottom-end"
         width="300"
         trigger="click"
         class="emoji">

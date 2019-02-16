@@ -1,14 +1,30 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="pickerhead">
-      <el-input placeholder="検索…" v-model="search"></el-input>
+      <el-input placeholder="検索…" prefix-icon="el-icon-search" v-model="search" clearable></el-input>
     </div>
-    <div v-if="searchstart" v-lazy-container="{ selector: 'img' }" class="pickspace">
-      <img v-for="emoji in emojis" :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
+    <div
+      v-if="searchstart"
+      v-lazy-container="{ selector: 'img' }"
+      class="pickspace"
+      v-loading="loading"
+      >
+      <div>カスタム絵文字</div>
+      <el-tooltip v-for="emoji in emojis" :key="emoji.id" :content="':' + emoji.shortcode + ':'" placement="bottom" effect="light" :open-delay="800">
+        <img :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
+      </el-tooltip>
     </div>
-    <div v-else v-lazy-container="{ selector: 'img' }" class="pickspace">
-      <img v-for="emoji in searchfilter" :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
-    </div>
+    <div
+      v-else
+      v-lazy-container="{ selector: 'img' }"
+      class="pickspace"
+      v-loading="searchloading"
+      >
+      <div>:{{ search }}:の検索結果</div>
+      <el-tooltip v-for="emoji in searchfilter" :key="emoji.id" :content="':' + emoji.shortcode + ':'" placement="bottom" effect="light" :open-delay="800">
+        <img :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
+      </el-tooltip>
+      </div>
   </el-card>
 </template>
 
@@ -21,12 +37,15 @@ export default {
   data() {
     return {
       emojis: [],
-      search: ''
+      search: '',
+      preload: false,
+      loading: true,
+      searchloading: false,
     }
   },
   computed: {
     searchstart() {
-      if(this.search === '') {
+      if(this.search == '') {
         return true
       }
       return false
@@ -43,9 +62,14 @@ export default {
     },
   },
   mounted() {
+    this.preload = false
     setTimeout(() => {
       this.getEmoji()
     },1000)
+    this.$Lazyload.$once('loaded',() => {
+      this.loading = false
+      this.preload = true
+    })
   },
   methods: {
     emojitap(name) {
@@ -87,6 +111,6 @@ export default {
   box-shadow: none;
 }
 .emojipick {
-  margin: 0 6px 6px 0;
+  margin: 4px;
 }
 </style>
