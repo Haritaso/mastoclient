@@ -330,9 +330,9 @@ export default {
   z-index: 5;
 }
 .cw {
-  grid-row: 2 / 3;
+  grid-row: 2 / 4;
   grid-column: 1 / 2;
-  height: 95%;
+  height: 98%;
   width: 100%;
   display: grid;
   background-size: cover;
