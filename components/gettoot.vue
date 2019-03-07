@@ -134,6 +134,9 @@ export default {
     getoldload() {
       this.load = true
       this.newscope = this.scope
+      if (this.scope == 'public?local') {
+        this.newscope = this.scope + '=true'
+      }
       if (this.scope == 'tag') {
         this.newscope = this.scope + '/'
       }

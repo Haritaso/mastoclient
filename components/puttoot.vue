@@ -34,6 +34,14 @@
               <div v-if="toot.account.bot == true">
                 <el-tag type="info" class="fas fa-robot tootstatusobj">Bot</el-tag>
               </div>
+              <div v-if="toot.poll !== null">
+                <div v-if="toot.poll.expired == true">
+                  <el-tag type="warning" class="fas fa-poll-h tootstatusobj">投票期限切れ</el-tag>
+                </div>
+                <div v-if="toot.poll.expired == false">
+                  <el-tag type="success" class="fas fa-poll-h tootstatusobj">投票期間中</el-tag>
+                </div>
+              </div>
               <div>
                 <a :href=userurllink>
                   <el-tag type="info" class="fas fa-at tootstatusobj">{{ userurl }}</el-tag>
@@ -72,6 +80,9 @@
                   <div class="cwtext" :style="nsfwtext">閲覧注意</div>
                 </div>
                 <div class="toottext" v-html="tootcontent"></div>
+                <div v-if="toot.poll !== null">
+                  <tootpoll :poll="polldata" @set="refreshpoll" />
+                </div>
                 <mediaview :mdata="toot.media_attachments" :preid="preid" />
                 <tootaction
                   :toot="toot"
@@ -93,6 +104,7 @@
 
 <script>
 import axios from 'axios'
+import tootpoll from './tootpoll'
 import mediaview from './mediaview'
 import tootaction from './tootaction'
 
@@ -112,6 +124,7 @@ export default {
       nsfwid: '',
       nsfwshow: false,
       deletetoot: true,
+      polldata: null
     }
   },
   computed: {
@@ -216,13 +229,25 @@ export default {
         this.nsfw = true
       }
       this.cw = true
-
+    },
+    refreshpoll() {
+      this.$nextTick(() => {
+        axios({
+          method: 'GET',
+          url: 'https://' + this.$store.getters.geturl + '/api/v1/polls/' + this.toot.poll.id,
+        })
+        .then(res => {
+          this.polldata = res.data
+        })
+      })
     }
   },
   created () {
     this.nowloading = this.loading
+    this.polldata = this.toot.poll
   },
   components: {
+    tootpoll,
     mediaview,
     tootaction,
   }

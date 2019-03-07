@@ -115,6 +115,24 @@ img.tootemoji {
   height: 24px;
 }
 
+.el-radio.is-bordered+.el-radio.is-bordered {
+  margin-left: 0;
+}
+
+.el-radio+.el-radio {
+  margin-left: 0;
+}
+
+.el-progress-bar__outer {
+  height: 18px!important;
+  border-radius: 3px;
+}
+
+.el-progress-bar__inner {
+  border-radius: 3px;
+  text-align: left;
+}
+
 .bbcode-pulse-loading {
   -webkit-animation: pulse 1s ease-in-out infinite;
   animation: pulse 1s ease-in-out infinite;
