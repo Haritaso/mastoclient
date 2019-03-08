@@ -18,13 +18,14 @@
       v-else
       v-lazy-container="{ selector: 'img' }"
       class="pickspace"
-      v-loading="searchloading"
+      v-loading="searchstart"
       >
       <div>:{{ search }}:の検索結果</div>
       <el-tooltip v-for="emoji in searchfilter" :key="emoji.id" :content="':' + emoji.shortcode + ':'" placement="bottom" effect="light" :open-delay="800">
         <img :src="emoji.url" v-lazy="emoji.url" :key="emoji.url" class="tootemoji emojipick" @click="emojitap(emoji.shortcode)"/>
       </el-tooltip>
-      </div>
+    </div>
+    <div>{{ emojiLength }}件の絵文字</div>
   </el-card>
 </template>
 
@@ -60,6 +61,12 @@ export default {
       }
       return emojis
     },
+    emojiLength() {
+      if(this.searchstart == false) {
+        return this.searchfilter.length
+      }
+      return this.emojis.length
+    }
   },
   mounted() {
     this.preload = false
@@ -67,7 +74,6 @@ export default {
       this.getEmoji()
     },1000)
     this.$Lazyload.$once('loaded',() => {
-      this.loading = false
       this.preload = true
     })
   },
@@ -82,6 +88,7 @@ export default {
       })
       .then(res => {
         this.emojis = res.data
+        this.loading = false
       })
     },
   },
